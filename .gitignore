@@ -1,4 +1,6 @@
 .idea
 .vscode
+.claude
 
 .hatch
+*.html

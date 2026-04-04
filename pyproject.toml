@@ -11,13 +11,20 @@ requires-python = ">=3.9"
 
 [dependency-groups]
 dev = [
-    "pytest"
+    "pytest",
 ]
 
 [tool.hatch.envs.default]
 dependency-groups = [
   "dev",
 ]
+
+[tool.hatch.envs.types]
+dependencies = [
+  "mypy~=1.20.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src}"
 
 [[tool.hatch.envs.hatch-test.matrix]]
 python = ["3.10", "3.11", "3.12", "3.13", "3.14"]

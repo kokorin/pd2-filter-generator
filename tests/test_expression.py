@@ -1,13 +1,16 @@
 """Tests for expression tree."""
+
 import pytest
 
 from pd2_filter_generator.expression import (
     And,
-    Between,
     BinaryOp,
     BinaryOperator,
+    BoolLiteral,
+    CodeLiteral,
     Equal,
     GreaterThan,
+    IntLiteral,
     LessThan,
     Literal,
     Node,
@@ -17,12 +20,22 @@ from pd2_filter_generator.expression import (
     Or,
 )
 
-A = Literal("A")
-B = Literal("B")
-C = Literal("C")
-X = Literal("x")
-Y = Literal("y")
-Z = Literal("z")
+# Boolean literals - PD2 flags
+NMAG = BoolLiteral("NMAG")
+RARE = BoolLiteral("RARE")
+BOOTS = BoolLiteral("BOOTS")
+
+# Integer literals - PD2 numeric stats
+SOCKETS = IntLiteral("SOCKETS")
+CLVL = IntLiteral("CLVL")
+GOLD = IntLiteral("GOLD")
+ONE = IntLiteral("1")
+TWO = IntLiteral("2")
+TEN = IntLiteral("10")
+
+# Code literals - PD2 3-4 letter codes
+CAP = CodeLiteral("cap")
+HLM = CodeLiteral("hlm")
 
 
 class ToDictVisitor(NodeVisitor[dict]):
@@ -37,285 +50,506 @@ class ToDictVisitor(NodeVisitor[dict]):
     def visit_binary_op(self, left: dict, right: dict, operator: BinaryOperator) -> dict:
         return {"type": operator.name, "left": left, "right": right}
 
-    def visit_between(self, operand: dict, less_than: dict, greater_than: dict) -> dict:
-        return {"type": "BETWEEN", "operand": operand, "less_than": less_than, "greater_than": greater_than}
-
 
 def to_dict(node: Node) -> dict:
     return node.accept(ToDictVisitor())
 
 
-class TestNot:
-    def test_not(self):
-        result = ~A
+# =============================================================================
+# Test Hierarchy: Tests organized by type hierarchy
+# =============================================================================
+
+
+class TestNode:
+    """Tests for Node base class."""
+
+    def test_node_cannot_be_instantiated(self):
+        """Node is abstract and cannot be instantiated directly."""
+        with pytest.raises(TypeError):
+            Node()
+
+    def test_node_bool_raises_error_in_if(self):
+        """Cannot use nodes in if statements."""
+        with pytest.raises(TypeError, match=r"Cannot use.*in boolean context"):
+            bool(SOCKETS < TEN)
+
+    def test_node_bool_raises_error_with_and_keyword(self):
+        """Cannot use 'and' keyword (must use & operator)."""
+        comparison = SOCKETS < TEN
+        with pytest.raises(TypeError, match=r"Cannot use.*in boolean context"):
+            comparison and NMAG  # noqa: B018
+
+    def test_node_bool_raises_error_with_or_keyword(self):
+        """Cannot use 'or' keyword (must use | operator)."""
+        with pytest.raises(TypeError, match=r"Cannot use.*in boolean context"):
+            NMAG or RARE  # noqa: B018
+
+    def test_node_bool_raises_error_with_not_keyword(self):
+        """Cannot use 'not' keyword (must use ~ operator)."""
+        with pytest.raises(TypeError, match=r"Cannot use.*in boolean context"):
+            not NMAG  # noqa: B018
+
+    def test_node_bool_raises_error_with_chained_comparison(self):
+        """Chained comparisons raise TypeError."""
+        with pytest.raises(TypeError, match=r"Cannot use.*in boolean context"):
+            ONE < SOCKETS < TWO  # noqa: B015
+
+
+class TestBooleanNode:
+    """Tests for BooleanNode - supports ~, &, | operators."""
+
+    def test_invert_creates_not(self):
+        """~NMAG creates Not node."""
+        result = ~NMAG
         assert isinstance(result, Not)
         assert to_dict(result) == {
             "type": "NOT",
-            "operand": {"type": "Literal", "value": "A"},
+            "operand": {"type": "Literal", "value": "NMAG"},
         }
 
-    def test_not_not(self):
-        result = ~~A
+    def test_double_invert(self):
+        """~~NMAG creates nested Not nodes."""
+        result = ~~NMAG
         assert isinstance(result, Not)
         assert to_dict(result) == {
             "type": "NOT",
             "operand": {
                 "type": "NOT",
-                "operand": {"type": "Literal", "value": "A"},
-            }
+                "operand": {"type": "Literal", "value": "NMAG"},
+            },
         }
 
-    def test_not_compound(self):
-        """~(A & B) negates the entire AND expression"""
-        result = ~(A & B)
+    def test_invert_compound_expression(self):
+        """~(NMAG & RARE) negates the entire AND expression."""
+        result = ~(NMAG & RARE)
         assert isinstance(result, Not)
         assert to_dict(result) == {
             "type": "NOT",
             "operand": {
                 "type": "AND",
-                "left": {"type": "Literal", "value": "A"},
-                "right": {"type": "Literal", "value": "B"},
-            }
+                "left": {"type": "Literal", "value": "NMAG"},
+                "right": {"type": "Literal", "value": "RARE"},
+            },
         }
 
-    def test_not_or(self):
-        """~(A | B) negates the entire OR expression"""
-        result = ~(A | B)
+    def test_invert_or_expression(self):
+        """~(NMAG | RARE) negates the entire OR expression."""
+        result = ~(NMAG | RARE)
         assert to_dict(result) == {
             "type": "NOT",
             "operand": {
                 "type": "OR",
-                "left": {"type": "Literal", "value": "A"},
-                "right": {"type": "Literal", "value": "B"},
-            }
+                "left": {"type": "Literal", "value": "NMAG"},
+                "right": {"type": "Literal", "value": "RARE"},
+            },
         }
 
-class TestBinaryOperators:
-    def test_and_operator(self):
-        result = A & B
+    def test_and_creates_and_node(self):
+        """NMAG & BOOTS creates And node."""
+        result = NMAG & BOOTS
         assert type(result) is And
         assert to_dict(result) == {
             "type": "AND",
-            "left": {"type": "Literal", "value": "A"},
-            "right": {"type": "Literal", "value": "B"},
+            "left": {"type": "Literal", "value": "NMAG"},
+            "right": {"type": "Literal", "value": "BOOTS"},
         }
 
-    def test_or_operator(self):
-        result = A | B
+    def test_or_creates_or_node(self):
+        """NMAG | RARE creates Or node."""
+        result = NMAG | RARE
         assert isinstance(result, Or)
         assert to_dict(result) == {
             "type": "OR",
-            "left": {"type": "Literal", "value": "A"},
-            "right": {"type": "Literal", "value": "B"},
+            "left": {"type": "Literal", "value": "NMAG"},
+            "right": {"type": "Literal", "value": "RARE"},
         }
 
     def test_chained_and(self):
-        result = A & B & C
+        """NMAG & RARE & BOOTS chains left-to-right."""
+        result = NMAG & RARE & BOOTS
         assert to_dict(result) == {
             "type": "AND",
             "left": {
                 "type": "AND",
-                "left": {"type": "Literal", "value": "A"},
-                "right": {"type": "Literal", "value": "B"},
+                "left": {"type": "Literal", "value": "NMAG"},
+                "right": {"type": "Literal", "value": "RARE"},
             },
-            "right": {"type": "Literal", "value": "C"},
-        }
-
-    def test_precedence_and_over_or(self):
-        result = A | B & C
-        assert to_dict(result) == {
-            "type": "OR",
-            "left": {"type": "Literal", "value": "A"},
-            "right": {
-                "type": "AND",
-                "left": {"type": "Literal", "value": "B"},
-                "right": {"type": "Literal", "value": "C"},
-            },
+            "right": {"type": "Literal", "value": "BOOTS"},
         }
 
     def test_chained_or(self):
-        """A | B | C is left-to-right: (A | B) | C"""
-        result = A | B | C
+        """NMAG | RARE | BOOTS chains left-to-right."""
+        result = NMAG | RARE | BOOTS
         assert to_dict(result) == {
             "type": "OR",
             "left": {
                 "type": "OR",
-                "left": {"type": "Literal", "value": "A"},
-                "right": {"type": "Literal", "value": "B"},
+                "left": {"type": "Literal", "value": "NMAG"},
+                "right": {"type": "Literal", "value": "RARE"},
             },
-            "right": {"type": "Literal", "value": "C"},
+            "right": {"type": "Literal", "value": "BOOTS"},
         }
 
-    def test_less_than_operator(self):
-        result = X < Y
-        assert isinstance(result, LessThan)
+    def test_and_precedence_over_or(self):
+        """NMAG | RARE & BOOTS: & has higher precedence."""
+        result = NMAG | RARE & BOOTS
         assert to_dict(result) == {
-            "type": "LESS_THAN",
-            "left": {"type": "Literal", "value": "x"},
-            "right": {"type": "Literal", "value": "y"},
+            "type": "OR",
+            "left": {"type": "Literal", "value": "NMAG"},
+            "right": {
+                "type": "AND",
+                "left": {"type": "Literal", "value": "RARE"},
+                "right": {"type": "Literal", "value": "BOOTS"},
+            },
         }
 
-    def test_greater_than_operator(self):
-        result = X > Y
-        assert isinstance(result, GreaterThan)
-        assert to_dict(result) == {
-            "type": "GREATER_THAN",
-            "left": {"type": "Literal", "value": "x"},
-            "right": {"type": "Literal", "value": "y"},
-        }
+    def test_and_validates_right_operand_is_boolean(self):
+        """AND requires both operands to be BooleanNode."""
+        with pytest.raises(TypeError, match="not boolean"):
+            NMAG & SOCKETS
 
-    def test_equals_operator(self):
-        result = X == Y
+    def test_or_validates_right_operand_is_boolean(self):
+        """OR requires both operands to be BooleanNode."""
+        with pytest.raises(TypeError, match="not boolean"):
+            NMAG | CLVL
+
+    def test_comparison_results_are_boolean(self):
+        """Comparison results are BooleanNode and can use &, |, ~."""
+        comparison = SOCKETS < TEN
+
+        # Can combine with other booleans
+        result = NMAG & comparison
+        assert isinstance(result, And)
+
+        # Can negate
+        negated = ~comparison
+        assert isinstance(negated, Not)
+
+
+class TestEqNode:
+    """Tests for EqNode - supports ==, != operators."""
+
+    def test_equal_operator(self):
+        """== creates Equal node."""
+        result = SOCKETS == CLVL
         assert isinstance(result, Equal)
         assert to_dict(result) == {
             "type": "EQUAL",
-            "left": {"type": "Literal", "value": "x"},
-            "right": {"type": "Literal", "value": "y"},
+            "left": {"type": "Literal", "value": "SOCKETS"},
+            "right": {"type": "Literal", "value": "CLVL"},
         }
 
-    def test_not_equals_operator(self):
-        result = X != Y
+    def test_not_equal_operator(self):
+        """!= creates NotEqual node."""
+        result = SOCKETS != GOLD
         assert isinstance(result, NotEqual)
         assert to_dict(result) == {
             "type": "NOT_EQUAL",
-            "left": {"type": "Literal", "value": "x"},
-            "right": {"type": "Literal", "value": "y"},
+            "left": {"type": "Literal", "value": "SOCKETS"},
+            "right": {"type": "Literal", "value": "GOLD"},
         }
 
+    def test_equal_validates_right_operand(self):
+        """== requires right operand to be EqNode."""
+        with pytest.raises(TypeError, match="does not support equality"):
+            HLM == NMAG  # noqa: B015
 
-class TestBetween:
-    def test_between_direct(self):
-        result = Between(Y, X, Z)
+    def test_not_equal_validates_right_operand(self):
+        """!= requires right operand to be EqNode."""
+        with pytest.raises(TypeError, match="does not support equality"):
+            HLM != NMAG  # noqa: B015
+
+    def test_equality_results_are_boolean(self):
+        """Equality results are BooleanNode."""
+        result = SOCKETS == ONE
+        assert isinstance(result, Equal)
+
+        # Can use boolean operations
+        combined = NMAG & result
+        assert isinstance(combined, And)
+
+
+class TestComparableNode:
+    """Tests for ComparableNode - supports <, >, ==, != operators."""
+
+    def test_less_than_operator(self):
+        """< creates LessThan node."""
+        result = SOCKETS < CLVL
+        assert isinstance(result, LessThan)
         assert to_dict(result) == {
-            "type": "BETWEEN",
-            "operand": {"type": "Literal", "value": "y"},
-            "less_than": {"type": "Literal", "value": "x"},
-            "greater_than": {"type": "Literal", "value": "z"},
+            "type": "LESS_THAN",
+            "left": {"type": "Literal", "value": "SOCKETS"},
+            "right": {"type": "Literal", "value": "CLVL"},
         }
 
-    def test_chained_less_than(self):
-        """X < Y < Z creates Between(Y, X, Z)"""
-        result = X < Y < Z
-        assert isinstance(result, Between)
+    def test_greater_than_operator(self):
+        """> creates GreaterThan node."""
+        result = CLVL > GOLD
+        assert isinstance(result, GreaterThan)
         assert to_dict(result) == {
-            "type": "BETWEEN",
-            "operand": {"type": "Literal", "value": "y"},
-            "less_than": {"type": "Literal", "value": "x"},
-            "greater_than": {"type": "Literal", "value": "z"},
+            "type": "GREATER_THAN",
+            "left": {"type": "Literal", "value": "CLVL"},
+            "right": {"type": "Literal", "value": "GOLD"},
         }
 
-    def test_chained_greater_than(self):
-        """X > Y > Z creates Between(Y, Z, X)"""
-        result = X > Y > Z
-        assert isinstance(result, Between)
-        assert to_dict(result) == {
-            "type": "BETWEEN",
-            "operand": {"type": "Literal", "value": "y"},
-            "less_than": {"type": "Literal", "value": "z"},
-            "greater_than": {"type": "Literal", "value": "x"},
-        }
+    def test_less_than_validates_right_operand(self):
+        """< requires right operand to be ComparableNode."""
+        with pytest.raises(TypeError, match="not comparable"):
+            SOCKETS < NMAG  # noqa: B015
 
-    def test_between_with_and(self):
-        """A & X < Y < Z - between combined with AND"""
-        result = A & X < Y < Z
-        assert to_dict(result) == {
-            "type": "AND",
-            "left": {"type": "Literal", "value": "A"},
-            "right": {
-                "type": "BETWEEN",
-                "operand": {"type": "Literal", "value": "y"},
-                "less_than": {"type": "Literal", "value": "x"},
-                "greater_than": {"type": "Literal", "value": "z"},
-            },
-        }
+    def test_greater_than_validates_right_operand(self):
+        """> requires right operand to be ComparableNode."""
+        with pytest.raises(TypeError, match="not comparable"):
+            SOCKETS > NMAG  # noqa: B015
 
+    def test_comparable_inherits_equality(self):
+        """ComparableNode extends EqNode, so supports ==, !=."""
+        result_eq = SOCKETS == CLVL
+        assert isinstance(result_eq, Equal)
 
-class TestCombinedExpression:
-    def test_full_expression(self):
-        result = A | B & X < Y
-        assert to_dict(result) == {
-            "type": "OR",
-            "left": {"type": "Literal", "value": "A"},
-            "right": {
-                "type": "AND",
-                "left": {"type": "Literal", "value": "B"},
-                "right": {
-                    "type": "LESS_THAN",
-                    "left": {"type": "Literal", "value": "x"},
-                    "right": {"type": "Literal", "value": "y"},
-                },
-            },
-        }
+        result_ne = SOCKETS != GOLD
+        assert isinstance(result_ne, NotEqual)
 
-    def test_not_with_comparison(self):
-        """~A & X > Y"""
-        result = ~A & X > Y
-        assert to_dict(result) == {
-            "type": "AND",
-            "left": {
-                "type": "NOT",
-                "operand": {"type": "Literal", "value": "A"},
-            },
-            "right": {
-                "type": "GREATER_THAN",
-                "left": {"type": "Literal", "value": "x"},
-                "right": {"type": "Literal", "value": "y"},
-            },
-        }
+    def test_comparison_results_are_boolean(self):
+        """Comparison results are BooleanNode."""
+        result = SOCKETS < TEN
 
-    def test_multiple_comparisons_with_or(self):
-        """X < Y | A > B"""
-        result = X < Y | A > B
-        assert to_dict(result) == {
-            "type": "OR",
-            "left": {
-                "type": "LESS_THAN",
-                "left": {"type": "Literal", "value": "x"},
-                "right": {"type": "Literal", "value": "y"},
-            },
-            "right": {
-                "type": "GREATER_THAN",
-                "left": {"type": "Literal", "value": "A"},
-                "right": {"type": "Literal", "value": "B"},
-            },
-        }
+        # Can use boolean operations
+        combined = NMAG & result
+        assert isinstance(combined, And)
 
-    def test_complex_nested(self):
-        """(A | B) & (X == Y)"""
-        result = (A | B) & (X == Y)
-        assert to_dict(result) == {
-            "type": "AND",
-            "left": {
-                "type": "OR",
-                "left": {"type": "Literal", "value": "A"},
-                "right": {"type": "Literal", "value": "B"},
-            },
-            "right": {
-                "type": "EQUAL",
-                "left": {"type": "Literal", "value": "x"},
-                "right": {"type": "Literal", "value": "y"},
-            },
-        }
+        # Can negate
+        negated = ~result
+        assert isinstance(negated, Not)
 
 
-class TestPrecedenceValues:
+class TestLiterals:
+    """Tests for literal types and their capabilities."""
+
+    def test_literal_base_class_cannot_be_instantiated(self):
+        """Literal is abstract."""
+        with pytest.raises(TypeError):
+            Literal("x")
+
+    # =========================================================================
+    # BoolLiteral: supports &, |, ~ only
+    # =========================================================================
+
+    def test_bool_literal_supports_and_operator(self):
+        """BoolLiteral supports & operator."""
+        result = NMAG & BOOTS
+        assert isinstance(result, And)
+
+    def test_bool_literal_supports_or_operator(self):
+        """BoolLiteral supports | operator."""
+        result = NMAG | RARE
+        assert isinstance(result, Or)
+
+    def test_bool_literal_supports_invert_operator(self):
+        """BoolLiteral supports ~ operator."""
+        result = ~NMAG
+        assert isinstance(result, Not)
+
+    def test_bool_literal_blocks_less_than(self):
+        """BoolLiteral doesn't support < operator."""
+        with pytest.raises(TypeError):
+            NMAG < RARE  # noqa: B015
+
+    def test_bool_literal_blocks_greater_than(self):
+        """BoolLiteral doesn't support > operator."""
+        with pytest.raises(TypeError):
+            NMAG > RARE  # noqa: B015
+
+    def test_bool_literal_blocks_equal(self):
+        """BoolLiteral doesn't support == operator."""
+        with pytest.raises(TypeError):
+            NMAG == RARE  # noqa: B015
+
+    def test_bool_literal_blocks_not_equal(self):
+        """BoolLiteral doesn't support != operator."""
+        with pytest.raises(TypeError):
+            NMAG != RARE  # noqa: B015
+
+    # =========================================================================
+    # CodeLiteral: supports ==, != only
+    # =========================================================================
+
+    def test_code_literal_supports_equal_operator(self):
+        """CodeLiteral supports == operator."""
+        result = HLM == CAP
+        assert isinstance(result, Equal)
+
+    def test_code_literal_supports_not_equal_operator(self):
+        """CodeLiteral supports != operator."""
+        result = HLM != CAP
+        assert isinstance(result, NotEqual)
+
+    def test_code_literal_blocks_less_than(self):
+        """CodeLiteral doesn't support < operator."""
+        with pytest.raises(TypeError):
+            CAP < HLM  # noqa: B015
+
+    def test_code_literal_blocks_greater_than(self):
+        """CodeLiteral doesn't support > operator."""
+        with pytest.raises(TypeError):
+            CAP > HLM  # noqa: B015
+
+    def test_code_literal_blocks_invert(self):
+        """CodeLiteral doesn't support ~ operator."""
+        with pytest.raises(TypeError):
+            ~CAP  # noqa: B018
+
+    def test_code_literal_blocks_and_operator(self):
+        """CodeLiteral doesn't support & operator."""
+        with pytest.raises(TypeError):
+            CAP & HLM
+
+    def test_code_literal_blocks_or_operator(self):
+        """CodeLiteral doesn't support | operator."""
+        with pytest.raises(TypeError):
+            CAP | HLM
+
+    # =========================================================================
+    # IntLiteral: supports <, >, ==, != only (NOT ~, &, |)
+    # =========================================================================
+
+    def test_int_literal_supports_less_than_operator(self):
+        """IntLiteral supports < operator."""
+        result = SOCKETS < TWO
+        assert isinstance(result, LessThan)
+
+    def test_int_literal_supports_greater_than_operator(self):
+        """IntLiteral supports > operator."""
+        result = SOCKETS > ONE
+        assert isinstance(result, GreaterThan)
+
+    def test_int_literal_supports_equal_operator(self):
+        """IntLiteral supports == operator."""
+        result = SOCKETS == ONE
+        assert isinstance(result, Equal)
+
+    def test_int_literal_supports_not_equal_operator(self):
+        """IntLiteral supports != operator."""
+        result = SOCKETS != TWO
+        assert isinstance(result, NotEqual)
+
+    def test_int_literal_blocks_invert(self):
+        """IntLiteral doesn't support ~ operator."""
+        with pytest.raises(TypeError):
+            ~SOCKETS  # noqa: B018
+
+    def test_int_literal_blocks_and_operator(self):
+        """IntLiteral doesn't support & operator."""
+        with pytest.raises(TypeError):
+            SOCKETS & CLVL
+
+    def test_int_literal_blocks_or_operator(self):
+        """IntLiteral doesn't support | operator."""
+        with pytest.raises(TypeError):
+            SOCKETS | CLVL
+
+
+class TestBinaryOp:
+    """Tests for BinaryOp base class."""
+
+    def test_binary_op_cannot_be_instantiated(self):
+        """BinaryOp is abstract."""
+        with pytest.raises(TypeError):
+            BinaryOp(NMAG, RARE, BinaryOperator.AND)
+
+    def test_visitor_pattern_for_binary_ops(self):
+        """All binary operations work with visitor pattern."""
+        expr = NMAG & (SOCKETS < TEN)
+        result = to_dict(expr)
+        assert result["type"] == "AND"
+        assert result["left"]["type"] == "Literal"
+        assert result["right"]["type"] == "LESS_THAN"
+
+
+class TestOperatorPrecedence:
+    """Tests for operator precedence values."""
+
     def test_comparison_precedence_highest(self):
+        """Comparisons have highest precedence (lowest value)."""
         assert BinaryOperator.LESS_THAN.precedence < BinaryOperator.AND.precedence
 
     def test_and_precedence_over_or(self):
+        """AND has higher precedence than OR."""
         assert BinaryOperator.AND.precedence < BinaryOperator.OR.precedence
 
     def test_all_comparisons_equal_precedence(self):
+        """All comparison operators have equal precedence."""
         assert BinaryOperator.LESS_THAN.precedence == BinaryOperator.GREATER_THAN.precedence
         assert BinaryOperator.LESS_THAN.precedence == BinaryOperator.EQUAL.precedence
         assert BinaryOperator.LESS_THAN.precedence == BinaryOperator.NOT_EQUAL.precedence
 
 
-class TestAbstractClasses:
-    def test_node_cannot_be_instantiated(self):
-        with pytest.raises(TypeError):
-            Node()
+class TestComplexExpressions:
+    """Tests for real-world PD2 filter patterns."""
 
-    def test_binary_op_cannot_be_instantiated(self):
-        with pytest.raises(TypeError):
-            BinaryOp(A, B, BinaryOperator.AND)
+    def test_full_expression(self):
+        """NMAG | RARE & (SOCKETS < CLVL) - needs parentheses due to precedence"""
+        result = NMAG | RARE & (SOCKETS < CLVL)
+        assert to_dict(result) == {
+            "type": "OR",
+            "left": {"type": "Literal", "value": "NMAG"},
+            "right": {
+                "type": "AND",
+                "left": {"type": "Literal", "value": "RARE"},
+                "right": {
+                    "type": "LESS_THAN",
+                    "left": {"type": "Literal", "value": "SOCKETS"},
+                    "right": {"type": "Literal", "value": "CLVL"},
+                },
+            },
+        }
+
+    def test_not_with_comparison(self):
+        """~NMAG & (CLVL > GOLD) - needs parentheses"""
+        result = ~NMAG & (CLVL > GOLD)
+        assert to_dict(result) == {
+            "type": "AND",
+            "left": {
+                "type": "NOT",
+                "operand": {"type": "Literal", "value": "NMAG"},
+            },
+            "right": {
+                "type": "GREATER_THAN",
+                "left": {"type": "Literal", "value": "CLVL"},
+                "right": {"type": "Literal", "value": "GOLD"},
+            },
+        }
+
+    def test_multiple_comparisons_with_or(self):
+        """(SOCKETS < CLVL) | (GOLD > CLVL) - both need parentheses"""
+        result = (SOCKETS < CLVL) | (GOLD > CLVL)
+        assert to_dict(result) == {
+            "type": "OR",
+            "left": {
+                "type": "LESS_THAN",
+                "left": {"type": "Literal", "value": "SOCKETS"},
+                "right": {"type": "Literal", "value": "CLVL"},
+            },
+            "right": {
+                "type": "GREATER_THAN",
+                "left": {"type": "Literal", "value": "GOLD"},
+                "right": {"type": "Literal", "value": "CLVL"},
+            },
+        }
+
+    def test_complex_nested(self):
+        """(NMAG | RARE) & (SOCKETS == CLVL)"""
+        result = (NMAG | RARE) & (SOCKETS == CLVL)
+        assert to_dict(result) == {
+            "type": "AND",
+            "left": {
+                "type": "OR",
+                "left": {"type": "Literal", "value": "NMAG"},
+                "right": {"type": "Literal", "value": "RARE"},
+            },
+            "right": {
+                "type": "EQUAL",
+                "left": {"type": "Literal", "value": "SOCKETS"},
+                "right": {"type": "Literal", "value": "CLVL"},
+            },
+        }
