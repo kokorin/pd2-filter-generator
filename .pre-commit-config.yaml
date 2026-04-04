@@ -1,0 +1,32 @@
+repos:
+  # Basic file hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-case-conflict
+
+  # Hatch-based checks (uses project dependencies)
+  - repo: local
+    hooks:
+      - id: hatch-fmt
+        name: hatch fmt (ruff)
+        entry: hatch fmt --check
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: hatch-types
+        name: hatch types (mypy)
+        entry: hatch run types:check
+        language: system
+        types: [python]
+        pass_filenames: false

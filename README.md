@@ -94,7 +94,7 @@ Concrete literal types:
 **BoolLiteral** — Boolean flags (presence checks):
 ```python
 NMAG, RARE, UNI, SET       # Item quality
-BOOTS, GLOVES, ARMOR       # Item groups  
+BOOTS, GLOVES, ARMOR       # Item groups
 ETH, ID, SOCK              # Item properties
 SHOP, GROUND, EQUIPPED     # Item state
 ```
@@ -216,6 +216,26 @@ hatch run types:check
 **Run all checks**:
 ```console
 hatch fmt --check && hatch run types:check && hatch run pytest
+```
+
+### Pre-commit Hooks
+
+Install pre-commit to run checks automatically before each commit:
+
+```console
+pip install pre-commit
+pre-commit install
+```
+
+This will run:
+- File hygiene checks (trailing whitespace, EOF newlines, mixed line endings)
+- Ruff format & lint
+- Mypy type checking
+- Pytest test suite
+
+Run manually on all files:
+```console
+pre-commit run --all-files
 ```
 
 ### Project Structure
