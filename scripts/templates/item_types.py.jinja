@@ -1,0 +1,25 @@
+"""Generated ItemTypes enum from PD2 data.
+
+DO NOT EDIT MANUALLY - regenerate with: hatch run ./scripts/generate.py generate
+"""
+from dataclasses import dataclass
+from enum import Enum
+
+
+@dataclass(frozen=True)
+class ItemTypeData:
+    """Item type metadata."""
+{% for column in items[0].keys() %}
+    {{ column }}: str
+{%- endfor %}
+
+
+class ItemType(Enum):
+    """PD2 item type categories."""
+{% for item in items %}
+    {{ item['ItemType'] }} = ItemTypeData(
+    {% for column, value in item.items() %}
+        {{ column }} = "{{ value }}",
+    {%- endfor %}
+    )
+{%- endfor %}
