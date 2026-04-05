@@ -2,24 +2,53 @@
 
 DO NOT EDIT MANUALLY - regenerate with: hatch run ./scripts/generate.py generate
 """
+
+from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
+from pd2_filter_generator.expression import CodeLiteral
 
+{%- set items = fetch_and_parse("ItemTypes.txt") %}
+{%- set skip_members = ["None", "Not Used", "Expansion"]  %}
+{%- set member_name_column = "ItemType" %}
+{%- set field_types = {
+    "code": "CodeLiteral",
+    "equiv1": "CodeLiteral",
+    "equiv2": "CodeLiteral",
+} %}
+{%- set non_none = ["code"] %}
 
 @dataclass(frozen=True)
 class ItemTypeData:
     """Item type metadata."""
-{% for column in items[0].keys() %}
-    {{ column }}: str
+{%- for column in items[0].keys() if is_valid_identifier(column) %}
+    {%- set field_name = column | to_field_name %}
+    {%- set field_type -%}
+        {{ field_types.get(field_name, "str") }}{{ " | None" if field_name not in non_none }}
+    {%- endset %}
+    {{ field_name }}: {{ field_type }}
 {%- endfor %}
 
 
 class ItemType(Enum):
     """PD2 item type categories."""
-{% for item in items %}
-    {{ item['ItemType'] }} = ItemTypeData(
-    {% for column, value in item.items() %}
-        {{ column }} = "{{ value }}",
+{#- Special handling of None item types #}
+{% for item in items if item.get(member_name_column) not in skip_members %}
+    {%- set member_name = item.get(member_name_column) | to_member_name %}
+    {{ member_name }} = ItemTypeData(
+    {%- for column, value in item.items() if is_valid_identifier(column) %}
+        {%- set field_name = column | to_field_name %}
+        {%- set field_type = field_types.get(field_name, "str") %}
+        {%- set field_value %}
+            {%- if value and field_type == "str" -%}
+                "{{ value }}"
+            {%- elif value -%}
+                {{ field_type }}("{{ value }}")
+            {%- else -%}
+                None
+            {%- endif  %}
+        {%- endset %}
+        {{ field_name }}={{ field_value }},
     {%- endfor %}
     )
 {%- endfor %}

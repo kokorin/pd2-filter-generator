@@ -1,6 +1,8 @@
 .idea
 .vscode
-.claude
 
 .hatch
 *.html
+
+# Generator cache
+.cache/
