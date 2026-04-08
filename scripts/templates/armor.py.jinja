@@ -1,0 +1,10 @@
+{%- from 'macros.jinja' import generate_enum %}
+{{ generate_enum(
+    'Armor.txt',
+    code_column='code',
+    metadata_columns={
+        'code': 'CodeLiteral',
+        'reqstr': 'int',
+        'levelreq': 'int',
+    }
+) }}

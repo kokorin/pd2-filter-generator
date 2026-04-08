@@ -1,0 +1,8 @@
+{%- from 'macros.jinja' import generate_enum %}
+{{ generate_enum(
+    'SetItems.txt',
+    metadata_columns={
+        'set': 'Set',
+        'item': 'CodeLiteral',
+    }
+) }}

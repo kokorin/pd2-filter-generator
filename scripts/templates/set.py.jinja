@@ -1,0 +1,5 @@
+{%- from 'macros.jinja' import generate_enum %}
+{{ generate_enum(
+    'Sets.txt',
+    member_name_column="name"
+) }}

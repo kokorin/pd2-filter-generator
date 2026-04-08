@@ -3,19 +3,20 @@
 # dependencies = [
 #   "click",
 #   "jinja2",
+#   "duckdb",
 # ]
 # ///
 
 from __future__ import annotations
 
 import csv
-import keyword
-import re
+import time
 from io import StringIO
 from pathlib import Path
 from urllib.request import Request, urlopen
 
 import click
+import duckdb
 from jinja2 import Environment, FileSystemLoader
 
 BASE_URL = "https://raw.githubusercontent.com/Lukaszpg/PD2-Single-Player-Plus-mod/main/data/global/excel"
@@ -56,117 +57,6 @@ def fetch_and_parse(filename: str) -> list[dict[str, str]]:
     return parse_tsv(content)
 
 
-NUMBER_TO_WORDS = {
-    0: "ZERO",
-    1: "ONE",
-    2: "TWO",
-    3: "THREE",
-    4: "FOUR",
-    5: "FIVE",
-    6: "SIX",
-    7: "SEVEN",
-    8: "EIGHT",
-    9: "NINE",
-}
-
-
-def to_field_name(name: str) -> str | None:
-    """Convert any string to valid Python field identifier (snake_case).
-
-    Handles: CamelCase, special chars, keywords, leading digits.
-
-    Examples:
-        BodyLoc1 -> body_loc1
-        ItemType -> item_type
-        *eol -> eol
-        class -> class_
-        2handed -> field_2handed
-    """
-    if not name:
-        return None
-
-    # CamelCase to snake_case
-    # Insert underscore before uppercase letters that follow lowercase
-    s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
-    # Insert underscore before uppercase letters that follow lowercase/digits
-    s2 = re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1)
-    name = s2.lower()
-
-    # Replace invalid chars with underscore
-    name = re.sub(r"[^a-z0-9_]", "_", name)
-
-    # Collapse multiple underscores
-    name = re.sub(r"_+", "_", name)
-
-    # Strip leading/trailing underscores
-    name = name.strip("_")
-
-    if not name:
-        return None
-
-    # Replace all leading digits with words
-    # 2h -> two_h, 2handed -> two_handed
-    match = re.match(r"^(\d+)", name)
-    if match:
-        digits = match.group(1)
-        words = "_".join(NUMBER_TO_WORDS[int(d)].lower() for d in digits)
-        name = words + "_" + name[len(digits) :]
-
-    # Handle keywords
-    if keyword.iskeyword(name):
-        name += "_"
-
-    return name
-
-
-def to_member_name(name: str) -> str | None:
-    """Convert any string to valid Python enum member identifier (UPPER_CASE).
-
-    Returns None for "None" string or empty input.
-    Handles: spaces, special chars, keywords, leading digits.
-
-    Examples:
-        Shield -> SHIELD
-        2Handed Melee Weapon -> TYPE_2HANDED_MELEE_WEAPON
-        cap/hat -> CAP_HAT
-        None -> None
-        "" -> None
-    """
-    if not name or name == "None":
-        return None
-
-    # Replace invalid chars with underscore
-    name = re.sub(r"[^a-zA-Z0-9_]", "_", name)
-
-    # Collapse multiple underscores
-    name = re.sub(r"_+", "_", name)
-
-    # Strip leading/trailing underscores
-    name = name.strip("_")
-
-    if not name:
-        return None
-
-    # Replace all leading digits with words
-    # 2H -> TWO_H, 2Handed -> TWO_HANDED
-    match = re.match(r"^(\d+)", name)
-    if match:
-        digits = match.group(1)
-        words = "_".join(NUMBER_TO_WORDS[int(d)] for d in digits)
-        name = words + "_" + name[len(digits) :]
-
-    # Handle keywords (rare for uppercase, but be safe)
-    if keyword.iskeyword(name.lower()):
-        name += "_"
-
-    return name.upper()
-
-
-def is_valid_identifier(name: str) -> bool:
-    """Check if name is a valid Python identifier (not a keyword)."""
-    return name.isidentifier() and not keyword.iskeyword(name)
-
-
 @click.group()
 def cli():
     """PD2 constants generator."""
@@ -202,12 +92,9 @@ def generate():
     # Setup Jinja environment with custom functions/filters
     env = Environment(loader=FileSystemLoader(templates_dir), autoescape=False)  # noqa: S701
     env.globals["fetch_and_parse"] = fetch_and_parse
-    env.globals["is_valid_identifier"] = is_valid_identifier
-    env.filters["to_field_name"] = to_field_name
-    env.filters["to_member_name"] = to_member_name
 
     # Find all .jinja templates
-    templates = sorted(templates_dir.glob("*.jinja"))
+    templates = sorted(templates_dir.glob("*.py.jinja"))
 
     if not templates:
         click.echo("No templates found in templates/", err=True)
@@ -229,6 +116,44 @@ def generate():
         output_file.write_text(rendered, encoding="utf-8")
 
         click.echo(f"  -> {output_file.relative_to(Path.cwd())}")
+
+
+@cli.command()
+def analyze():
+    """Start DuckDB UI with cached PD2 data files loaded as tables."""
+    cache_dir = CACHE_DIR
+
+    if not cache_dir.exists():
+        click.echo("No cache directory found. Run 'generate' first.", err=True)
+        return
+
+    cache_files = list(cache_dir.glob("*.txt"))
+    if not cache_files:
+        click.echo("No cached files found. Run 'generate' first.", err=True)
+        return
+
+    click.echo(f"Loading {len(cache_files)} cached file(s) into DuckDB...")
+
+    # Create in-memory DuckDB connection
+    con = duckdb.connect(":memory:")
+
+    # Load each cache file as a table
+    for cache_file in cache_files:
+        # Table name: ItemTypes.txt -> itemtypes
+        table_name = cache_file.stem.lower()
+        click.echo(f"  Loading {cache_file.name} as table '{table_name}'")
+
+        con.execute(
+            f"""
+            CREATE TABLE {table_name} AS
+            SELECT * FROM read_csv_auto('{cache_file.absolute()}', delim='\t', header=true)
+        """
+        )
+
+    click.echo("\nTables loaded. Starting DuckDB UI...")
+    con.sql("CALL start_ui()")
+    while True:
+        time.sleep(1)
 
 
 if __name__ == "__main__":
