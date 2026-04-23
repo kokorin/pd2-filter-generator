@@ -25,17 +25,48 @@
   {{ result | join('') }}
 {%- endmacro -%}
 
-{# ###################################### #}
+{#- ###################################### #}
+
+{%- macro get_name(
+            item,
+            name_column,
+            name_code_column
+) -%}
+    {%- if name_code_column -%}
+        {%- set res = [] -%}
+        {%- set name_code = item[name_code_column] -%}
+        {%- for filename in ['string.tbl', 'expansionstring.tbl', 'patchstring.tbl'] -%}
+            {%- set names = read_tbl('data/local/lng/eng/' ~ filename) -%}
+            {%- set name = names.get(name_code) | trim %}
+            {%- set _ = res.append(names[name_code]) -%}
+        {%- endfor -%}
+        {%- if not res -%}
+            {{ 'Name code not found: ' ~ name_code }}
+        {%- endif  -%}
+        {{ res | select | list | last }}
+    {%- else -%}
+        {{ item[name_column] }}
+    {%- endif -%}
+{%- endmacro -%}
+
+{#- ###################################### #}
 
 {%- macro generate_enum(
             file_name,
-            class_name = None,
-            code_column = None,
+            class_name,
+            code_column,
             metadata_columns = {},
-            member_name_column = "",
-            skip_members = ["None", "Not Used", "Unused", "unused", "Expansion"]
+            member_name_column = None,
+            member_name_code_column = None,
+            skip_by_columns = {
+                'name': ["None", "Not Used", "Unused", "unused", "Expansion"],
+            },
+            name_override = {}
 ) -%}
 {%- set class_name = class_name or file_name.split('.')[0].rstrip('s') -%}
+{%- if member_name_column and member_name_code_column or not member_name_column and not member_name_code_column -%}
+    {%- set _ = raise('Exactly one of member_name_column and member_name_code_column must be set in ' ~ class_name) -%}
+{%- endif -%}
 """
 Generated {{ class_name }} enum from PD2 data.
 
@@ -46,10 +77,49 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from pd2_filter_generator.expression import CodeLiteral
+{%- if class_name != 'Set' %}
 from pd2_filter_generator.set import Set
+{%- endif %}
 
-{%- set items = fetch_and_parse(file_name) %}
-{%- set member_name_column = member_name_column or items[0].keys() | first %}
+{%- set items = read_tsv('data/global/excel/' ~ file_name) %}
+
+{%- set members = {}  %}
+
+{%- for item in items %}
+    {%- set to_skip = [] %}
+    {%- for column, skipped_values in skip_by_columns.items() %}
+        {%- if item[column] in skipped_values %}
+            {%- set _ = to_skip.append(True) %}
+        {%- endif %}
+    {%- endfor  %}
+
+    {%- if not to_skip %}
+    {%- set member_name = name_override.get(item.get(code_column)) or get_name(item, member_name_column, member_name_code_column) %}
+    {%- set member_variants = members.setdefault(member_name, []) %}
+    {%- set member_props = {} %}
+
+    {%- if code_column %}
+        {%- set _ = member_props.update({ code_column : item.get(code_column) }) %}
+    {%- endif  %}
+    {%- for column, type in metadata_columns.items() %}
+        {%- set _ = member_props.update({ to_snake_case(column) : item[column] }) %}
+    {%- endfor %}
+    {%- set _ = member_variants.append(member_props) %}
+    {%- endif %}
+{%- endfor %}
+
+{%- for member_name, member_variants in members.items() %}
+    {%- if member_variants | map('tojson') | unique | list | length > 1 %}
+    {%- set err_msg  -%}
+        Can't generate {{ class_name }}: it contains a member {{ member_name }} with different properties:
+        {% for member in member_variants | map('tojson') | unique %}
+            {{ member }}
+        {% endfor %}
+    {%- endset %}
+    {{ raise(err_msg) }}
+    {%- endif %}
+    {%- set _ = members.update({ member_name : member_variants | first }) %}
+{%- endfor  %}
 
 {%- if metadata_columns %}
 @dataclass(frozen=True)
@@ -60,18 +130,17 @@ class _Metadata:
 {%- endfor %}
 
 _METADATA: dict[str, _Metadata] = {
-    {%- for item in items if item.get(member_name_column) not in skip_members %}
-    {%- set member_name = item.get(member_name_column) %}
+    {%- for member_name, member_props in members.items() %}
     {%- set member_name_snake = to_snake_case(member_name) | upper %}
-    "{{ member_name_snake | upper }}": _Metadata(
+    "{{ member_name_snake }}": _Metadata(
     {%- for column, type in metadata_columns.items() %}
-        {%- set value = item.get(column) %}
-        {{ to_snake_case(column) }}={%- if value and type == "str" -%}
-            "{{ value }}"
-        {%- elif value and type == 'bool' -%}
-            {{ value == '1' }}
-        {%- elif value and type == 'int' -%}
-            {{ value }}
+        {%- set value = member_props.get(column) %}
+        {{ to_snake_case(column) }}={%- if type == "str" -%}
+            "{{ value or '' }}"
+        {%- elif type == 'bool' -%}
+            {{ value is defined and value | string | trim == '1' }}
+        {%- elif type == 'int' -%}
+            {{ value or 0 }}
         {%- elif value -%}
             {{ type }}("{{ value }}")
         {%- else -%}
@@ -86,11 +155,10 @@ _METADATA: dict[str, _Metadata] = {
 class {{ class_name }}(Enum):
     """PD2 {{ to_snake_case(class_name).split('_') | join(' ') }} categories."""
 {#- Special handling of None item types #}
-{% for item in items if item.get(member_name_column) not in skip_members %}
-    {%- set member_name = item.get(member_name_column) %}
+{%- for member_name, member_props in members.items() %}
     {%- set member_name_snake = to_snake_case(member_name) | upper %}
-    {{ member_name_snake | upper }} = {% if code_column -%}
-        CodeLiteral("{{ item.get(code_column) }}") # {{ member_name }}
+    {{ member_name_snake }} = {% if code_column -%}
+        CodeLiteral("{{ member_props.get(code_column) }}") # {{ member_name }}
     {%- else %} "{{ member_name }}"
     {%- endif %}
 {%- endfor %}

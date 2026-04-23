@@ -1,4 +1,3 @@
-
 """
 Generated Armor enum from PD2 data.
 
@@ -6,19 +5,24 @@ DO NOT EDIT MANUALLY - regenerate with: hatch run ./scripts/generate.py generate
 """
 
 from __future__ import annotations
+
 from dataclasses import dataclass
 from enum import Enum
+
 from pd2_filter_generator.expression import CodeLiteral
-from pd2_filter_generator.set import Set
+
+
 @dataclass(frozen=True)
 class _Metadata:
     """Item type metadata."""
-    code: CodeLiteral # "code"
-    reqstr: int # "reqstr"
-    levelreq: int # "levelreq"
+
+    code: CodeLiteral  # "code"
+    reqstr: int  # "reqstr"
+    levelreq: int  # "levelreq"
+
 
 _METADATA: dict[str, _Metadata] = {
-    "CAP_HAT": _Metadata(
+    "CAP": _Metadata(
         code=CodeLiteral("cap"),
         reqstr=0,
         levelreq=0,
@@ -158,7 +162,7 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=60,
         levelreq=0,
     ),
-    "GLOVES_L_": _Metadata(
+    "LEATHER_GLOVES": _Metadata(
         code=CodeLiteral("lgl"),
         reqstr=0,
         levelreq=0,
@@ -168,7 +172,7 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=0,
         levelreq=0,
     ),
-    "BRACERS_M_": _Metadata(
+    "CHAIN_GLOVES": _Metadata(
         code=CodeLiteral("mgl"),
         reqstr=25,
         levelreq=0,
@@ -178,12 +182,12 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=45,
         levelreq=0,
     ),
-    "GAUNLETS_H_": _Metadata(
+    "GAUNTLETS": _Metadata(
         code=CodeLiteral("hgl"),
         reqstr=60,
         levelreq=0,
     ),
-    "LEATHER_BOOTS": _Metadata(
+    "BOOTS": _Metadata(
         code=CodeLiteral("lbt"),
         reqstr=0,
         levelreq=0,
@@ -198,17 +202,17 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=30,
         levelreq=0,
     ),
-    "LIGHT_PLATE_BOOTS": _Metadata(
+    "LIGHT_PLATED_BOOTS": _Metadata(
         code=CodeLiteral("tbt"),
         reqstr=50,
         levelreq=0,
     ),
-    "PLATE_BOOTS": _Metadata(
+    "GREAVES": _Metadata(
         code=CodeLiteral("hbt"),
         reqstr=70,
         levelreq=0,
     ),
-    "SASH_L_": _Metadata(
+    "SASH": _Metadata(
         code=CodeLiteral("lbl"),
         reqstr=0,
         levelreq=0,
@@ -218,7 +222,7 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=0,
         levelreq=0,
     ),
-    "BELT_M_": _Metadata(
+    "BELT": _Metadata(
         code=CodeLiteral("mbl"),
         reqstr=25,
         levelreq=0,
@@ -228,7 +232,7 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=45,
         levelreq=0,
     ),
-    "GIRDLE_H_": _Metadata(
+    "PLATED_BELT": _Metadata(
         code=CodeLiteral("hbl"),
         reqstr=60,
         levelreq=0,
@@ -348,7 +352,7 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=140,
         levelreq=25,
     ),
-    "ORNATE_ARMOR": _Metadata(
+    "ORNATE_PLATE": _Metadata(
         code=CodeLiteral("xar"),
         reqstr=170,
         levelreq=25,
@@ -678,7 +682,7 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=165,
         levelreq=57,
     ),
-    "HELLFORGED_PLATE": _Metadata(
+    "HELLFORGE_PLATE": _Metadata(
         code=CodeLiteral("ult"),
         reqstr=196,
         levelreq=59,
@@ -833,7 +837,7 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=44,
         levelreq=26,
     ),
-    "GRIFFON_HEADRESS": _Metadata(
+    "GRIFFON_HEADDRESS": _Metadata(
         code=CodeLiteral("dr7"),
         reqstr=50,
         levelreq=30,
@@ -893,7 +897,7 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=69,
         levelreq=34,
     ),
-    "GUILDED_SHIELD": _Metadata(
+    "GILDED_SHIELD": _Metadata(
         code=CodeLiteral("pa9"),
         reqstr=89,
         levelreq=38,
@@ -923,12 +927,12 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=50,
         levelreq=36,
     ),
-    "HEIROPHANT_TROPHY": _Metadata(
+    "HIEROPHANT_TROPHY": _Metadata(
         code=CodeLiteral("nea"),
         reqstr=58,
         levelreq=40,
     ),
-    "BLOOD_SPIRT": _Metadata(
+    "BLOOD_SPIRIT": _Metadata(
         code=CodeLiteral("drb"),
         reqstr=86,
         levelreq=46,
@@ -968,7 +972,7 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=151,
         levelreq=54,
     ),
-    "CONQUERER_CROWN": _Metadata(
+    "CONQUEROR_CROWN": _Metadata(
         code=CodeLiteral("bae"),
         reqstr=174,
         levelreq=60,
@@ -988,7 +992,7 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=109,
         levelreq=52,
     ),
-    "ANCIENT_SHIELD": _Metadata(
+    "KURAST_SHIELD": _Metadata(
         code=CodeLiteral("pad"),
         reqstr=124,
         levelreq=55,
@@ -1018,7 +1022,7 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=91,
         levelreq=49,
     ),
-    "SUCCUBAE_SKULL": _Metadata(
+    "SUCCUBUS_SKULL": _Metadata(
         code=CodeLiteral("nee"),
         reqstr=95,
         levelreq=60,
@@ -1028,226 +1032,226 @@ _METADATA: dict[str, _Metadata] = {
         reqstr=106,
         levelreq=65,
     ),
-    "BONEWEAVE__S_": _Metadata(
+    "BONEWEAVE_RAR": _Metadata(
         code=CodeLiteral("rar"),
         reqstr=158,
         levelreq=47,
     ),
-    "TROLL_BELT__S_": _Metadata(
+    "TROLL_BELT_RBE": _Metadata(
         code=CodeLiteral("rbe"),
         reqstr=151,
         levelreq=62,
     ),
 }
 
+
 class Armor(Enum):
     """PD2 armor categories."""
 
-    CAP_HAT = CodeLiteral("cap") # Cap/hat
-    SKULL_CAP = CodeLiteral("skp") # Skull Cap
-    HELM = CodeLiteral("hlm") # Helm
-    FULL_HELM = CodeLiteral("fhl") # Full Helm
-    GREAT_HELM = CodeLiteral("ghm") # Great Helm
-    CROWN = CodeLiteral("crn") # Crown
-    MASK = CodeLiteral("msk") # Mask
-    QUILTED_ARMOR = CodeLiteral("qui") # Quilted Armor
-    LEATHER_ARMOR = CodeLiteral("lea") # Leather Armor
-    HARD_LEATHER_ARMOR = CodeLiteral("hla") # Hard Leather Armor
-    STUDDED_LEATHER = CodeLiteral("stu") # Studded Leather
-    RING_MAIL = CodeLiteral("rng") # Ring Mail
-    SCALE_MAIL = CodeLiteral("scl") # Scale Mail
-    CHAIN_MAIL = CodeLiteral("chn") # Chain Mail
-    BREAST_PLATE = CodeLiteral("brs") # Breast Plate
-    SPLINT_MAIL = CodeLiteral("spl") # Splint Mail
-    PLATE_MAIL = CodeLiteral("plt") # Plate Mail
-    FIELD_PLATE = CodeLiteral("fld") # Field Plate
-    GOTHIC_PLATE = CodeLiteral("gth") # Gothic Plate
-    FULL_PLATE_MAIL = CodeLiteral("ful") # Full Plate Mail
-    ANCIENT_ARMOR = CodeLiteral("aar") # Ancient Armor
-    LIGHT_PLATE = CodeLiteral("ltp") # Light Plate
-    BUCKLER = CodeLiteral("buc") # Buckler
-    SMALL_SHIELD = CodeLiteral("sml") # Small Shield
-    LARGE_SHIELD = CodeLiteral("lrg") # Large Shield
-    KITE_SHIELD = CodeLiteral("kit") # Kite Shield
-    TOWER_SHIELD = CodeLiteral("tow") # Tower Shield
-    GOTHIC_SHIELD = CodeLiteral("gts") # Gothic Shield
-    GLOVES_L_ = CodeLiteral("lgl") # Gloves(L)
-    HEAVY_GLOVES = CodeLiteral("vgl") # Heavy Gloves
-    BRACERS_M_ = CodeLiteral("mgl") # Bracers(M)
-    LIGHT_GAUNTLETS = CodeLiteral("tgl") # Light Gauntlets
-    GAUNLETS_H_ = CodeLiteral("hgl") # Gaunlets(H)
-    LEATHER_BOOTS = CodeLiteral("lbt") # Leather Boots
-    HEAVY_BOOTS = CodeLiteral("vbt") # Heavy Boots
-    CHAIN_BOOTS = CodeLiteral("mbt") # Chain Boots
-    LIGHT_PLATE_BOOTS = CodeLiteral("tbt") # Light Plate Boots
-    PLATE_BOOTS = CodeLiteral("hbt") # Plate Boots
-    SASH_L_ = CodeLiteral("lbl") # Sash(L)
-    LIGHT_BELT = CodeLiteral("vbl") # Light Belt
-    BELT_M_ = CodeLiteral("mbl") # Belt(M)
-    HEAVY_BELT = CodeLiteral("tbl") # Heavy Belt
-    GIRDLE_H_ = CodeLiteral("hbl") # Girdle(H)
-    BONE_HELM = CodeLiteral("bhm") # Bone Helm
-    BONE_SHIELD = CodeLiteral("bsh") # Bone Shield
-    SPIKED_SHIELD = CodeLiteral("spk") # Spiked Shield
-    WAR_HAT = CodeLiteral("xap") # War Hat
-    SALLET = CodeLiteral("xkp") # Sallet
-    CASQUE = CodeLiteral("xlm") # Casque
-    BASINET = CodeLiteral("xhl") # Basinet
-    WINGED_HELM = CodeLiteral("xhm") # Winged Helm
-    GRAND_CROWN = CodeLiteral("xrn") # Grand Crown
-    DEATH_MASK = CodeLiteral("xsk") # Death Mask
-    GHOST_ARMOR = CodeLiteral("xui") # Ghost Armor
-    SERPENTSKIN_ARMOR = CodeLiteral("xea") # Serpentskin Armor
-    DEMONHIDE_ARMOR = CodeLiteral("xla") # Demonhide Armor
-    TRELLISED_ARMOR = CodeLiteral("xtu") # Trellised Armor
-    LINKED_MAIL = CodeLiteral("xng") # Linked Mail
-    TIGULATED_MAIL = CodeLiteral("xcl") # Tigulated Mail
-    MESH_ARMOR = CodeLiteral("xhn") # Mesh Armor
-    CUIRASS = CodeLiteral("xrs") # Cuirass
-    RUSSET_ARMOR = CodeLiteral("xpl") # Russet Armor
-    TEMPLAR_COAT = CodeLiteral("xlt") # Templar Coat
-    SHARKTOOTH_ARMOR = CodeLiteral("xld") # Sharktooth Armor
-    EMBOSSED_PLATE = CodeLiteral("xth") # Embossed Plate
-    CHAOS_ARMOR = CodeLiteral("xul") # Chaos Armor
-    ORNATE_ARMOR = CodeLiteral("xar") # Ornate Armor
-    MAGE_PLATE = CodeLiteral("xtp") # Mage Plate
-    DEFENDER = CodeLiteral("xuc") # Defender
-    ROUND_SHIELD = CodeLiteral("xml") # Round Shield
-    SCUTUM = CodeLiteral("xrg") # Scutum
-    DRAGON_SHIELD = CodeLiteral("xit") # Dragon Shield
-    PAVISE = CodeLiteral("xow") # Pavise
-    ANCIENT_SHIELD = CodeLiteral("xts") # Ancient Shield
-    DEMONHIDE_GLOVES = CodeLiteral("xlg") # Demonhide Gloves
-    SHARKSKIN_GLOVES = CodeLiteral("xvg") # Sharkskin Gloves
-    HEAVY_BRACERS = CodeLiteral("xmg") # Heavy Bracers
-    BATTLE_GAUNTLETS = CodeLiteral("xtg") # Battle Gauntlets
-    WAR_GAUNTLETS = CodeLiteral("xhg") # War Gauntlets
-    DEMONHIDE_BOOTS = CodeLiteral("xlb") # Demonhide Boots
-    SHARKSKIN_BOOTS = CodeLiteral("xvb") # Sharkskin Boots
-    MESH_BOOTS = CodeLiteral("xmb") # Mesh Boots
-    BATTLE_BOOTS = CodeLiteral("xtb") # Battle Boots
-    WAR_BOOTS = CodeLiteral("xhb") # War Boots
-    DEMONHIDE_SASH = CodeLiteral("zlb") # Demonhide Sash
-    SHARKSKIN_BELT = CodeLiteral("zvb") # Sharkskin Belt
-    MESH_BELT = CodeLiteral("zmb") # Mesh Belt
-    BATTLE_BELT = CodeLiteral("ztb") # Battle Belt
-    WAR_BELT = CodeLiteral("zhb") # War Belt
-    GRIM_HELM = CodeLiteral("xh9") # Grim Helm
-    GRIM_SHIELD = CodeLiteral("xsh") # Grim Shield
-    BARBED_SHIELD = CodeLiteral("xpk") # Barbed Shield
-    WOLF_HEAD = CodeLiteral("dr1") # Wolf Head
-    HAWK_HELM = CodeLiteral("dr2") # Hawk Helm
-    ANTLERS = CodeLiteral("dr3") # Antlers
-    FALCON_MASK = CodeLiteral("dr4") # Falcon Mask
-    SPIRIT_MASK = CodeLiteral("dr5") # Spirit Mask
-    JAWBONE_CAP = CodeLiteral("ba1") # Jawbone Cap
-    FANGED_HELM = CodeLiteral("ba2") # Fanged Helm
-    HORNED_HELM = CodeLiteral("ba3") # Horned Helm
-    ASSAULT_HELMET = CodeLiteral("ba4") # Assault Helmet
-    AVENGER_GUARD = CodeLiteral("ba5") # Avenger Guard
-    TARGE = CodeLiteral("pa1") # Targe
-    RONDACHE = CodeLiteral("pa2") # Rondache
-    HERALDIC_SHIELD = CodeLiteral("pa3") # Heraldic Shield
-    AERIN_SHIELD = CodeLiteral("pa4") # Aerin Shield
-    CROWN_SHIELD = CodeLiteral("pa5") # Crown Shield
-    PRESERVED_HEAD = CodeLiteral("ne1") # Preserved Head
-    ZOMBIE_HEAD = CodeLiteral("ne2") # Zombie Head
-    UNRAVELLER_HEAD = CodeLiteral("ne3") # Unraveller Head
-    GARGOYLE_HEAD = CodeLiteral("ne4") # Gargoyle Head
-    DEMON_HEAD = CodeLiteral("ne5") # Demon Head
-    CIRCLET = CodeLiteral("ci0") # Circlet
-    CORONET = CodeLiteral("ci1") # Coronet
-    TIARA = CodeLiteral("ci2") # Tiara
-    DIADEM = CodeLiteral("ci3") # Diadem
-    SHAKO = CodeLiteral("uap") # Shako
-    HYDRASKULL = CodeLiteral("ukp") # Hydraskull
-    ARMET = CodeLiteral("ulm") # Armet
-    GIANT_CONCH = CodeLiteral("uhl") # Giant Conch
-    SPIRED_HELM = CodeLiteral("uhm") # Spired Helm
-    CORONA = CodeLiteral("urn") # Corona
-    DEMONHEAD = CodeLiteral("usk") # Demonhead
-    DUSK_SHROUD = CodeLiteral("uui") # Dusk Shroud
-    WYRMHIDE = CodeLiteral("uea") # Wyrmhide
-    SCARAB_HUSK = CodeLiteral("ula") # Scarab Husk
-    WIRE_FLEECE = CodeLiteral("utu") # Wire Fleece
-    DIAMOND_MAIL = CodeLiteral("ung") # Diamond Mail
-    LORICATED_MAIL = CodeLiteral("ucl") # Loricated Mail
-    BONEWEAVE = CodeLiteral("uhn") # Boneweave
-    GREAT_HAUBERK = CodeLiteral("urs") # Great Hauberk
-    BALROG_SKIN = CodeLiteral("upl") # Balrog Skin
-    HELLFORGED_PLATE = CodeLiteral("ult") # Hellforged Plate
-    KRAKEN_SHELL = CodeLiteral("uld") # Kraken Shell
-    LACQUERED_PLATE = CodeLiteral("uth") # Lacquered Plate
-    SHADOW_PLATE = CodeLiteral("uul") # Shadow Plate
-    SACRED_ARMOR = CodeLiteral("uar") # Sacred Armor
-    ARCHON_PLATE = CodeLiteral("utp") # Archon Plate
-    HEATER = CodeLiteral("uuc") # Heater
-    LUNA = CodeLiteral("uml") # Luna
-    HYPERION = CodeLiteral("urg") # Hyperion
-    MONARCH = CodeLiteral("uit") # Monarch
-    AEGIS = CodeLiteral("uow") # Aegis
-    WARD = CodeLiteral("uts") # Ward
-    BRAMBLE_MITTS = CodeLiteral("ulg") # Bramble Mitts
-    VAMPIREBONE_GLOVES = CodeLiteral("uvg") # Vampirebone Gloves
-    VAMBRACES = CodeLiteral("umg") # Vambraces
-    CRUSADER_GAUNTLETS = CodeLiteral("utg") # Crusader Gauntlets
-    OGRE_GAUNTLETS = CodeLiteral("uhg") # Ogre Gauntlets
-    WYRMHIDE_BOOTS = CodeLiteral("ulb") # Wyrmhide Boots
-    SCARABSHELL_BOOTS = CodeLiteral("uvb") # Scarabshell Boots
-    BONEWEAVE_BOOTS = CodeLiteral("umb") # Boneweave Boots
-    MIRRORED_BOOTS = CodeLiteral("utb") # Mirrored Boots
-    MYRMIDON_GREAVES = CodeLiteral("uhb") # Myrmidon Greaves
-    SPIDERWEB_SASH = CodeLiteral("ulc") # Spiderweb Sash
-    VAMPIREFANG_BELT = CodeLiteral("uvc") # Vampirefang Belt
-    MITHRIL_COIL = CodeLiteral("umc") # Mithril Coil
-    TROLL_BELT = CodeLiteral("utc") # Troll Belt
-    COLOSSUS_GIRDLE = CodeLiteral("uhc") # Colossus Girdle
-    BONE_VISAGE = CodeLiteral("uh9") # Bone Visage
-    TROLL_NEST = CodeLiteral("ush") # Troll Nest
-    BLADE_BARRIER = CodeLiteral("upk") # Blade Barrier
-    ALPHA_HELM = CodeLiteral("dr6") # Alpha Helm
-    GRIFFON_HEADRESS = CodeLiteral("dr7") # Griffon Headress
-    HUNTERS_GUISE = CodeLiteral("dr8") # Hunter's Guise
-    SACRED_FEATHERS = CodeLiteral("dr9") # Sacred Feathers
-    TOTEMIC_MASK = CodeLiteral("dra") # Totemic Mask
-    JAWBONE_VISOR = CodeLiteral("ba6") # Jawbone Visor
-    LION_HELM = CodeLiteral("ba7") # Lion Helm
-    RAGE_MASK = CodeLiteral("ba8") # Rage Mask
-    SAVAGE_HELMET = CodeLiteral("ba9") # Savage Helmet
-    SLAYER_GUARD = CodeLiteral("baa") # Slayer Guard
-    AKARAN_TARGE = CodeLiteral("pa6") # Akaran Targe
-    AKARAN_RONDACHE = CodeLiteral("pa7") # Akaran Rondache
-    PROTECTOR_SHIELD = CodeLiteral("pa8") # Protector Shield
-    GUILDED_SHIELD = CodeLiteral("pa9") # Guilded Shield
-    ROYAL_SHIELD = CodeLiteral("paa") # Royal Shield
-    MUMMIFIED_TROPHY = CodeLiteral("ne6") # Mummified Trophy
-    FETISH_TROPHY = CodeLiteral("ne7") # Fetish Trophy
-    SEXTON_TROPHY = CodeLiteral("ne8") # Sexton Trophy
-    CANTOR_TROPHY = CodeLiteral("ne9") # Cantor Trophy
-    HEIROPHANT_TROPHY = CodeLiteral("nea") # Heirophant Trophy
-    BLOOD_SPIRT = CodeLiteral("drb") # Blood Spirt
-    SUN_SPIRIT = CodeLiteral("drc") # Sun Spirit
-    EARTH_SPIRIT = CodeLiteral("drd") # Earth Spirit
-    SKY_SPIRIT = CodeLiteral("dre") # Sky Spirit
-    DREAM_SPIRIT = CodeLiteral("drf") # Dream Spirit
-    CARNAGE_HELM = CodeLiteral("bab") # Carnage Helm
-    FURY_VISOR = CodeLiteral("bac") # Fury Visor
-    DESTROYER_HELM = CodeLiteral("bad") # Destroyer Helm
-    CONQUERER_CROWN = CodeLiteral("bae") # Conquerer Crown
-    GUARDIAN_CROWN = CodeLiteral("baf") # Guardian Crown
-    SACRED_TARGE = CodeLiteral("pab") # Sacred Targe
-    SACRED_RONDACHE = CodeLiteral("pac") # Sacred Rondache
-    ANCIENT_SHIELD = CodeLiteral("pad") # Ancient Shield
-    ZAKARUM_SHIELD = CodeLiteral("pae") # Zakarum Shield
-    VORTEX_SHIELD = CodeLiteral("paf") # Vortex Shield
-    MINION_SKULL = CodeLiteral("neb") # Minion Skull
-    HELLSPAWN_SKULL = CodeLiteral("neg") # Hellspawn Skull
-    OVERSEER_SKULL = CodeLiteral("ned") # Overseer Skull
-    SUCCUBAE_SKULL = CodeLiteral("nee") # Succubae Skull
-    BLOODLORD_SKULL = CodeLiteral("nef") # Bloodlord Skull
-    BONEWEAVE__S_ = CodeLiteral("rar") # Boneweave [S]
-    TROLL_BELT__S_ = CodeLiteral("rbe") # Troll Belt [S]
-
+    CAP = CodeLiteral("cap")  # Cap
+    SKULL_CAP = CodeLiteral("skp")  # Skull Cap
+    HELM = CodeLiteral("hlm")  # Helm
+    FULL_HELM = CodeLiteral("fhl")  # Full Helm
+    GREAT_HELM = CodeLiteral("ghm")  # Great Helm
+    CROWN = CodeLiteral("crn")  # Crown
+    MASK = CodeLiteral("msk")  # Mask
+    QUILTED_ARMOR = CodeLiteral("qui")  # Quilted Armor
+    LEATHER_ARMOR = CodeLiteral("lea")  # Leather Armor
+    HARD_LEATHER_ARMOR = CodeLiteral("hla")  # Hard Leather Armor
+    STUDDED_LEATHER = CodeLiteral("stu")  # Studded Leather
+    RING_MAIL = CodeLiteral("rng")  # Ring Mail
+    SCALE_MAIL = CodeLiteral("scl")  # Scale Mail
+    CHAIN_MAIL = CodeLiteral("chn")  # Chain Mail
+    BREAST_PLATE = CodeLiteral("brs")  # Breast Plate
+    SPLINT_MAIL = CodeLiteral("spl")  # Splint Mail
+    PLATE_MAIL = CodeLiteral("plt")  # Plate Mail
+    FIELD_PLATE = CodeLiteral("fld")  # Field Plate
+    GOTHIC_PLATE = CodeLiteral("gth")  # Gothic Plate
+    FULL_PLATE_MAIL = CodeLiteral("ful")  # Full Plate Mail
+    ANCIENT_ARMOR = CodeLiteral("aar")  # Ancient Armor
+    LIGHT_PLATE = CodeLiteral("ltp")  # Light Plate
+    BUCKLER = CodeLiteral("buc")  # Buckler
+    SMALL_SHIELD = CodeLiteral("sml")  # Small Shield
+    LARGE_SHIELD = CodeLiteral("lrg")  # Large Shield
+    KITE_SHIELD = CodeLiteral("kit")  # Kite Shield
+    TOWER_SHIELD = CodeLiteral("tow")  # Tower Shield
+    GOTHIC_SHIELD = CodeLiteral("gts")  # Gothic Shield
+    LEATHER_GLOVES = CodeLiteral("lgl")  # Leather Gloves
+    HEAVY_GLOVES = CodeLiteral("vgl")  # Heavy Gloves
+    CHAIN_GLOVES = CodeLiteral("mgl")  # Chain Gloves
+    LIGHT_GAUNTLETS = CodeLiteral("tgl")  # Light Gauntlets
+    GAUNTLETS = CodeLiteral("hgl")  # Gauntlets
+    BOOTS = CodeLiteral("lbt")  # Boots
+    HEAVY_BOOTS = CodeLiteral("vbt")  # Heavy Boots
+    CHAIN_BOOTS = CodeLiteral("mbt")  # Chain Boots
+    LIGHT_PLATED_BOOTS = CodeLiteral("tbt")  # Light Plated Boots
+    GREAVES = CodeLiteral("hbt")  # Greaves
+    SASH = CodeLiteral("lbl")  # Sash
+    LIGHT_BELT = CodeLiteral("vbl")  # Light Belt
+    BELT = CodeLiteral("mbl")  # Belt
+    HEAVY_BELT = CodeLiteral("tbl")  # Heavy Belt
+    PLATED_BELT = CodeLiteral("hbl")  # Plated Belt
+    BONE_HELM = CodeLiteral("bhm")  # Bone Helm
+    BONE_SHIELD = CodeLiteral("bsh")  # Bone Shield
+    SPIKED_SHIELD = CodeLiteral("spk")  # Spiked Shield
+    WAR_HAT = CodeLiteral("xap")  # War Hat
+    SALLET = CodeLiteral("xkp")  # Sallet
+    CASQUE = CodeLiteral("xlm")  # Casque
+    BASINET = CodeLiteral("xhl")  # Basinet
+    WINGED_HELM = CodeLiteral("xhm")  # Winged Helm
+    GRAND_CROWN = CodeLiteral("xrn")  # Grand Crown
+    DEATH_MASK = CodeLiteral("xsk")  # Death Mask
+    GHOST_ARMOR = CodeLiteral("xui")  # Ghost Armor
+    SERPENTSKIN_ARMOR = CodeLiteral("xea")  # Serpentskin Armor
+    DEMONHIDE_ARMOR = CodeLiteral("xla")  # Demonhide Armor
+    TRELLISED_ARMOR = CodeLiteral("xtu")  # Trellised Armor
+    LINKED_MAIL = CodeLiteral("xng")  # Linked Mail
+    TIGULATED_MAIL = CodeLiteral("xcl")  # Tigulated Mail
+    MESH_ARMOR = CodeLiteral("xhn")  # Mesh Armor
+    CUIRASS = CodeLiteral("xrs")  # Cuirass
+    RUSSET_ARMOR = CodeLiteral("xpl")  # Russet Armor
+    TEMPLAR_COAT = CodeLiteral("xlt")  # Templar Coat
+    SHARKTOOTH_ARMOR = CodeLiteral("xld")  # Sharktooth Armor
+    EMBOSSED_PLATE = CodeLiteral("xth")  # Embossed Plate
+    CHAOS_ARMOR = CodeLiteral("xul")  # Chaos Armor
+    ORNATE_PLATE = CodeLiteral("xar")  # Ornate Plate
+    MAGE_PLATE = CodeLiteral("xtp")  # Mage Plate
+    DEFENDER = CodeLiteral("xuc")  # Defender
+    ROUND_SHIELD = CodeLiteral("xml")  # Round Shield
+    SCUTUM = CodeLiteral("xrg")  # Scutum
+    DRAGON_SHIELD = CodeLiteral("xit")  # Dragon Shield
+    PAVISE = CodeLiteral("xow")  # Pavise
+    ANCIENT_SHIELD = CodeLiteral("xts")  # Ancient Shield
+    DEMONHIDE_GLOVES = CodeLiteral("xlg")  # Demonhide Gloves
+    SHARKSKIN_GLOVES = CodeLiteral("xvg")  # Sharkskin Gloves
+    HEAVY_BRACERS = CodeLiteral("xmg")  # Heavy Bracers
+    BATTLE_GAUNTLETS = CodeLiteral("xtg")  # Battle Gauntlets
+    WAR_GAUNTLETS = CodeLiteral("xhg")  # War Gauntlets
+    DEMONHIDE_BOOTS = CodeLiteral("xlb")  # Demonhide Boots
+    SHARKSKIN_BOOTS = CodeLiteral("xvb")  # Sharkskin Boots
+    MESH_BOOTS = CodeLiteral("xmb")  # Mesh Boots
+    BATTLE_BOOTS = CodeLiteral("xtb")  # Battle Boots
+    WAR_BOOTS = CodeLiteral("xhb")  # War Boots
+    DEMONHIDE_SASH = CodeLiteral("zlb")  # Demonhide Sash
+    SHARKSKIN_BELT = CodeLiteral("zvb")  # Sharkskin Belt
+    MESH_BELT = CodeLiteral("zmb")  # Mesh Belt
+    BATTLE_BELT = CodeLiteral("ztb")  # Battle Belt
+    WAR_BELT = CodeLiteral("zhb")  # War Belt
+    GRIM_HELM = CodeLiteral("xh9")  # Grim Helm
+    GRIM_SHIELD = CodeLiteral("xsh")  # Grim Shield
+    BARBED_SHIELD = CodeLiteral("xpk")  # Barbed Shield
+    WOLF_HEAD = CodeLiteral("dr1")  # Wolf Head
+    HAWK_HELM = CodeLiteral("dr2")  # Hawk Helm
+    ANTLERS = CodeLiteral("dr3")  # Antlers
+    FALCON_MASK = CodeLiteral("dr4")  # Falcon Mask
+    SPIRIT_MASK = CodeLiteral("dr5")  # Spirit Mask
+    JAWBONE_CAP = CodeLiteral("ba1")  # Jawbone Cap
+    FANGED_HELM = CodeLiteral("ba2")  # Fanged Helm
+    HORNED_HELM = CodeLiteral("ba3")  # Horned Helm
+    ASSAULT_HELMET = CodeLiteral("ba4")  # Assault Helmet
+    AVENGER_GUARD = CodeLiteral("ba5")  # Avenger Guard
+    TARGE = CodeLiteral("pa1")  # Targe
+    RONDACHE = CodeLiteral("pa2")  # Rondache
+    HERALDIC_SHIELD = CodeLiteral("pa3")  # Heraldic Shield
+    AERIN_SHIELD = CodeLiteral("pa4")  # Aerin Shield
+    CROWN_SHIELD = CodeLiteral("pa5")  # Crown Shield
+    PRESERVED_HEAD = CodeLiteral("ne1")  # Preserved Head
+    ZOMBIE_HEAD = CodeLiteral("ne2")  # Zombie Head
+    UNRAVELLER_HEAD = CodeLiteral("ne3")  # Unraveller Head
+    GARGOYLE_HEAD = CodeLiteral("ne4")  # Gargoyle Head
+    DEMON_HEAD = CodeLiteral("ne5")  # Demon Head
+    CIRCLET = CodeLiteral("ci0")  # Circlet
+    CORONET = CodeLiteral("ci1")  # Coronet
+    TIARA = CodeLiteral("ci2")  # Tiara
+    DIADEM = CodeLiteral("ci3")  # Diadem
+    SHAKO = CodeLiteral("uap")  # Shako
+    HYDRASKULL = CodeLiteral("ukp")  # Hydraskull
+    ARMET = CodeLiteral("ulm")  # Armet
+    GIANT_CONCH = CodeLiteral("uhl")  # Giant Conch
+    SPIRED_HELM = CodeLiteral("uhm")  # Spired Helm
+    CORONA = CodeLiteral("urn")  # Corona
+    DEMONHEAD = CodeLiteral("usk")  # Demonhead
+    DUSK_SHROUD = CodeLiteral("uui")  # Dusk Shroud
+    WYRMHIDE = CodeLiteral("uea")  # Wyrmhide
+    SCARAB_HUSK = CodeLiteral("ula")  # Scarab Husk
+    WIRE_FLEECE = CodeLiteral("utu")  # Wire Fleece
+    DIAMOND_MAIL = CodeLiteral("ung")  # Diamond Mail
+    LORICATED_MAIL = CodeLiteral("ucl")  # Loricated Mail
+    BONEWEAVE = CodeLiteral("uhn")  # Boneweave
+    GREAT_HAUBERK = CodeLiteral("urs")  # Great Hauberk
+    BALROG_SKIN = CodeLiteral("upl")  # Balrog Skin
+    HELLFORGE_PLATE = CodeLiteral("ult")  # Hellforge Plate
+    KRAKEN_SHELL = CodeLiteral("uld")  # Kraken Shell
+    LACQUERED_PLATE = CodeLiteral("uth")  # Lacquered Plate
+    SHADOW_PLATE = CodeLiteral("uul")  # Shadow Plate
+    SACRED_ARMOR = CodeLiteral("uar")  # Sacred Armor
+    ARCHON_PLATE = CodeLiteral("utp")  # Archon Plate
+    HEATER = CodeLiteral("uuc")  # Heater
+    LUNA = CodeLiteral("uml")  # Luna
+    HYPERION = CodeLiteral("urg")  # Hyperion
+    MONARCH = CodeLiteral("uit")  # Monarch
+    AEGIS = CodeLiteral("uow")  # Aegis
+    WARD = CodeLiteral("uts")  # Ward
+    BRAMBLE_MITTS = CodeLiteral("ulg")  # Bramble Mitts
+    VAMPIREBONE_GLOVES = CodeLiteral("uvg")  # Vampirebone Gloves
+    VAMBRACES = CodeLiteral("umg")  # Vambraces
+    CRUSADER_GAUNTLETS = CodeLiteral("utg")  # Crusader Gauntlets
+    OGRE_GAUNTLETS = CodeLiteral("uhg")  # Ogre Gauntlets
+    WYRMHIDE_BOOTS = CodeLiteral("ulb")  # Wyrmhide Boots
+    SCARABSHELL_BOOTS = CodeLiteral("uvb")  # Scarabshell Boots
+    BONEWEAVE_BOOTS = CodeLiteral("umb")  # Boneweave Boots
+    MIRRORED_BOOTS = CodeLiteral("utb")  # Mirrored Boots
+    MYRMIDON_GREAVES = CodeLiteral("uhb")  # Myrmidon Greaves
+    SPIDERWEB_SASH = CodeLiteral("ulc")  # Spiderweb Sash
+    VAMPIREFANG_BELT = CodeLiteral("uvc")  # Vampirefang Belt
+    MITHRIL_COIL = CodeLiteral("umc")  # Mithril Coil
+    TROLL_BELT = CodeLiteral("utc")  # Troll Belt
+    COLOSSUS_GIRDLE = CodeLiteral("uhc")  # Colossus Girdle
+    BONE_VISAGE = CodeLiteral("uh9")  # Bone Visage
+    TROLL_NEST = CodeLiteral("ush")  # Troll Nest
+    BLADE_BARRIER = CodeLiteral("upk")  # Blade Barrier
+    ALPHA_HELM = CodeLiteral("dr6")  # Alpha Helm
+    GRIFFON_HEADDRESS = CodeLiteral("dr7")  # Griffon Headdress
+    HUNTERS_GUISE = CodeLiteral("dr8")  # Hunter's Guise
+    SACRED_FEATHERS = CodeLiteral("dr9")  # Sacred Feathers
+    TOTEMIC_MASK = CodeLiteral("dra")  # Totemic Mask
+    JAWBONE_VISOR = CodeLiteral("ba6")  # Jawbone Visor
+    LION_HELM = CodeLiteral("ba7")  # Lion Helm
+    RAGE_MASK = CodeLiteral("ba8")  # Rage Mask
+    SAVAGE_HELMET = CodeLiteral("ba9")  # Savage Helmet
+    SLAYER_GUARD = CodeLiteral("baa")  # Slayer Guard
+    AKARAN_TARGE = CodeLiteral("pa6")  # Akaran Targe
+    AKARAN_RONDACHE = CodeLiteral("pa7")  # Akaran Rondache
+    PROTECTOR_SHIELD = CodeLiteral("pa8")  # Protector Shield
+    GILDED_SHIELD = CodeLiteral("pa9")  # Gilded Shield
+    ROYAL_SHIELD = CodeLiteral("paa")  # Royal Shield
+    MUMMIFIED_TROPHY = CodeLiteral("ne6")  # Mummified Trophy
+    FETISH_TROPHY = CodeLiteral("ne7")  # Fetish Trophy
+    SEXTON_TROPHY = CodeLiteral("ne8")  # Sexton Trophy
+    CANTOR_TROPHY = CodeLiteral("ne9")  # Cantor Trophy
+    HIEROPHANT_TROPHY = CodeLiteral("nea")  # Hierophant Trophy
+    BLOOD_SPIRIT = CodeLiteral("drb")  # Blood Spirit
+    SUN_SPIRIT = CodeLiteral("drc")  # Sun Spirit
+    EARTH_SPIRIT = CodeLiteral("drd")  # Earth Spirit
+    SKY_SPIRIT = CodeLiteral("dre")  # Sky Spirit
+    DREAM_SPIRIT = CodeLiteral("drf")  # Dream Spirit
+    CARNAGE_HELM = CodeLiteral("bab")  # Carnage Helm
+    FURY_VISOR = CodeLiteral("bac")  # Fury Visor
+    DESTROYER_HELM = CodeLiteral("bad")  # Destroyer Helm
+    CONQUEROR_CROWN = CodeLiteral("bae")  # Conqueror Crown
+    GUARDIAN_CROWN = CodeLiteral("baf")  # Guardian Crown
+    SACRED_TARGE = CodeLiteral("pab")  # Sacred Targe
+    SACRED_RONDACHE = CodeLiteral("pac")  # Sacred Rondache
+    KURAST_SHIELD = CodeLiteral("pad")  # Kurast Shield
+    ZAKARUM_SHIELD = CodeLiteral("pae")  # Zakarum Shield
+    VORTEX_SHIELD = CodeLiteral("paf")  # Vortex Shield
+    MINION_SKULL = CodeLiteral("neb")  # Minion Skull
+    HELLSPAWN_SKULL = CodeLiteral("neg")  # Hellspawn Skull
+    OVERSEER_SKULL = CodeLiteral("ned")  # Overseer Skull
+    SUCCUBUS_SKULL = CodeLiteral("nee")  # Succubus Skull
+    BLOODLORD_SKULL = CodeLiteral("nef")  # Bloodlord Skull
+    BONEWEAVE_RAR = CodeLiteral("rar")  # Boneweave rar
+    TROLL_BELT_RBE = CodeLiteral("rbe")  # Troll Belt rbe
 
     @property
     def code(self) -> CodeLiteral:

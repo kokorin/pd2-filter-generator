@@ -1,4 +1,16 @@
 {%- from 'macros.jinja' import generate_enum %}
 {{ generate_enum(
-    'ItemTypes.txt'
+    'ItemTypes.txt',
+    code_column='Code',
+    member_name_column='ItemType',
+    metadata_columns={
+        'Body': 'bool',
+        'Throwable': 'bool',
+        'Beltable': 'bool',
+        'Shoots': 'bool',
+        'Quiver': 'bool',
+    },
+    skip_by_columns = {
+        'ItemType': ["None", "Not Used", "Unused", "unused", "Expansion"],
+    }
 ) }}
