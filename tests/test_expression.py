@@ -6,13 +6,12 @@ from pd2_filter_generator.expression import (
     And,
     BinaryOp,
     BinaryOperator,
-    BoolLiteral,
-    CodeLiteral,
+    BoolRef,
     Equal,
     GreaterThan,
-    IntLiteral,
+    IntLit,
+    Leaf,
     LessThan,
-    Literal,
     Node,
     NodeVisitor,
     Not,
@@ -20,22 +19,18 @@ from pd2_filter_generator.expression import (
     Or,
 )
 
-# Boolean literals - PD2 flags
-NMAG = BoolLiteral("NMAG")
-RARE = BoolLiteral("RARE")
-BOOTS = BoolLiteral("BOOTS")
+# Boolean refs - PD2 flags / item-type predicates
+NMAG = BoolRef("NMAG")
+RARE = BoolRef("RARE")
+BOOTS = BoolRef("BOOTS")
 
-# Integer literals - PD2 numeric stats
-SOCKETS = IntLiteral("SOCKETS")
-CLVL = IntLiteral("CLVL")
-GOLD = IntLiteral("GOLD")
-ONE = IntLiteral("1")
-TWO = IntLiteral("2")
-TEN = IntLiteral("10")
-
-# Code literals - PD2 3-4 letter codes
-CAP = CodeLiteral("cap")
-HLM = CodeLiteral("hlm")
+# Integer refs - PD2 numeric stats
+SOCKETS = IntLit("SOCKETS")
+CLVL = IntLit("CLVL")
+GOLD = IntLit("GOLD")
+ONE = IntLit("1")
+TWO = IntLit("2")
+TEN = IntLit("10")
 
 
 class ToDictVisitor(NodeVisitor[dict]):
@@ -95,8 +90,8 @@ class TestNode:
             ONE < SOCKETS < TWO  # noqa: B015
 
 
-class TestBooleanNode:
-    """Tests for BooleanNode - supports ~, &, | operators."""
+class TestBoolExpr:
+    """Tests for BoolExpr - supports ~, &, | operators."""
 
     def test_invert_creates_not(self):
         """~NMAG creates Not node."""
@@ -203,31 +198,29 @@ class TestBooleanNode:
             },
         }
 
-    def test_and_validates_right_operand_is_boolean(self):
-        """AND requires both operands to be BooleanNode."""
-        with pytest.raises(TypeError, match="not boolean"):
+    def test_and_validates_right_operand_is_bool(self):
+        """AND requires both operands to be BoolExpr."""
+        with pytest.raises(TypeError, match="BoolExpr"):
             NMAG & SOCKETS
 
-    def test_or_validates_right_operand_is_boolean(self):
-        """OR requires both operands to be BooleanNode."""
-        with pytest.raises(TypeError, match="not boolean"):
+    def test_or_validates_right_operand_is_bool(self):
+        """OR requires both operands to be BoolExpr."""
+        with pytest.raises(TypeError, match="BoolExpr"):
             NMAG | CLVL
 
     def test_comparison_results_are_boolean(self):
-        """Comparison results are BooleanNode and can use &, |, ~."""
+        """Comparison results are BoolExpr and can use &, |, ~."""
         comparison = SOCKETS < TEN
 
-        # Can combine with other booleans
         result = NMAG & comparison
         assert isinstance(result, And)
 
-        # Can negate
         negated = ~comparison
         assert isinstance(negated, Not)
 
 
-class TestEqNode:
-    """Tests for EqNode - supports ==, != operators."""
+class TestIntExpr:
+    """Tests for IntExpr - supports ==, !=, <, > operators."""
 
     def test_equal_operator(self):
         """== creates Equal node."""
@@ -249,29 +242,6 @@ class TestEqNode:
             "right": {"type": "Literal", "value": "GOLD"},
         }
 
-    def test_equal_validates_right_operand(self):
-        """== requires right operand to be EqNode."""
-        with pytest.raises(TypeError, match="does not support equality"):
-            HLM == NMAG  # noqa: B015
-
-    def test_not_equal_validates_right_operand(self):
-        """!= requires right operand to be EqNode."""
-        with pytest.raises(TypeError, match="does not support equality"):
-            HLM != NMAG  # noqa: B015
-
-    def test_equality_results_are_boolean(self):
-        """Equality results are BooleanNode."""
-        result = SOCKETS == ONE
-        assert isinstance(result, Equal)
-
-        # Can use boolean operations
-        combined = NMAG & result
-        assert isinstance(combined, And)
-
-
-class TestComparableNode:
-    """Tests for ComparableNode - supports <, >, ==, != operators."""
-
     def test_less_than_operator(self):
         """< creates LessThan node."""
         result = SOCKETS < CLVL
@@ -292,159 +262,114 @@ class TestComparableNode:
             "right": {"type": "Literal", "value": "GOLD"},
         }
 
-    def test_less_than_validates_right_operand(self):
-        """< requires right operand to be ComparableNode."""
-        with pytest.raises(TypeError, match="not comparable"):
+    def test_equal_validates_right_operand_is_int(self):
+        """== requires both operands to be IntExpr."""
+        with pytest.raises(TypeError, match="IntExpr"):
+            SOCKETS == NMAG  # noqa: B015
+
+    def test_not_equal_validates_right_operand_is_int(self):
+        """!= requires both operands to be IntExpr."""
+        with pytest.raises(TypeError, match="IntExpr"):
+            SOCKETS != NMAG  # noqa: B015
+
+    def test_less_than_validates_right_operand_is_int(self):
+        """< requires both operands to be IntExpr."""
+        with pytest.raises(TypeError, match="IntExpr"):
             SOCKETS < NMAG  # noqa: B015
 
-    def test_greater_than_validates_right_operand(self):
-        """> requires right operand to be ComparableNode."""
-        with pytest.raises(TypeError, match="not comparable"):
+    def test_greater_than_validates_right_operand_is_int(self):
+        """> requires both operands to be IntExpr."""
+        with pytest.raises(TypeError, match="IntExpr"):
             SOCKETS > NMAG  # noqa: B015
 
-    def test_comparable_inherits_equality(self):
-        """ComparableNode extends EqNode, so supports ==, !=."""
-        result_eq = SOCKETS == CLVL
-        assert isinstance(result_eq, Equal)
-
-        result_ne = SOCKETS != GOLD
-        assert isinstance(result_ne, NotEqual)
-
     def test_comparison_results_are_boolean(self):
-        """Comparison results are BooleanNode."""
+        """Comparison results are BoolExpr."""
         result = SOCKETS < TEN
 
-        # Can use boolean operations
         combined = NMAG & result
         assert isinstance(combined, And)
 
-        # Can negate
         negated = ~result
         assert isinstance(negated, Not)
 
+    def test_equality_results_are_boolean(self):
+        """Equality results are BoolExpr."""
+        result = SOCKETS == ONE
+        assert isinstance(result, Equal)
 
-class TestLiterals:
-    """Tests for literal types and their capabilities."""
+        combined = NMAG & result
+        assert isinstance(combined, And)
 
-    def test_literal_base_class_cannot_be_instantiated(self):
-        """Literal is abstract."""
+
+class TestLeaf:
+    """Tests for leaf node types and their capabilities."""
+
+    def test_leaf_base_class_cannot_be_instantiated(self):
+        """Leaf is abstract."""
         with pytest.raises(TypeError):
-            Literal("x")
+            Leaf("x")
 
     # =========================================================================
-    # BoolLiteral: supports &, |, ~ only
+    # BoolRef: supports &, |, ~ only
     # =========================================================================
 
-    def test_bool_literal_supports_and_operator(self):
-        """BoolLiteral supports & operator."""
+    def test_bool_ref_supports_and_operator(self):
         result = NMAG & BOOTS
         assert isinstance(result, And)
 
-    def test_bool_literal_supports_or_operator(self):
-        """BoolLiteral supports | operator."""
+    def test_bool_ref_supports_or_operator(self):
         result = NMAG | RARE
         assert isinstance(result, Or)
 
-    def test_bool_literal_supports_invert_operator(self):
-        """BoolLiteral supports ~ operator."""
+    def test_bool_ref_supports_invert_operator(self):
         result = ~NMAG
         assert isinstance(result, Not)
 
-    def test_bool_literal_blocks_less_than(self):
-        """BoolLiteral doesn't support < operator."""
+    def test_bool_ref_blocks_less_than(self):
         with pytest.raises(TypeError):
             NMAG < RARE  # noqa: B015
 
-    def test_bool_literal_blocks_greater_than(self):
-        """BoolLiteral doesn't support > operator."""
+    def test_bool_ref_blocks_greater_than(self):
         with pytest.raises(TypeError):
             NMAG > RARE  # noqa: B015
 
-    def test_bool_literal_blocks_equal(self):
-        """BoolLiteral doesn't support == operator."""
+    def test_bool_ref_blocks_equal(self):
         with pytest.raises(TypeError):
             NMAG == RARE  # noqa: B015
 
-    def test_bool_literal_blocks_not_equal(self):
-        """BoolLiteral doesn't support != operator."""
+    def test_bool_ref_blocks_not_equal(self):
         with pytest.raises(TypeError):
             NMAG != RARE  # noqa: B015
 
     # =========================================================================
-    # CodeLiteral: supports ==, != only
+    # IntLit: supports <, >, ==, != only (NOT ~, &, |)
     # =========================================================================
 
-    def test_code_literal_supports_equal_operator(self):
-        """CodeLiteral supports == operator."""
-        result = HLM == CAP
-        assert isinstance(result, Equal)
-
-    def test_code_literal_supports_not_equal_operator(self):
-        """CodeLiteral supports != operator."""
-        result = HLM != CAP
-        assert isinstance(result, NotEqual)
-
-    def test_code_literal_blocks_less_than(self):
-        """CodeLiteral doesn't support < operator."""
-        with pytest.raises(TypeError):
-            CAP < HLM  # noqa: B015
-
-    def test_code_literal_blocks_greater_than(self):
-        """CodeLiteral doesn't support > operator."""
-        with pytest.raises(TypeError):
-            CAP > HLM  # noqa: B015
-
-    def test_code_literal_blocks_invert(self):
-        """CodeLiteral doesn't support ~ operator."""
-        with pytest.raises(TypeError):
-            ~CAP  # noqa: B018
-
-    def test_code_literal_blocks_and_operator(self):
-        """CodeLiteral doesn't support & operator."""
-        with pytest.raises(TypeError):
-            CAP & HLM
-
-    def test_code_literal_blocks_or_operator(self):
-        """CodeLiteral doesn't support | operator."""
-        with pytest.raises(TypeError):
-            CAP | HLM
-
-    # =========================================================================
-    # IntLiteral: supports <, >, ==, != only (NOT ~, &, |)
-    # =========================================================================
-
-    def test_int_literal_supports_less_than_operator(self):
-        """IntLiteral supports < operator."""
+    def test_int_lit_supports_less_than_operator(self):
         result = SOCKETS < TWO
         assert isinstance(result, LessThan)
 
-    def test_int_literal_supports_greater_than_operator(self):
-        """IntLiteral supports > operator."""
+    def test_int_lit_supports_greater_than_operator(self):
         result = SOCKETS > ONE
         assert isinstance(result, GreaterThan)
 
-    def test_int_literal_supports_equal_operator(self):
-        """IntLiteral supports == operator."""
+    def test_int_lit_supports_equal_operator(self):
         result = SOCKETS == ONE
         assert isinstance(result, Equal)
 
-    def test_int_literal_supports_not_equal_operator(self):
-        """IntLiteral supports != operator."""
+    def test_int_lit_supports_not_equal_operator(self):
         result = SOCKETS != TWO
         assert isinstance(result, NotEqual)
 
-    def test_int_literal_blocks_invert(self):
-        """IntLiteral doesn't support ~ operator."""
+    def test_int_lit_blocks_invert(self):
         with pytest.raises(TypeError):
             ~SOCKETS  # noqa: B018
 
-    def test_int_literal_blocks_and_operator(self):
-        """IntLiteral doesn't support & operator."""
+    def test_int_lit_blocks_and_operator(self):
         with pytest.raises(TypeError):
             SOCKETS & CLVL
 
-    def test_int_literal_blocks_or_operator(self):
-        """IntLiteral doesn't support | operator."""
+    def test_int_lit_blocks_or_operator(self):
         with pytest.raises(TypeError):
             SOCKETS | CLVL
 

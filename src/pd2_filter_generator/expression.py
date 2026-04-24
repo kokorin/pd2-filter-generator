@@ -21,6 +21,7 @@ class BinaryOperator(Enum):
 
 
 T = TypeVar("T")
+E = TypeVar("E", bound="Node")
 
 
 class NodeVisitor(ABC, Generic[T]):
@@ -37,8 +38,68 @@ class NodeVisitor(ABC, Generic[T]):
         pass
 
 
-class Node(ABC):
+class ExprMixin(Generic[E]):
+    """Mixin for expression nodes."""
+
+    # Cannot extend ABC - otherwise we will get metaclass conflict
+    @abstractmethod
+    def as_node(self) -> "E":
+        raise NotImplementedError
+
+    # We have to block == and != default methods.
+    # Other operations are defined to raise TypeError (not AttributeError) to make errors more explicit.
+
+    def __hash__(self):
+        msg = f"Cannot hash {type(self).__name__}"
+        raise TypeError(msg)
+
+    def __eq__(self, other: object) -> "BoolExpr":  # type: ignore[override]
+        msg = f"Cannot use == with {type(self).__name__}"
+        raise TypeError(msg)
+
+    def __ne__(self, other: object) -> "BoolExpr":  # type: ignore[override]
+        msg = f"Cannot use != with {type(self).__name__}"
+        raise TypeError(msg)
+
+
+class BoolMixin(ExprMixin["BoolExpr"]):
+    """Mixin counterpart to BoolExpr — supports ~, &, | operators."""
+
+    def __invert__(self) -> "BoolExpr":
+        return Not(self)
+
+    def __and__(self, other: "BoolMixin") -> "BoolExpr":
+        return And(self, other)
+
+    def __or__(self, other: "BoolMixin") -> "BoolExpr":
+        return Or(self, other)
+
+
+class IntMixin(ExprMixin["IntExpr"]):
+    """Mixin counterpart to IntExpr — supports ==, !=, <, > operators."""
+
+    def __hash__(self):
+        msg = f"Cannot hash {type(self).__name__}"
+        raise TypeError(msg)
+
+    def __eq__(self, other: "IntMixin") -> "BoolExpr":  # type: ignore[override]
+        return Equal(self, other)
+
+    def __ne__(self, other: "IntMixin") -> "BoolExpr":  # type: ignore[override]
+        return NotEqual(self, other)
+
+    def __lt__(self, other: "IntMixin") -> "BoolExpr":
+        return LessThan(self, other)
+
+    def __gt__(self, other: "IntMixin") -> "BoolExpr":
+        return GreaterThan(self, other)
+
+
+class Node(ExprMixin["Node"], ABC):
     """Base class for expression tree nodes."""
+
+    def as_node(self) -> "Node":
+        return self
 
     @abstractmethod
     def accept(self, visitor: NodeVisitor[T]) -> T:
@@ -56,117 +117,47 @@ class Node(ABC):
         )
         raise TypeError(msg)
 
-    # We have to block == and != default methods.
-    # Other operations are defined to raise TypeError (not AttributeError) to make errors more explicit.
 
-    def __hash__(self):
-        msg = f"Cannot hash {type(self).__name__}"
-        raise TypeError(msg)
-
-    def __invert__(self):
-        self._raise_not_supported(type(self), "~")
-
-    def __eq__(self, other):
-        self._raise_not_supported(type(self), "==")
-
-    def __ne__(self, other):
-        self._raise_not_supported(type(self), "!=")
-
-    def __lt__(self, other):
-        self._raise_not_supported(type(self), "<")
-
-    def __gt__(self, other):
-        self._raise_not_supported(type(self), ">")
-
-    @staticmethod
-    def _raise_not_supported(node_type, operation: str):
-        msg = f"Cannot use {operation} with {node_type.__name__}"
-        raise TypeError(msg)
+class BoolExpr(Node, BoolMixin, ABC):
+    """Nodes representing boolean expressions. Support ~, &, | operators."""
 
 
-class EqNode(Node, ABC):  # noqa: PLW1641
-    """Nodes that support equality comparison operators (==, !=)."""
-
-    def __eq__(self, other: "EqNode") -> "BooleanNode":  # type: ignore[override]
-        if not isinstance(other, EqNode):
-            msg = f"Cannot use == with {type(other).__name__} (right operand does not support equality)"
-            raise TypeError(msg)
-        return Equal(self, other)
-
-    def __ne__(self, other: "EqNode") -> "BooleanNode":  # type: ignore[override]
-        if not isinstance(other, EqNode):
-            msg = f"Cannot use != with {type(other).__name__} (right operand does not support equality)"
-            raise TypeError(msg)
-        return NotEqual(self, other)
+class IntExpr(Node, IntMixin, ABC):
+    """Nodes supporting ordering operators (==, !=, <, >)."""
 
 
-class ComparableNode(EqNode, ABC):
-    """Nodes that support ordering operators (<, >) in addition to equality (==, !=)."""
-
-    def __lt__(self, other: "ComparableNode") -> "BooleanNode":
-        if not isinstance(other, ComparableNode):
-            msg = f"Cannot use < with {type(other).__name__} (right operand is not comparable)"
-            raise TypeError(msg)
-        return LessThan(self, other)
-
-    def __gt__(self, other: "ComparableNode") -> "BooleanNode":
-        if not isinstance(other, ComparableNode):
-            msg = f"Cannot use > with {type(other).__name__} (right operand is not comparable)"
-            raise TypeError(msg)
-        return GreaterThan(self, other)
-
-
-class BooleanNode(Node, ABC):
-    """Nodes representing boolean expressions. Support boolean operators (~, &, |)."""
-
-    def __invert__(self) -> "BooleanNode":
-        return Not(self)
-
-    def __and__(self, other: "BooleanNode") -> "BooleanNode":
-        if not isinstance(other, BooleanNode):
-            msg = f"Cannot use AND with {type(other).__name__} (right operand is not boolean)"
-            raise TypeError(msg)
-        return And(self, other)
-
-    def __or__(self, other: "BooleanNode") -> "BooleanNode":
-        if not isinstance(other, BooleanNode):
-            msg = f"Cannot use OR with {type(other).__name__} (right operand is not boolean)"
-            raise TypeError(msg)
-        return Or(self, other)
-
-
-class Literal(Node):
+class Leaf(Node, ABC):
     """Leaf node holding a value."""
 
     def __init__(self, value: str):
-        if type(self) is Literal:
-            msg = "Cannot instantiate Literal directly"
-            raise TypeError(msg)
+        super().__init__()
         self.value = value
 
     def accept(self, visitor: NodeVisitor[T]) -> T:
         return visitor.visit_literal(self.value)
 
+
+class IntLit(Leaf, IntExpr):
     def __repr__(self):
-        return f"Literal({self.value})"
+        return f"IntLit({self.value})"
 
 
-class CodeLiteral(Literal, EqNode):
-    pass
+class IntRef(Leaf, IntExpr):
+    def __repr__(self):
+        return f"IntRef({self.value})"
 
 
-class IntLiteral(Literal, ComparableNode):
-    pass
+class BoolRef(Leaf, BoolExpr):
+    def __repr__(self):
+        return f"BoolRef({self.value})"
 
 
-class BoolLiteral(Literal, BooleanNode):
-    pass
-
-
-class Not(BooleanNode):
-    def __init__(self, operand: BooleanNode):
-        super().__init__()
-        self.operand = operand
+class Not(BoolExpr):
+    def __init__(self, operand: BoolMixin):
+        self.operand = operand.as_node()
+        if not isinstance(self.operand, BoolExpr):
+            msg = f"~ requires BoolExpr, got {type(operand).__name__}"
+            raise TypeError(msg)
 
     def accept(self, visitor: NodeVisitor[T]) -> T:
         operand = self.operand.accept(visitor)
@@ -176,16 +167,24 @@ class Not(BooleanNode):
         return f"Not({self.operand})"
 
 
-class BinaryOp(Node):
-    def __init__(self, left: Node, right: Node, operator: BinaryOperator):
-        if type(self) is BinaryOp:
-            # we need at least 1 abstract method for ABC to block direct instantiation
-            msg = "Cannot instantiate BinaryOp directly"
+class BinaryOp(Node, ABC):
+    def __init__(self, left: ExprMixin, right: ExprMixin):
+        self.left = left.as_node()
+        self.right = right.as_node()
+
+        if not isinstance(self.left, self._operands_type) or not isinstance(self.right, self._operands_type):
+            msg = f"{self.operator.symbol} requires {self._operands_type} operands, got {type(self.left).__name__} and {type(self.right).__name__}"
             raise TypeError(msg)
 
-        self.left = left
-        self.right = right
-        self.operator = operator
+    @property
+    @abstractmethod
+    def operator(self) -> BinaryOperator:
+        pass
+
+    @property
+    @abstractmethod
+    def _operands_type(self) -> type:
+        pass
 
     def accept(self, visitor: NodeVisitor[T]) -> T:
         left = self.left.accept(visitor)
@@ -196,31 +195,61 @@ class BinaryOp(Node):
         return f"BinaryOp({self.left} {self.operator} {self.right})"
 
 
-class LessThan(BinaryOp, BooleanNode):
-    def __init__(self, left: ComparableNode, right: ComparableNode):
-        super().__init__(left, right, BinaryOperator.LESS_THAN)
+class LessThan(BinaryOp, BoolExpr):
+    @property
+    def operator(self) -> BinaryOperator:
+        return BinaryOperator.LESS_THAN
+
+    @property
+    def _operands_type(self) -> type:
+        return IntExpr
 
 
-class GreaterThan(BinaryOp, BooleanNode):
-    def __init__(self, left: Node, right: Node):
-        super().__init__(left, right, BinaryOperator.GREATER_THAN)
+class GreaterThan(BinaryOp, BoolExpr):
+    @property
+    def operator(self) -> BinaryOperator:
+        return BinaryOperator.GREATER_THAN
+
+    @property
+    def _operands_type(self) -> type:
+        return IntExpr
 
 
-class Equal(BinaryOp, BooleanNode):
-    def __init__(self, left: Node, right: Node):
-        super().__init__(left, right, BinaryOperator.EQUAL)
+class Equal(BinaryOp, BoolExpr):
+    @property
+    def operator(self) -> BinaryOperator:
+        return BinaryOperator.EQUAL
+
+    @property
+    def _operands_type(self) -> type:
+        return IntExpr
 
 
-class NotEqual(BinaryOp, BooleanNode):
-    def __init__(self, left: Node, right: Node):
-        super().__init__(left, right, BinaryOperator.NOT_EQUAL)
+class NotEqual(BinaryOp, BoolExpr):
+    @property
+    def operator(self) -> BinaryOperator:
+        return BinaryOperator.NOT_EQUAL
+
+    @property
+    def _operands_type(self) -> type:
+        return IntExpr
 
 
-class And(BinaryOp, BooleanNode):
-    def __init__(self, left: Node, right: Node):
-        super().__init__(left, right, BinaryOperator.AND)
+class And(BinaryOp, BoolExpr):
+    @property
+    def operator(self) -> BinaryOperator:
+        return BinaryOperator.AND
+
+    @property
+    def _operands_type(self) -> type:
+        return BoolExpr
 
 
-class Or(BinaryOp, BooleanNode):
-    def __init__(self, left: Node, right: Node):
-        super().__init__(left, right, BinaryOperator.OR)
+class Or(BinaryOp, BoolExpr):
+    @property
+    def operator(self) -> BinaryOperator:
+        return BinaryOperator.OR
+
+    @property
+    def _operands_type(self) -> type:
+        return BoolExpr
