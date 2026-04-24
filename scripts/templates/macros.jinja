@@ -27,23 +27,27 @@
 
 {#- ###################################### #}
 
+{%- macro resolve_name_code(name_code) -%}
+    {%- set res = [] -%}
+    {%- for filename in ['string.tbl', 'expansionstring.tbl', 'patchstring.tbl'] -%}
+        {%- set names = read_tbl('data/local/lng/eng/' ~ filename) -%}
+        {%- set name = names.get(name_code) | trim %}
+        {%- set _ = res.append(names[name_code]) -%}
+    {%- endfor -%}
+    {%- if not res -%}
+        {{ 'Name code not found: ' ~ name_code }}
+    {%- endif  -%}
+    {{ res | select | list | last }}
+{%- endmacro -%}
+
 {%- macro get_name(
             item,
             name_column,
             name_code_column
 ) -%}
     {%- if name_code_column -%}
-        {%- set res = [] -%}
         {%- set name_code = item[name_code_column] -%}
-        {%- for filename in ['string.tbl', 'expansionstring.tbl', 'patchstring.tbl'] -%}
-            {%- set names = read_tbl('data/local/lng/eng/' ~ filename) -%}
-            {%- set name = names.get(name_code) | trim %}
-            {%- set _ = res.append(names[name_code]) -%}
-        {%- endfor -%}
-        {%- if not res -%}
-            {{ 'Name code not found: ' ~ name_code }}
-        {%- endif  -%}
-        {{ res | select | list | last }}
+        {{ resolve_name_code(name_code) }}
     {%- else -%}
         {{ item[name_column] }}
     {%- endif -%}
@@ -76,7 +80,7 @@ DO NOT EDIT MANUALLY - regenerate with: hatch run ./scripts/generate.py generate
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
-from pd2_filter_generator.expression import CodeLiteral
+from pd2_filter_generator.expression import BoolMixin, BoolRef, IntRef
 {%- if class_name != 'Set' %}
 from pd2_filter_generator.set import Set
 {%- endif %}
@@ -102,7 +106,7 @@ from pd2_filter_generator.set import Set
         {%- set _ = member_props.update({ code_column : item.get(code_column) }) %}
     {%- endif  %}
     {%- for column, type in metadata_columns.items() %}
-        {%- set _ = member_props.update({ to_snake_case(column) : item[column] }) %}
+        {%- set _ = member_props.update({ column : item[column] }) %}
     {%- endfor %}
     {%- set _ = member_variants.append(member_props) %}
     {%- endif %}
@@ -141,6 +145,8 @@ _METADATA: dict[str, _Metadata] = {
             {{ value is defined and value | string | trim == '1' }}
         {%- elif type == 'int' -%}
             {{ value or 0 }}
+        {%- elif type == 'Set' -%}
+            Set("{{ resolve_name_code(value) }}")
         {%- elif value -%}
             {{ type }}("{{ value }}")
         {%- else -%}
@@ -152,17 +158,20 @@ _METADATA: dict[str, _Metadata] = {
 }
 {%- endif %}
 
-class {{ class_name }}(Enum):
+class {{ class_name }}({% if code_column %}BoolMixin, {% endif %}Enum):
     """PD2 {{ to_snake_case(class_name).split('_') | join(' ') }} categories."""
-{#- Special handling of None item types #}
 {%- for member_name, member_props in members.items() %}
     {%- set member_name_snake = to_snake_case(member_name) | upper %}
     {{ member_name_snake }} = {% if code_column -%}
-        CodeLiteral("{{ member_props.get(code_column) }}") # {{ member_name }}
-    {%- else %} "{{ member_name }}"
+        "{{ member_props.get(code_column) }}"  # {{ member_name }}
+    {%- else %}"{{ member_name }}"
     {%- endif %}
 {%- endfor %}
 
+{% if code_column %}
+    def as_node(self) -> BoolRef:
+        return BoolRef(self.value)
+{% endif %}
 {% for column, type in metadata_columns.items() %}
     @property
     def {{ to_snake_case(column) }}(self) -> {{ type }}:
