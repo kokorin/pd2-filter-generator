@@ -71,6 +71,7 @@
 {%- if member_name_column and member_name_code_column or not member_name_column and not member_name_code_column -%}
     {%- set _ = raise('Exactly one of member_name_column and member_name_code_column must be set in ' ~ class_name) -%}
 {%- endif -%}
+# ruff: noqa: PIE796
 """
 Generated {{ class_name }} enum from PD2 data.
 
@@ -125,18 +126,29 @@ from pd2_filter_generator.set import Set
     {%- set _ = members.update({ member_name : member_variants | first }) %}
 {%- endfor  %}
 
-{%- if metadata_columns %}
+{%- if metadata_columns or code_column %}
+
 @dataclass(frozen=True)
 class _Metadata:
     """Item type metadata."""
+{%- if code_column  %}
+    {{ to_snake_case(code_column) }}: str
+{%- endif  %}
 {%- for column, type in metadata_columns.items() %}
     {{ to_snake_case(column) }}: {{ type }} # "{{ column }}"
 {%- endfor %}
+{%- endif %}
 
-_METADATA: dict[str, _Metadata] = {
-    {%- for member_name, member_props in members.items() %}
+class {{ class_name }}({% if code_column %}BoolMixin, {% endif %}Enum):
+    """PD2 {{ to_snake_case(class_name).split('_') | join(' ') }} categories."""
+{%- for member_name, member_props in members.items() %}
     {%- set member_name_snake = to_snake_case(member_name) | upper %}
-    "{{ member_name_snake }}": _Metadata(
+    {{ member_name_snake }} = {# -#}
+    {%- if metadata_columns or code_column -%}
+    _Metadata(
+    {%- if code_column  %}
+        {{ to_snake_case(code_column) }}="{{ member_props.get(code_column) }}",
+    {%- endif  %}
     {%- for column, type in metadata_columns.items() %}
         {%- set value = member_props.get(column) %}
         {{ to_snake_case(column) }}={%- if type == "str" -%}
@@ -146,35 +158,25 @@ _METADATA: dict[str, _Metadata] = {
         {%- elif type == 'int' -%}
             {{ value or 0 }}
         {%- elif type == 'Set' -%}
-            Set("{{ resolve_name_code(value) }}")
+            Set.{{ to_snake_case(resolve_name_code(value)) | upper }}
         {%- elif value -%}
             {{ type }}("{{ value }}")
         {%- else -%}
             None
         {%- endif  %},
     {%- endfor %}
-    ),
-    {%- endfor %}
-}
-{%- endif %}
-
-class {{ class_name }}({% if code_column %}BoolMixin, {% endif %}Enum):
-    """PD2 {{ to_snake_case(class_name).split('_') | join(' ') }} categories."""
-{%- for member_name, member_props in members.items() %}
-    {%- set member_name_snake = to_snake_case(member_name) | upper %}
-    {{ member_name_snake }} = {% if code_column -%}
-        "{{ member_props.get(code_column) }}"  # {{ member_name }}
+    )
     {%- else %}"{{ member_name }}"
     {%- endif %}
 {%- endfor %}
 
 {% if code_column %}
     def as_node(self) -> BoolRef:
-        return BoolRef(self.value)
+        return BoolRef(self.value.{{ to_snake_case(code_column) }})
 {% endif %}
 {% for column, type in metadata_columns.items() %}
     @property
     def {{ to_snake_case(column) }}(self) -> {{ type }}:
-        return _METADATA[self.name].{{ to_snake_case(column) }}
+        return self.value.{{ to_snake_case(column) }}
 {% endfor %}
 {%- endmacro -%}

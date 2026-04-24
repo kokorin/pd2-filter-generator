@@ -7,10 +7,6 @@ def test_member_exists():
     assert UniqueItem.THE_GNASHER is not None
 
 
-def test_member_value_is_string():
-    assert isinstance(UniqueItem.THE_GNASHER.value, str)
-
-
 def test_metadata_code_is_code_literal():
     assert isinstance(UniqueItem.THE_GNASHER.code, str)
 

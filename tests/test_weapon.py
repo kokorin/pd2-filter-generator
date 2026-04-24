@@ -8,8 +8,8 @@ def test_member_is_expr_mixin():
     assert isinstance(Weapon.AXE, ExprMixin)
 
 
-def test_member_value_is_string():
-    assert Weapon.AXE.value == "axe"
+def test_member_value_code():
+    assert Weapon.AXE.value.code == "axe"
 
 
 def test_invert():

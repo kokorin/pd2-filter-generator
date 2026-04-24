@@ -8,8 +8,8 @@ def test_member_is_expr_mixin():
     assert isinstance(Armor.FULL_PLATE_MAIL, ExprMixin)
 
 
-def test_member_value_is_string():
-    assert Armor.FULL_PLATE_MAIL.value == "ful"
+def test_member_value_code():
+    assert Armor.FULL_PLATE_MAIL.value.code == "ful"
 
 
 def test_invert():

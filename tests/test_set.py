@@ -7,9 +7,5 @@ def test_member_exists():
     assert Set.CIVERBS_VESTMENTS is not None
 
 
-def test_member_value_is_string():
-    assert isinstance(Set.CIVERBS_VESTMENTS.value, str)
-
-
 def test_metadata_level():
     assert isinstance(Set.CIVERBS_VESTMENTS.level, int)

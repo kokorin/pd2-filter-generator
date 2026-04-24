@@ -1,3 +1,4 @@
+# ruff: noqa: PIE796
 """
 Generated UniqueItem enum from PD2 data.
 
@@ -20,3106 +21,2662 @@ class _Metadata:
     lvl_req: int  # "lvl req"
 
 
-_METADATA: dict[str, _Metadata] = {
-    "THE_GNASHER": _Metadata(
+class UniqueItem(Enum):
+    """PD2 unique item categories."""
+
+    THE_GNASHER = _Metadata(
         ladder=False,
         code="hax",
         lvl=7,
         lvl_req=5,
-    ),
-    "DEATHSPADE": _Metadata(
+    )
+    DEATHSPADE = _Metadata(
         ladder=False,
         code="axe",
         lvl=12,
         lvl_req=9,
-    ),
-    "BLADEBONE": _Metadata(
+    )
+    BLADEBONE = _Metadata(
         ladder=False,
         code="2ax",
         lvl=20,
         lvl_req=15,
-    ),
-    "SKULL_SPLITTER": _Metadata(
+    )
+    SKULL_SPLITTER = _Metadata(
         ladder=False,
         code="mpi",
         lvl=28,
         lvl_req=21,
-    ),
-    "RAKESCAR": _Metadata(
+    )
+    RAKESCAR = _Metadata(
         ladder=False,
         code="wax",
         lvl=36,
         lvl_req=27,
-    ),
-    "AXE_OF_FECHMAR": _Metadata(
+    )
+    AXE_OF_FECHMAR = _Metadata(
         ladder=False,
         code="lax",
         lvl=11,
         lvl_req=8,
-    ),
-    "GORESHOVEL": _Metadata(
+    )
+    GORESHOVEL = _Metadata(
         ladder=False,
         code="bax",
         lvl=19,
         lvl_req=14,
-    ),
-    "THE_CHIEFTAIN": _Metadata(
+    )
+    THE_CHIEFTAIN = _Metadata(
         ladder=False,
         code="btx",
         lvl=26,
         lvl_req=19,
-    ),
-    "BRAINHEW": _Metadata(
+    )
+    BRAINHEW = _Metadata(
         ladder=False,
         code="gax",
         lvl=34,
         lvl_req=25,
-    ),
-    "HUMONGOUS": _Metadata(
+    )
+    HUMONGOUS = _Metadata(
         ladder=False,
         code="gix",
         lvl=39,
         lvl_req=29,
-    ),
-    "TORCH_OF_IRO": _Metadata(
+    )
+    TORCH_OF_IRO = _Metadata(
         ladder=False,
         code="wnd",
         lvl=7,
         lvl_req=5,
-    ),
-    "MAELSTROM": _Metadata(
+    )
+    MAELSTROM = _Metadata(
         ladder=False,
         code="ywn",
         lvl=19,
         lvl_req=14,
-    ),
-    "GRAVENSPINE": _Metadata(
+    )
+    GRAVENSPINE = _Metadata(
         ladder=False,
         code="bwn",
         lvl=27,
         lvl_req=20,
-    ),
-    "UMES_LAMENT": _Metadata(
+    )
+    UMES_LAMENT = _Metadata(
         ladder=False,
         code="gwn",
         lvl=38,
         lvl_req=28,
-    ),
-    "FELLOAK": _Metadata(
+    )
+    FELLOAK = _Metadata(
         ladder=False,
         code="clb",
         lvl=4,
         lvl_req=3,
-    ),
-    "KNELL_STRIKER": _Metadata(
+    )
+    KNELL_STRIKER = _Metadata(
         ladder=False,
         code="scp",
         lvl=7,
         lvl_req=5,
-    ),
-    "RUSTHANDLE": _Metadata(
+    )
+    RUSTHANDLE = _Metadata(
         ladder=False,
         code="gsc",
         lvl=23,
         lvl_req=17,
-    ),
-    "STORMEYE": _Metadata(
+    )
+    STORMEYE = _Metadata(
         ladder=False,
         code="wsp",
         lvl=31,
         lvl_req=23,
-    ),
-    "STOUTNAIL": _Metadata(
+    )
+    STOUTNAIL = _Metadata(
         ladder=False,
         code="spc",
         lvl=7,
         lvl_req=5,
-    ),
-    "CRUSHFLANGE": _Metadata(
+    )
+    CRUSHFLANGE = _Metadata(
         ladder=False,
         code="mac",
         lvl=12,
         lvl_req=9,
-    ),
-    "BLOODRISE": _Metadata(
+    )
+    BLOODRISE = _Metadata(
         ladder=False,
         code="mst",
         lvl=20,
         lvl_req=15,
-    ),
-    "THE_GENERALS_TAN_DO_LI_GA": _Metadata(
+    )
+    THE_GENERALS_TAN_DO_LI_GA = _Metadata(
         ladder=False,
         code="fla",
         lvl=28,
         lvl_req=21,
-    ),
-    "IRONSTONE": _Metadata(
+    )
+    IRONSTONE = _Metadata(
         ladder=False,
         code="whm",
         lvl=36,
         lvl_req=27,
-    ),
-    "BONESNAP": _Metadata(
+    )
+    BONESNAP = _Metadata(
         ladder=False,
         code="mau",
         lvl=32,
         lvl_req=24,
-    ),
-    "STEELDRIVER": _Metadata(
+    )
+    STEELDRIVER = _Metadata(
         ladder=False,
         code="gma",
         lvl=39,
         lvl_req=29,
-    ),
-    "RIXOTS_KEEN": _Metadata(
+    )
+    RIXOTS_KEEN = _Metadata(
         ladder=False,
         code="ssd",
         lvl=3,
         lvl_req=2,
-    ),
-    "BLOOD_CRESCENT": _Metadata(
+    )
+    BLOOD_CRESCENT = _Metadata(
         ladder=False,
         code="scm",
         lvl=10,
         lvl_req=7,
-    ),
-    "SKEWER_OF_KRINTIZ": _Metadata(
+    )
+    SKEWER_OF_KRINTIZ = _Metadata(
         ladder=False,
         code="sbr",
         lvl=14,
         lvl_req=10,
-    ),
-    "GLEAMSCYTHE": _Metadata(
+    )
+    GLEAMSCYTHE = _Metadata(
         ladder=False,
         code="flc",
         lvl=18,
         lvl_req=13,
-    ),
-    "GRISWOLDS_EDGE": _Metadata(
+    )
+    GRISWOLDS_EDGE = _Metadata(
         ladder=False,
         code="bsd",
         lvl=23,
         lvl_req=17,
-    ),
-    "HELLPLAGUE": _Metadata(
+    )
+    HELLPLAGUE = _Metadata(
         ladder=False,
         code="lsd",
         lvl=30,
         lvl_req=22,
-    ),
-    "CULWENS_POINT": _Metadata(
+    )
+    CULWENS_POINT = _Metadata(
         ladder=False,
         code="wsd",
         lvl=39,
         lvl_req=29,
-    ),
-    "SHADOWFANG": _Metadata(
+    )
+    SHADOWFANG = _Metadata(
         ladder=False,
         code="2hs",
         lvl=16,
         lvl_req=12,
-    ),
-    "SOULFLAY": _Metadata(
+    )
+    SOULFLAY = _Metadata(
         ladder=False,
         code="clm",
         lvl=26,
         lvl_req=19,
-    ),
-    "KINEMILS_AWL": _Metadata(
+    )
+    KINEMILS_AWL = _Metadata(
         ladder=False,
         code="gis",
         lvl=31,
         lvl_req=23,
-    ),
-    "BLACKTONGUE": _Metadata(
+    )
+    BLACKTONGUE = _Metadata(
         ladder=False,
         code="bsw",
         lvl=35,
         lvl_req=26,
-    ),
-    "RIPSAW": _Metadata(
+    )
+    RIPSAW = _Metadata(
         ladder=False,
         code="flb",
         lvl=35,
         lvl_req=26,
-    ),
-    "THE_PATRIARCH": _Metadata(
+    )
+    THE_PATRIARCH = _Metadata(
         ladder=False,
         code="gsd",
         lvl=39,
         lvl_req=29,
-    ),
-    "GULL": _Metadata(
+    )
+    GULL = _Metadata(
         ladder=False,
         code="dgr",
         lvl=6,
         lvl_req=4,
-    ),
-    "THE_DIGGLER": _Metadata(
+    )
+    THE_DIGGLER = _Metadata(
         ladder=False,
         code="dir",
         lvl=15,
         lvl_req=11,
-    ),
-    "THE_JADE_TAN_DO": _Metadata(
+    )
+    THE_JADE_TAN_DO = _Metadata(
         ladder=False,
         code="kri",
         lvl=26,
         lvl_req=19,
-    ),
-    "SPECTRAL_SHARD": _Metadata(
+    )
+    SPECTRAL_SHARD = _Metadata(
         ladder=False,
         code="bld",
         lvl=34,
         lvl_req=25,
-    ),
-    "THE_DRAGON_CHANG": _Metadata(
+    )
+    THE_DRAGON_CHANG = _Metadata(
         ladder=False,
         code="spr",
         lvl=11,
         lvl_req=8,
-    ),
-    "RAZORTINE": _Metadata(
+    )
+    RAZORTINE = _Metadata(
         ladder=False,
         code="tri",
         lvl=16,
         lvl_req=12,
-    ),
-    "BLOODTHIEF": _Metadata(
+    )
+    BLOODTHIEF = _Metadata(
         ladder=False,
         code="brn",
         lvl=23,
         lvl_req=17,
-    ),
-    "LANCE_OF_YAGGAI": _Metadata(
+    )
+    LANCE_OF_YAGGAI = _Metadata(
         ladder=False,
         code="spt",
         lvl=30,
         lvl_req=22,
-    ),
-    "THE_TANNR_GOREROD": _Metadata(
+    )
+    THE_TANNR_GOREROD = _Metadata(
         ladder=False,
         code="pik",
         lvl=36,
         lvl_req=27,
-    ),
-    "DIMOAKS_HEW": _Metadata(
+    )
+    DIMOAKS_HEW = _Metadata(
         ladder=False,
         code="bar",
         lvl=11,
         lvl_req=8,
-    ),
-    "STEELGOAD": _Metadata(
+    )
+    STEELGOAD = _Metadata(
         ladder=False,
         code="vou",
         lvl=19,
         lvl_req=14,
-    ),
-    "SOUL_HARVEST": _Metadata(
+    )
+    SOUL_HARVEST = _Metadata(
         ladder=False,
         code="scy",
         lvl=26,
         lvl_req=19,
-    ),
-    "THE_BATTLEBRANCH": _Metadata(
+    )
+    THE_BATTLEBRANCH = _Metadata(
         ladder=False,
         code="pax",
         lvl=34,
         lvl_req=25,
-    ),
-    "WOESTAVE": _Metadata(
+    )
+    WOESTAVE = _Metadata(
         ladder=False,
         code="hal",
         lvl=38,
         lvl_req=28,
-    ),
-    "THE_GRIM_REAPER": _Metadata(
+    )
+    THE_GRIM_REAPER = _Metadata(
         ladder=False,
         code="wsc",
         lvl=39,
         lvl_req=29,
-    ),
-    "BANE_ASH": _Metadata(
+    )
+    BANE_ASH = _Metadata(
         ladder=False,
         code="sst",
         lvl=7,
         lvl_req=5,
-    ),
-    "SERPENT_LORD": _Metadata(
+    )
+    SERPENT_LORD = _Metadata(
         ladder=False,
         code="lst",
         lvl=12,
         lvl_req=9,
-    ),
-    "SPIRE_OF_LAZARUS": _Metadata(
+    )
+    SPIRE_OF_LAZARUS = _Metadata(
         ladder=False,
         code="cst",
         lvl=24,
         lvl_req=18,
-    ),
-    "THE_SALAMANDER": _Metadata(
+    )
+    THE_SALAMANDER = _Metadata(
         ladder=False,
         code="bst",
         lvl=28,
         lvl_req=21,
-    ),
-    "THE_IRON_JANG_BONG": _Metadata(
+    )
+    THE_IRON_JANG_BONG = _Metadata(
         ladder=False,
         code="wst",
         lvl=38,
         lvl_req=28,
-    ),
-    "PLUCKEYE": _Metadata(
+    )
+    PLUCKEYE = _Metadata(
         ladder=False,
         code="sbw",
         lvl=10,
         lvl_req=7,
-    ),
-    "WITHERSTRING": _Metadata(
+    )
+    WITHERSTRING = _Metadata(
         ladder=False,
         code="hbw",
         lvl=18,
         lvl_req=13,
-    ),
-    "RAVEN_CLAW": _Metadata(
+    )
+    RAVEN_CLAW = _Metadata(
         ladder=False,
         code="lbw",
         lvl=20,
         lvl_req=15,
-    ),
-    "ROGUES_BOW": _Metadata(
+    )
+    ROGUES_BOW = _Metadata(
         ladder=False,
         code="cbw",
         lvl=27,
         lvl_req=20,
-    ),
-    "STORMSTRIKE": _Metadata(
+    )
+    STORMSTRIKE = _Metadata(
         ladder=False,
         code="sbb",
         lvl=34,
         lvl_req=25,
-    ),
-    "WIZENDRAW": _Metadata(
+    )
+    WIZENDRAW = _Metadata(
         ladder=False,
         code="lbb",
         lvl=35,
         lvl_req=26,
-    ),
-    "HELLCLAP": _Metadata(
+    )
+    HELLCLAP = _Metadata(
         ladder=False,
         code="swb",
         lvl=36,
         lvl_req=27,
-    ),
-    "BLASTBARK": _Metadata(
+    )
+    BLASTBARK = _Metadata(
         ladder=False,
         code="lwb",
         lvl=38,
         lvl_req=28,
-    ),
-    "LEADCROW": _Metadata(
+    )
+    LEADCROW = _Metadata(
         ladder=False,
         code="lxb",
         lvl=12,
         lvl_req=9,
-    ),
-    "ICHORSTING": _Metadata(
+    )
+    ICHORSTING = _Metadata(
         ladder=False,
         code="mxb",
         lvl=24,
         lvl_req=18,
-    ),
-    "HELLCAST": _Metadata(
+    )
+    HELLCAST = _Metadata(
         ladder=False,
         code="hxb",
         lvl=36,
         lvl_req=27,
-    ),
-    "DOOMSLINGER": _Metadata(
+    )
+    DOOMSLINGER = _Metadata(
         ladder=False,
         code="rxb",
         lvl=38,
         lvl_req=28,
-    ),
-    "BIGGINS_BONNET": _Metadata(
+    )
+    BIGGINS_BONNET = _Metadata(
         ladder=False,
         code="cap",
         lvl=4,
         lvl_req=3,
-    ),
-    "TARNHELM": _Metadata(
+    )
+    TARNHELM = _Metadata(
         ladder=False,
         code="skp",
         lvl=20,
         lvl_req=15,
-    ),
-    "COIF_OF_GLORY": _Metadata(
+    )
+    COIF_OF_GLORY = _Metadata(
         ladder=False,
         code="hlm",
         lvl=19,
         lvl_req=14,
-    ),
-    "DUSKDEEP": _Metadata(
+    )
+    DUSKDEEP = _Metadata(
         ladder=False,
         code="fhl",
         lvl=23,
         lvl_req=17,
-    ),
-    "WORMSKULL": _Metadata(
+    )
+    WORMSKULL = _Metadata(
         ladder=False,
         code="bhm",
         lvl=28,
         lvl_req=21,
-    ),
-    "HOWLTUSK": _Metadata(
+    )
+    HOWLTUSK = _Metadata(
         ladder=False,
         code="ghm",
         lvl=34,
         lvl_req=25,
-    ),
-    "UNDEAD_CROWN": _Metadata(
+    )
+    UNDEAD_CROWN = _Metadata(
         ladder=False,
         code="crn",
         lvl=39,
         lvl_req=29,
-    ),
-    "THE_FACE_OF_HORROR": _Metadata(
+    )
+    THE_FACE_OF_HORROR = _Metadata(
         ladder=False,
         code="msk",
         lvl=27,
         lvl_req=20,
-    ),
-    "GREYFORM": _Metadata(
+    )
+    GREYFORM = _Metadata(
         ladder=False,
         code="qui",
         lvl=10,
         lvl_req=7,
-    ),
-    "BLINKBATS_FORM": _Metadata(
+    )
+    BLINKBATS_FORM = _Metadata(
         ladder=False,
         code="lea",
         lvl=16,
         lvl_req=12,
-    ),
-    "THE_CENTURION": _Metadata(
+    )
+    THE_CENTURION = _Metadata(
         ladder=False,
         code="hla",
         lvl=19,
         lvl_req=14,
-    ),
-    "TWITCHTHROE": _Metadata(
+    )
+    TWITCHTHROE = _Metadata(
         ladder=False,
         code="stu",
         lvl=22,
         lvl_req=16,
-    ),
-    "DARKGLOW": _Metadata(
+    )
+    DARKGLOW = _Metadata(
         ladder=False,
         code="rng",
         lvl=19,
         lvl_req=14,
-    ),
-    "HAWKMAIL": _Metadata(
+    )
+    HAWKMAIL = _Metadata(
         ladder=False,
         code="scl",
         lvl=20,
         lvl_req=15,
-    ),
-    "SPARKING_MAIL": _Metadata(
+    )
+    SPARKING_MAIL = _Metadata(
         ladder=False,
         code="chn",
         lvl=23,
         lvl_req=17,
-    ),
-    "VENOM_WARD": _Metadata(
+    )
+    VENOM_WARD = _Metadata(
         ladder=False,
         code="brs",
         lvl=27,
         lvl_req=20,
-    ),
-    "ICEBLINK": _Metadata(
+    )
+    ICEBLINK = _Metadata(
         ladder=False,
         code="spl",
         lvl=30,
         lvl_req=22,
-    ),
-    "BONEFLESH": _Metadata(
+    )
+    BONEFLESH = _Metadata(
         ladder=False,
         code="plt",
         lvl=35,
         lvl_req=26,
-    ),
-    "ROCKFLEECE": _Metadata(
+    )
+    ROCKFLEECE = _Metadata(
         ladder=False,
         code="fld",
         lvl=38,
         lvl_req=28,
-    ),
-    "RATTLECAGE": _Metadata(
+    )
+    RATTLECAGE = _Metadata(
         ladder=False,
         code="gth",
         lvl=39,
         lvl_req=29,
-    ),
-    "GOLDSKIN": _Metadata(
+    )
+    GOLDSKIN = _Metadata(
         ladder=False,
         code="ful",
         lvl=38,
         lvl_req=28,
-    ),
-    "SILKS_OF_THE_VICTOR": _Metadata(
+    )
+    SILKS_OF_THE_VICTOR = _Metadata(
         ladder=False,
         code="aar",
         lvl=38,
         lvl_req=28,
-    ),
-    "HEAVENLY_GARB": _Metadata(
+    )
+    HEAVENLY_GARB = _Metadata(
         ladder=False,
         code="ltp",
         lvl=39,
         lvl_req=29,
-    ),
-    "PELTA_LUNATA": _Metadata(
+    )
+    PELTA_LUNATA = _Metadata(
         ladder=False,
         code="buc",
         lvl=3,
         lvl_req=2,
-    ),
-    "UMBRAL_DISK": _Metadata(
+    )
+    UMBRAL_DISK = _Metadata(
         ladder=False,
         code="sml",
         lvl=12,
         lvl_req=9,
-    ),
-    "STORMGUILD": _Metadata(
+    )
+    STORMGUILD = _Metadata(
         ladder=False,
         code="lrg",
         lvl=18,
         lvl_req=13,
-    ),
-    "WALL_OF_THE_EYELESS": _Metadata(
+    )
+    WALL_OF_THE_EYELESS = _Metadata(
         ladder=False,
         code="bsh",
         lvl=27,
         lvl_req=20,
-    ),
-    "SWORDBACK_HOLD": _Metadata(
+    )
+    SWORDBACK_HOLD = _Metadata(
         ladder=False,
         code="spk",
         lvl=20,
         lvl_req=15,
-    ),
-    "STEELCLASH": _Metadata(
+    )
+    STEELCLASH = _Metadata(
         ladder=False,
         code="kit",
         lvl=23,
         lvl_req=17,
-    ),
-    "BVERRIT_KEEP": _Metadata(
+    )
+    BVERRIT_KEEP = _Metadata(
         ladder=False,
         code="tow",
         lvl=26,
         lvl_req=19,
-    ),
-    "THE_WARD": _Metadata(
+    )
+    THE_WARD = _Metadata(
         ladder=False,
         code="gts",
         lvl=35,
         lvl_req=26,
-    ),
-    "THE_HAND_OF_BROC": _Metadata(
+    )
+    THE_HAND_OF_BROC = _Metadata(
         ladder=False,
         code="lgl",
         lvl=7,
         lvl_req=5,
-    ),
-    "BLOODFIST": _Metadata(
+    )
+    BLOODFIST = _Metadata(
         ladder=False,
         code="vgl",
         lvl=12,
         lvl_req=9,
-    ),
-    "CHANCE_GUARDS": _Metadata(
+    )
+    CHANCE_GUARDS = _Metadata(
         ladder=False,
         code="mgl",
         lvl=20,
         lvl_req=15,
-    ),
-    "MAGEFIST": _Metadata(
+    )
+    MAGEFIST = _Metadata(
         ladder=False,
         code="tgl",
         lvl=31,
         lvl_req=23,
-    ),
-    "FROSTBURN": _Metadata(
+    )
+    FROSTBURN = _Metadata(
         ladder=False,
         code="hgl",
         lvl=39,
         lvl_req=29,
-    ),
-    "HOTSPUR": _Metadata(
+    )
+    HOTSPUR = _Metadata(
         ladder=False,
         code="lbt",
         lvl=7,
         lvl_req=5,
-    ),
-    "GOREFOOT": _Metadata(
+    )
+    GOREFOOT = _Metadata(
         ladder=False,
         code="vbt",
         lvl=12,
         lvl_req=12,
-    ),
-    "TREADS_OF_CTHON": _Metadata(
+    )
+    TREADS_OF_CTHON = _Metadata(
         ladder=False,
         code="mbt",
         lvl=20,
         lvl_req=15,
-    ),
-    "GOBLIN_TOE": _Metadata(
+    )
+    GOBLIN_TOE = _Metadata(
         ladder=False,
         code="tbt",
         lvl=30,
         lvl_req=22,
-    ),
-    "TEARHAUNCH": _Metadata(
+    )
+    TEARHAUNCH = _Metadata(
         ladder=False,
         code="hbt",
         lvl=39,
         lvl_req=29,
-    ),
-    "LENYMO": _Metadata(
+    )
+    LENYMO = _Metadata(
         ladder=False,
         code="lbl",
         lvl=10,
         lvl_req=7,
-    ),
-    "SNAKECORD": _Metadata(
+    )
+    SNAKECORD = _Metadata(
         ladder=False,
         code="vbl",
         lvl=16,
         lvl_req=12,
-    ),
-    "NIGHTSMOKE": _Metadata(
+    )
+    NIGHTSMOKE = _Metadata(
         ladder=False,
         code="mbl",
         lvl=27,
         lvl_req=20,
-    ),
-    "GOLDWRAP": _Metadata(
+    )
+    GOLDWRAP = _Metadata(
         ladder=False,
         code="tbl",
         lvl=36,
         lvl_req=27,
-    ),
-    "BLADEBUCKLE": _Metadata(
+    )
+    BLADEBUCKLE = _Metadata(
         ladder=False,
         code="hbl",
         lvl=39,
         lvl_req=39,
-    ),
-    "NOKOZAN_RELIC": _Metadata(
+    )
+    NOKOZAN_RELIC = _Metadata(
         ladder=False,
         code="amu",
         lvl=14,
         lvl_req=10,
-    ),
-    "THE_EYE_OF_ETLICH": _Metadata(
+    )
+    THE_EYE_OF_ETLICH = _Metadata(
         ladder=False,
         code="amu",
         lvl=20,
         lvl_req=15,
-    ),
-    "THE_MAHIM_OAK_CURIO": _Metadata(
+    )
+    THE_MAHIM_OAK_CURIO = _Metadata(
         ladder=False,
         code="amu",
         lvl=34,
         lvl_req=25,
-    ),
-    "NAGELRING": _Metadata(
+    )
+    NAGELRING = _Metadata(
         ladder=False,
         code="rin",
         lvl=10,
         lvl_req=7,
-    ),
-    "MANALD_HEAL": _Metadata(
+    )
+    MANALD_HEAL = _Metadata(
         ladder=False,
         code="rin",
         lvl=20,
         lvl_req=15,
-    ),
-    "THE_STONE_OF_JORDAN": _Metadata(
+    )
+    THE_STONE_OF_JORDAN = _Metadata(
         ladder=False,
         code="rin",
         lvl=39,
         lvl_req=29,
-    ),
-    "AMULET_OF_THE_VIPER": _Metadata(
+    )
+    AMULET_OF_THE_VIPER = _Metadata(
         ladder=False,
         code="vip",
         lvl=0,
         lvl_req=0,
-    ),
-    "STAFF_OF_KINGS": _Metadata(
+    )
+    STAFF_OF_KINGS = _Metadata(
         ladder=False,
         code="msf",
         lvl=0,
         lvl_req=0,
-    ),
-    "HORADRIC_STAFF": _Metadata(
+    )
+    HORADRIC_STAFF = _Metadata(
         ladder=False,
         code="hst",
         lvl=0,
         lvl_req=0,
-    ),
-    "HELL_FORGE_HAMMER": _Metadata(
+    )
+    HELL_FORGE_HAMMER = _Metadata(
         ladder=False,
         code="hfh",
         lvl=0,
         lvl_req=0,
-    ),
-    "KHALIMS_FLAIL": _Metadata(
+    )
+    KHALIMS_FLAIL = _Metadata(
         ladder=False,
         code="qf1",
         lvl=0,
         lvl_req=0,
-    ),
-    "KHALIMS_WILL": _Metadata(
+    )
+    KHALIMS_WILL = _Metadata(
         ladder=False,
         code="qf2",
         lvl=0,
         lvl_req=0,
-    ),
-    "COLDKILL": _Metadata(
+    )
+    COLDKILL = _Metadata(
         ladder=False,
         code="9ha",
         lvl=44,
         lvl_req=36,
-    ),
-    "BUTCHERS_PUPIL": _Metadata(
+    )
+    BUTCHERS_PUPIL = _Metadata(
         ladder=False,
         code="9ax",
         lvl=47,
         lvl_req=39,
-    ),
-    "ISLESTRIKE": _Metadata(
+    )
+    ISLESTRIKE = _Metadata(
         ladder=False,
         code="92a",
         lvl=51,
         lvl_req=43,
-    ),
-    "POMPEIIS_WRATH": _Metadata(
+    )
+    POMPEIIS_WRATH = _Metadata(
         ladder=False,
         code="9mp",
         lvl=53,
         lvl_req=45,
-    ),
-    "GUARDIAN_NAGA": _Metadata(
+    )
+    GUARDIAN_NAGA = _Metadata(
         ladder=False,
         code="9wa",
         lvl=56,
         lvl_req=48,
-    ),
-    "WARLORDS_TRUST": _Metadata(
+    )
+    WARLORDS_TRUST = _Metadata(
         ladder=False,
         code="9la",
         lvl=43,
         lvl_req=35,
-    ),
-    "SPELLSTEEL": _Metadata(
+    )
+    SPELLSTEEL = _Metadata(
         ladder=False,
         code="9ba",
         lvl=47,
         lvl_req=39,
-    ),
-    "STORMRIDER": _Metadata(
+    )
+    STORMRIDER = _Metadata(
         ladder=False,
         code="9bt",
         lvl=49,
         lvl_req=41,
-    ),
-    "BONESLAYER_BLADE": _Metadata(
+    )
+    BONESLAYER_BLADE = _Metadata(
         ladder=False,
         code="9ga",
         lvl=50,
         lvl_req=42,
-    ),
-    "THE_MINOTAUR": _Metadata(
+    )
+    THE_MINOTAUR = _Metadata(
         ladder=False,
         code="9gi",
         lvl=53,
         lvl_req=45,
-    ),
-    "SUICIDE_BRANCH": _Metadata(
+    )
+    SUICIDE_BRANCH = _Metadata(
         ladder=False,
         code="9wn",
         lvl=41,
         lvl_req=33,
-    ),
-    "CARIN_SHARD": _Metadata(
+    )
+    CARIN_SHARD = _Metadata(
         ladder=False,
         code="9yw",
         lvl=43,
         lvl_req=35,
-    ),
-    "ARM_OF_KING_LEORIC": _Metadata(
+    )
+    ARM_OF_KING_LEORIC = _Metadata(
         ladder=False,
         code="9bw",
         lvl=44,
         lvl_req=36,
-    ),
-    "BLACKHAND_KEY": _Metadata(
+    )
+    BLACKHAND_KEY = _Metadata(
         ladder=False,
         code="9gw",
         lvl=49,
         lvl_req=41,
-    ),
-    "DARK_CLAN_CRUSHER": _Metadata(
+    )
+    DARK_CLAN_CRUSHER = _Metadata(
         ladder=False,
         code="9cl",
         lvl=42,
         lvl_req=34,
-    ),
-    "ZAKARUMS_HAND": _Metadata(
+    )
+    ZAKARUMS_HAND = _Metadata(
         ladder=False,
         code="9sc",
         lvl=45,
         lvl_req=37,
-    ),
-    "THE_FETID_SPRINKLER": _Metadata(
+    )
+    THE_FETID_SPRINKLER = _Metadata(
         ladder=False,
         code="9qs",
         lvl=46,
         lvl_req=38,
-    ),
-    "HAND_OF_BLESSED_LIGHT": _Metadata(
+    )
+    HAND_OF_BLESSED_LIGHT = _Metadata(
         ladder=False,
         code="9ws",
         lvl=50,
         lvl_req=42,
-    ),
-    "FLESHRENDER": _Metadata(
+    )
+    FLESHRENDER = _Metadata(
         ladder=False,
         code="9sp",
         lvl=46,
         lvl_req=38,
-    ),
-    "SURESHRILL_FROST": _Metadata(
+    )
+    SURESHRILL_FROST = _Metadata(
         ladder=False,
         code="9ma",
         lvl=47,
         lvl_req=39,
-    ),
-    "MOONFALL": _Metadata(
+    )
+    MOONFALL = _Metadata(
         ladder=False,
         code="9mt",
         lvl=50,
         lvl_req=42,
-    ),
-    "BAEZILS_VORTEX": _Metadata(
+    )
+    BAEZILS_VORTEX = _Metadata(
         ladder=False,
         code="9fl",
         lvl=53,
         lvl_req=45,
-    ),
-    "EARTHSHAKER": _Metadata(
+    )
+    EARTHSHAKER = _Metadata(
         ladder=False,
         code="9wh",
         lvl=51,
         lvl_req=43,
-    ),
-    "BLOODTREE_STUMP": _Metadata(
+    )
+    BLOODTREE_STUMP = _Metadata(
         ladder=False,
         code="9m9",
         lvl=56,
         lvl_req=48,
-    ),
-    "THE_GAVEL_OF_PAIN": _Metadata(
+    )
+    THE_GAVEL_OF_PAIN = _Metadata(
         ladder=False,
         code="9gm",
         lvl=53,
         lvl_req=45,
-    ),
-    "BLOODLETTER": _Metadata(
+    )
+    BLOODLETTER = _Metadata(
         ladder=False,
         code="9ss",
         lvl=38,
         lvl_req=30,
-    ),
-    "COLDSTEEL_EYE": _Metadata(
+    )
+    COLDSTEEL_EYE = _Metadata(
         ladder=False,
         code="9sm",
         lvl=39,
         lvl_req=31,
-    ),
-    "HEXFIRE": _Metadata(
+    )
+    HEXFIRE = _Metadata(
         ladder=False,
         code="9sb",
         lvl=41,
         lvl_req=33,
-    ),
-    "BLADE_OF_ALI_BABA": _Metadata(
+    )
+    BLADE_OF_ALI_BABA = _Metadata(
         ladder=False,
         code="9fc",
         lvl=43,
         lvl_req=35,
-    ),
-    "GINTHERS_RIFT": _Metadata(
+    )
+    GINTHERS_RIFT = _Metadata(
         ladder=False,
         code="9cr",
         lvl=45,
         lvl_req=37,
-    ),
-    "HEADSTRIKER": _Metadata(
+    )
+    HEADSTRIKER = _Metadata(
         ladder=False,
         code="9bs",
         lvl=47,
         lvl_req=39,
-    ),
-    "PLAGUE_BEARER": _Metadata(
+    )
+    PLAGUE_BEARER = _Metadata(
         ladder=False,
         code="9ls",
         lvl=49,
         lvl_req=41,
-    ),
-    "THE_ATLANTEAN": _Metadata(
+    )
+    THE_ATLANTEAN = _Metadata(
         ladder=False,
         code="9wd",
         lvl=50,
         lvl_req=42,
-    ),
-    "CRAINTE_VOMIR": _Metadata(
+    )
+    CRAINTE_VOMIR = _Metadata(
         ladder=False,
         code="92h",
         lvl=50,
         lvl_req=42,
-    ),
-    "BING_SZ_WANG": _Metadata(
+    )
+    BING_SZ_WANG = _Metadata(
         ladder=False,
         code="9cm",
         lvl=51,
         lvl_req=43,
-    ),
-    "THE_VILE_HUSK": _Metadata(
+    )
+    THE_VILE_HUSK = _Metadata(
         ladder=False,
         code="9gs",
         lvl=52,
         lvl_req=44,
-    ),
-    "CLOUDCRACK": _Metadata(
+    )
+    CLOUDCRACK = _Metadata(
         ladder=False,
         code="9b9",
         lvl=53,
         lvl_req=45,
-    ),
-    "TODESFAELLE_FLAMME": _Metadata(
+    )
+    TODESFAELLE_FLAMME = _Metadata(
         ladder=False,
         code="9fb",
         lvl=54,
         lvl_req=46,
-    ),
-    "SWORDGUARD": _Metadata(
+    )
+    SWORDGUARD = _Metadata(
         ladder=False,
         code="9gd",
         lvl=55,
         lvl_req=48,
-    ),
-    "SPINERIPPER": _Metadata(
+    )
+    SPINERIPPER = _Metadata(
         ladder=False,
         code="9dg",
         lvl=40,
         lvl_req=32,
-    ),
-    "HEART_CARVER": _Metadata(
+    )
+    HEART_CARVER = _Metadata(
         ladder=False,
         code="9di",
         lvl=44,
         lvl_req=36,
-    ),
-    "BLACKBOGS_SHARP": _Metadata(
+    )
+    BLACKBOGS_SHARP = _Metadata(
         ladder=False,
         code="9kr",
         lvl=46,
         lvl_req=38,
-    ),
-    "STORMSPIKE": _Metadata(
+    )
+    STORMSPIKE = _Metadata(
         ladder=False,
         code="9bl",
         lvl=49,
         lvl_req=41,
-    ),
-    "THE_IMPALER": _Metadata(
+    )
+    THE_IMPALER = _Metadata(
         ladder=False,
         code="9sr",
         lvl=39,
         lvl_req=31,
-    ),
-    "KELPIE_SNARE": _Metadata(
+    )
+    KELPIE_SNARE = _Metadata(
         ladder=False,
         code="9tr",
         lvl=41,
         lvl_req=33,
-    ),
-    "SOULFEAST_TINE": _Metadata(
+    )
+    SOULFEAST_TINE = _Metadata(
         ladder=False,
         code="9br",
         lvl=43,
         lvl_req=35,
-    ),
-    "HONE_SUNDAN": _Metadata(
+    )
+    HONE_SUNDAN = _Metadata(
         ladder=False,
         code="9st",
         lvl=45,
         lvl_req=37,
-    ),
-    "SPIRE_OF_HONOR": _Metadata(
+    )
+    SPIRE_OF_HONOR = _Metadata(
         ladder=False,
         code="9p9",
         lvl=47,
         lvl_req=39,
-    ),
-    "THE_MEAT_SCRAPER": _Metadata(
+    )
+    THE_MEAT_SCRAPER = _Metadata(
         ladder=False,
         code="9b7",
         lvl=49,
         lvl_req=41,
-    ),
-    "BLACKLEACH_BLADE": _Metadata(
+    )
+    BLACKLEACH_BLADE = _Metadata(
         ladder=False,
         code="9vo",
         lvl=50,
         lvl_req=42,
-    ),
-    "ATHENAS_WRATH": _Metadata(
+    )
+    ATHENAS_WRATH = _Metadata(
         ladder=False,
         code="9s8",
         lvl=50,
         lvl_req=42,
-    ),
-    "PIERRE_TOMBALE_COUANT": _Metadata(
+    )
+    PIERRE_TOMBALE_COUANT = _Metadata(
         ladder=False,
         code="9pa",
         lvl=51,
         lvl_req=43,
-    ),
-    "HUSOLDAL_EVO": _Metadata(
+    )
+    HUSOLDAL_EVO = _Metadata(
         ladder=False,
         code="9h9",
         lvl=52,
         lvl_req=44,
-    ),
-    "GRIMS_BURNING_DEAD": _Metadata(
+    )
+    GRIMS_BURNING_DEAD = _Metadata(
         ladder=False,
         code="9wc",
         lvl=52,
         lvl_req=45,
-    ),
-    "RAZORSWITCH": _Metadata(
+    )
+    RAZORSWITCH = _Metadata(
         ladder=False,
         code="8ss",
         lvl=36,
         lvl_req=28,
-    ),
-    "RIBCRACKER": _Metadata(
+    )
+    RIBCRACKER = _Metadata(
         ladder=False,
         code="8ls",
         lvl=39,
         lvl_req=31,
-    ),
-    "CHROMATIC_IRE": _Metadata(
+    )
+    CHROMATIC_IRE = _Metadata(
         ladder=False,
         code="8cs",
         lvl=43,
         lvl_req=35,
-    ),
-    "WARPSPEAR": _Metadata(
+    )
+    WARPSPEAR = _Metadata(
         ladder=False,
         code="8bs",
         lvl=47,
         lvl_req=39,
-    ),
-    "SKULL_COLLECTOR": _Metadata(
+    )
+    SKULL_COLLECTOR = _Metadata(
         ladder=False,
         code="8ws",
         lvl=49,
         lvl_req=41,
-    ),
-    "SKYSTRIKE": _Metadata(
+    )
+    SKYSTRIKE = _Metadata(
         ladder=False,
         code="8sb",
         lvl=36,
         lvl_req=28,
-    ),
-    "RIPHOOK": _Metadata(
+    )
+    RIPHOOK = _Metadata(
         ladder=False,
         code="8hb",
         lvl=39,
         lvl_req=31,
-    ),
-    "KUKO_SHAKAKU": _Metadata(
+    )
+    KUKO_SHAKAKU = _Metadata(
         ladder=False,
         code="8lb",
         lvl=41,
         lvl_req=33,
-    ),
-    "ENDLESSHAIL": _Metadata(
+    )
+    ENDLESSHAIL = _Metadata(
         ladder=False,
         code="8cb",
         lvl=44,
         lvl_req=36,
-    ),
-    "WITCHWILD_STRING": _Metadata(
+    )
+    WITCHWILD_STRING = _Metadata(
         ladder=False,
         code="8s8",
         lvl=47,
         lvl_req=39,
-    ),
-    "CLIFFKILLER": _Metadata(
+    )
+    CLIFFKILLER = _Metadata(
         ladder=False,
         code="8l8",
         lvl=49,
         lvl_req=41,
-    ),
-    "MAGEWRATH": _Metadata(
+    )
+    MAGEWRATH = _Metadata(
         ladder=False,
         code="8sw",
         lvl=51,
         lvl_req=43,
-    ),
-    "GOLDSTRIKE_ARCH": _Metadata(
+    )
+    GOLDSTRIKE_ARCH = _Metadata(
         ladder=False,
         code="8lw",
         lvl=54,
         lvl_req=46,
-    ),
-    "LANGER_BRISER": _Metadata(
+    )
+    LANGER_BRISER = _Metadata(
         ladder=False,
         code="8lx",
         lvl=40,
         lvl_req=32,
-    ),
-    "PUS_SPITTER": _Metadata(
+    )
+    PUS_SPITTER = _Metadata(
         ladder=False,
         code="8mx",
         lvl=44,
         lvl_req=36,
-    ),
-    "BURIZA_DO_KYANON": _Metadata(
+    )
+    BURIZA_DO_KYANON = _Metadata(
         ladder=False,
         code="8hx",
         lvl=59,
         lvl_req=41,
-    ),
-    "DEMON_MACHINE": _Metadata(
+    )
+    DEMON_MACHINE = _Metadata(
         ladder=False,
         code="8rx",
         lvl=57,
         lvl_req=49,
-    ),
-    "PEASANT_CROWN": _Metadata(
+    )
+    PEASANT_CROWN = _Metadata(
         ladder=False,
         code="xap",
         lvl=36,
         lvl_req=28,
-    ),
-    "ROCKSTOPPER": _Metadata(
+    )
+    ROCKSTOPPER = _Metadata(
         ladder=False,
         code="xkp",
         lvl=39,
         lvl_req=31,
-    ),
-    "STEALSKULL": _Metadata(
+    )
+    STEALSKULL = _Metadata(
         ladder=False,
         code="xlm",
         lvl=43,
         lvl_req=35,
-    ),
-    "DARKSIGHT_HELM": _Metadata(
+    )
+    DARKSIGHT_HELM = _Metadata(
         ladder=False,
         code="xhl",
         lvl=46,
         lvl_req=38,
-    ),
-    "VALKYRIE_WING": _Metadata(
+    )
+    VALKYRIE_WING = _Metadata(
         ladder=False,
         code="xhm",
         lvl=52,
         lvl_req=44,
-    ),
-    "CROWN_OF_THIEVES": _Metadata(
+    )
+    CROWN_OF_THIEVES = _Metadata(
         ladder=False,
         code="xrn",
         lvl=57,
         lvl_req=49,
-    ),
-    "BLACKHORNS_FACE": _Metadata(
+    )
+    BLACKHORNS_FACE = _Metadata(
         ladder=False,
         code="xsk",
         lvl=49,
         lvl_req=41,
-    ),
-    "VAMPIRE_GAZE": _Metadata(
+    )
+    VAMPIRE_GAZE = _Metadata(
         ladder=False,
         code="xh9",
         lvl=49,
         lvl_req=41,
-    ),
-    "THE_SPIRIT_SHROUD": _Metadata(
+    )
+    THE_SPIRIT_SHROUD = _Metadata(
         ladder=False,
         code="xui",
         lvl=36,
         lvl_req=28,
-    ),
-    "SKIN_OF_THE_VIPERMAGI": _Metadata(
+    )
+    SKIN_OF_THE_VIPERMAGI = _Metadata(
         ladder=False,
         code="xea",
         lvl=37,
         lvl_req=29,
-    ),
-    "SKIN_OF_THE_FLAYED_ONE": _Metadata(
+    )
+    SKIN_OF_THE_FLAYED_ONE = _Metadata(
         ladder=False,
         code="xla",
         lvl=39,
         lvl_req=31,
-    ),
-    "IRON_PELT": _Metadata(
+    )
+    IRON_PELT = _Metadata(
         ladder=False,
         code="xtu",
         lvl=41,
         lvl_req=33,
-    ),
-    "SPIRIT_FORGE": _Metadata(
+    )
+    SPIRIT_FORGE = _Metadata(
         ladder=False,
         code="xng",
         lvl=43,
         lvl_req=35,
-    ),
-    "CROW_CAW": _Metadata(
+    )
+    CROW_CAW = _Metadata(
         ladder=False,
         code="xcl",
         lvl=45,
         lvl_req=37,
-    ),
-    "SHAFTSTOP": _Metadata(
+    )
+    SHAFTSTOP = _Metadata(
         ladder=False,
         code="xhn",
         lvl=46,
         lvl_req=38,
-    ),
-    "DURIELS_SHELL": _Metadata(
+    )
+    DURIELS_SHELL = _Metadata(
         ladder=False,
         code="xrs",
         lvl=49,
         lvl_req=41,
-    ),
-    "SKULLDERS_IRE": _Metadata(
+    )
+    SKULLDERS_IRE = _Metadata(
         ladder=False,
         code="xpl",
         lvl=50,
         lvl_req=42,
-    ),
-    "GUARDIAN_ANGEL": _Metadata(
+    )
+    GUARDIAN_ANGEL = _Metadata(
         ladder=False,
         code="xlt",
         lvl=53,
         lvl_req=45,
-    ),
-    "TOOTHROW": _Metadata(
+    )
+    TOOTHROW = _Metadata(
         ladder=False,
         code="xld",
         lvl=56,
         lvl_req=48,
-    ),
-    "ATMAS_WAIL": _Metadata(
+    )
+    ATMAS_WAIL = _Metadata(
         ladder=False,
         code="xth",
         lvl=59,
         lvl_req=51,
-    ),
-    "BLACK_HADES": _Metadata(
+    )
+    BLACK_HADES = _Metadata(
         ladder=False,
         code="xul",
         lvl=61,
         lvl_req=53,
-    ),
-    "CORPSEMOURN": _Metadata(
+    )
+    CORPSEMOURN = _Metadata(
         ladder=False,
         code="xar",
         lvl=63,
         lvl_req=55,
-    ),
-    "QUE_HEGANS_WISDOM": _Metadata(
+    )
+    QUE_HEGANS_WISDOM = _Metadata(
         ladder=False,
         code="xtp",
         lvl=59,
         lvl_req=51,
-    ),
-    "VISCERATUANT": _Metadata(
+    )
+    VISCERATUANT = _Metadata(
         ladder=False,
         code="xuc",
         lvl=36,
         lvl_req=28,
-    ),
-    "MOSERS_BLESSED_CIRCLE": _Metadata(
+    )
+    MOSERS_BLESSED_CIRCLE = _Metadata(
         ladder=False,
         code="xml",
         lvl=39,
         lvl_req=31,
-    ),
-    "STORMCHASER": _Metadata(
+    )
+    STORMCHASER = _Metadata(
         ladder=False,
         code="xrg",
         lvl=43,
         lvl_req=35,
-    ),
-    "TIAMATS_REBUKE": _Metadata(
+    )
+    TIAMATS_REBUKE = _Metadata(
         ladder=False,
         code="xit",
         lvl=46,
         lvl_req=38,
-    ),
-    "GERKES_SANCTUARY": _Metadata(
+    )
+    GERKES_SANCTUARY = _Metadata(
         ladder=False,
         code="xow",
         lvl=52,
         lvl_req=44,
-    ),
-    "RADAMENTS_SPHERE": _Metadata(
+    )
+    RADAMENTS_SPHERE = _Metadata(
         ladder=False,
         code="xts",
         lvl=58,
         lvl_req=50,
-    ),
-    "LIDLESS_WALL": _Metadata(
+    )
+    LIDLESS_WALL = _Metadata(
         ladder=False,
         code="xsh",
         lvl=49,
         lvl_req=41,
-    ),
-    "LANCE_GUARD": _Metadata(
+    )
+    LANCE_GUARD = _Metadata(
         ladder=False,
         code="xpk",
         lvl=43,
         lvl_req=35,
-    ),
-    "VENOM_GRIP": _Metadata(
+    )
+    VENOM_GRIP = _Metadata(
         ladder=False,
         code="xlg",
         lvl=37,
         lvl_req=29,
-    ),
-    "GRAVEPALM": _Metadata(
+    )
+    GRAVEPALM = _Metadata(
         ladder=False,
         code="xvg",
         lvl=39,
         lvl_req=32,
-    ),
-    "GHOULHIDE": _Metadata(
+    )
+    GHOULHIDE = _Metadata(
         ladder=False,
         code="xmg",
         lvl=44,
         lvl_req=36,
-    ),
-    "LAVA_GOUT": _Metadata(
+    )
+    LAVA_GOUT = _Metadata(
         ladder=False,
         code="xtg",
         lvl=50,
         lvl_req=42,
-    ),
-    "HELLMOUTH": _Metadata(
+    )
+    HELLMOUTH = _Metadata(
         ladder=False,
         code="xhg",
         lvl=55,
         lvl_req=47,
-    ),
-    "INFERNOSTRIDE": _Metadata(
+    )
+    INFERNOSTRIDE = _Metadata(
         ladder=False,
         code="xlb",
         lvl=37,
         lvl_req=29,
-    ),
-    "WATERWALK": _Metadata(
+    )
+    WATERWALK = _Metadata(
         ladder=False,
         code="xvb",
         lvl=40,
         lvl_req=32,
-    ),
-    "SILKWEAVE": _Metadata(
+    )
+    SILKWEAVE = _Metadata(
         ladder=False,
         code="xmb",
         lvl=44,
         lvl_req=36,
-    ),
-    "WAR_TRAVELER": _Metadata(
+    )
+    WAR_TRAVELER = _Metadata(
         ladder=False,
         code="xtb",
         lvl=50,
         lvl_req=42,
-    ),
-    "GORE_RIDER": _Metadata(
+    )
+    GORE_RIDER = _Metadata(
         ladder=False,
         code="xhb",
         lvl=55,
         lvl_req=47,
-    ),
-    "STRING_OF_EARS": _Metadata(
+    )
+    STRING_OF_EARS = _Metadata(
         ladder=False,
         code="zlb",
         lvl=37,
         lvl_req=29,
-    ),
-    "RAZORTAIL": _Metadata(
+    )
+    RAZORTAIL = _Metadata(
         ladder=False,
         code="zvb",
         lvl=39,
         lvl_req=32,
-    ),
-    "GLOOMS_TRAP": _Metadata(
+    )
+    GLOOMS_TRAP = _Metadata(
         ladder=False,
         code="zmb",
         lvl=45,
         lvl_req=36,
-    ),
-    "SNOWCLASH": _Metadata(
+    )
+    SNOWCLASH = _Metadata(
         ladder=False,
         code="ztb",
         lvl=49,
         lvl_req=42,
-    ),
-    "THUNDERGODS_VIGOR": _Metadata(
+    )
+    THUNDERGODS_VIGOR = _Metadata(
         ladder=False,
         code="zhb",
         lvl=55,
         lvl_req=47,
-    ),
-    "HARLEQUIN_CREST": _Metadata(
+    )
+    HARLEQUIN_CREST = _Metadata(
         ladder=False,
         code="uap",
         lvl=69,
         lvl_req=62,
-    ),
-    "VEIL_OF_STEEL": _Metadata(
+    )
+    VEIL_OF_STEEL = _Metadata(
         ladder=False,
         code="uhm",
         lvl=77,
         lvl_req=73,
-    ),
-    "THE_GLADIATORS_BANE": _Metadata(
+    )
+    THE_GLADIATORS_BANE = _Metadata(
         ladder=False,
         code="utu",
         lvl=85,
         lvl_req=85,
-    ),
-    "ARKAINES_VALOR": _Metadata(
+    )
+    ARKAINES_VALOR = _Metadata(
         ladder=False,
         code="upl",
         lvl=85,
         lvl_req=85,
-    ),
-    "BLACKOAK_SHIELD": _Metadata(
+    )
+    BLACKOAK_SHIELD = _Metadata(
         ladder=False,
         code="uml",
         lvl=67,
         lvl_req=61,
-    ),
-    "STORMSHIELD": _Metadata(
+    )
+    STORMSHIELD = _Metadata(
         ladder=False,
         code="uit",
         lvl=77,
         lvl_req=73,
-    ),
-    "HELLSLAYER": _Metadata(
+    )
+    HELLSLAYER = _Metadata(
         ladder=False,
         code="7bt",
         lvl=71,
         lvl_req=66,
-    ),
-    "MESSERSCHMIDTS_REAVER": _Metadata(
+    )
+    MESSERSCHMIDTS_REAVER = _Metadata(
         ladder=False,
         code="7ga",
         lvl=75,
         lvl_req=70,
-    ),
-    "BARANARS_STAR": _Metadata(
+    )
+    BARANARS_STAR = _Metadata(
         ladder=False,
         code="7mt",
         lvl=70,
         lvl_req=65,
-    ),
-    "SCHAEFERS_HAMMER": _Metadata(
+    )
+    SCHAEFERS_HAMMER = _Metadata(
         ladder=False,
         code="7wh",
         lvl=83,
         lvl_req=79,
-    ),
-    "THE_CRANIUM_BASHER": _Metadata(
+    )
+    THE_CRANIUM_BASHER = _Metadata(
         ladder=False,
         code="7gm",
         lvl=85,
         lvl_req=87,
-    ),
-    "LIGHTSABRE": _Metadata(
+    )
+    LIGHTSABRE = _Metadata(
         ladder=False,
         code="7cr",
         lvl=66,
         lvl_req=58,
-    ),
-    "DOOMBRINGER": _Metadata(
+    )
+    DOOMBRINGER = _Metadata(
         ladder=False,
         code="7b7",
         lvl=75,
         lvl_req=69,
-    ),
-    "THE_GRANDFATHER": _Metadata(
+    )
+    THE_GRANDFATHER = _Metadata(
         ladder=False,
         code="7gd",
         lvl=85,
         lvl_req=81,
-    ),
-    "WIZARDSPIKE": _Metadata(
+    )
+    WIZARDSPIKE = _Metadata(
         ladder=False,
         code="7dg",
         lvl=69,
         lvl_req=61,
-    ),
-    "CONSTRICTING_LOOP": _Metadata(
+    )
+    CONSTRICTING_LOOP = _Metadata(
         ladder=False,
         code="rin",
         lvl=73,
         lvl_req=65,
-    ),
-    "STORMSPIRE": _Metadata(
+    )
+    STORMSPIRE = _Metadata(
         ladder=False,
         code="7wc",
         lvl=78,
         lvl_req=70,
-    ),
-    "EAGLEHORN": _Metadata(
+    )
+    EAGLEHORN = _Metadata(
         ladder=False,
         code="6l7",
         lvl=77,
         lvl_req=69,
-    ),
-    "WINDFORCE": _Metadata(
+    )
+    WINDFORCE = _Metadata(
         ladder=False,
         code="6lw",
         lvl=80,
         lvl_req=73,
-    ),
-    "BUL_KATHOS_WEDDING_BAND": _Metadata(
+    )
+    BUL_KATHOS_WEDDING_BAND = _Metadata(
         ladder=False,
         code="rin",
         lvl=66,
         lvl_req=58,
-    ),
-    "THE_CATS_EYE": _Metadata(
+    )
+    THE_CATS_EYE = _Metadata(
         ladder=False,
         code="amu",
         lvl=58,
         lvl_req=50,
-    ),
-    "THE_RISING_SUN": _Metadata(
+    )
+    THE_RISING_SUN = _Metadata(
         ladder=False,
         code="amu",
         lvl=73,
         lvl_req=65,
-    ),
-    "CRESCENT_MOON": _Metadata(
+    )
+    CRESCENT_MOON = _Metadata(
         ladder=False,
         code="amu",
         lvl=58,
         lvl_req=50,
-    ),
-    "MARAS_KALEIDOSCOPE": _Metadata(
+    )
+    MARAS_KALEIDOSCOPE = _Metadata(
         ladder=False,
         code="amu",
         lvl=80,
         lvl_req=67,
-    ),
-    "ATMAS_SCARAB": _Metadata(
+    )
+    ATMAS_SCARAB = _Metadata(
         ladder=False,
         code="amu",
         lvl=60,
         lvl_req=60,
-    ),
-    "DWARF_STAR": _Metadata(
+    )
+    DWARF_STAR = _Metadata(
         ladder=False,
         code="rin",
         lvl=53,
         lvl_req=45,
-    ),
-    "RAVEN_FROST": _Metadata(
+    )
+    RAVEN_FROST = _Metadata(
         ladder=False,
         code="rin",
         lvl=53,
         lvl_req=45,
-    ),
-    "HIGHLORDS_WRATH": _Metadata(
+    )
+    HIGHLORDS_WRATH = _Metadata(
         ladder=False,
         code="amu",
         lvl=73,
         lvl_req=65,
-    ),
-    "SARACENS_CHANCE": _Metadata(
+    )
+    SARACENS_CHANCE = _Metadata(
         ladder=False,
         code="amu",
         lvl=55,
         lvl_req=47,
-    ),
-    "ARREATS_FACE": _Metadata(
+    )
+    ARREATS_FACE = _Metadata(
         ladder=False,
         code="baa",
         lvl=50,
         lvl_req=42,
-    ),
-    "HOMUNCULUS": _Metadata(
+    )
+    HOMUNCULUS = _Metadata(
         ladder=False,
         code="nea",
         lvl=50,
         lvl_req=42,
-    ),
-    "TITANS_REVENGE": _Metadata(
+    )
+    TITANS_REVENGE = _Metadata(
         ladder=False,
         code="ama",
         lvl=50,
         lvl_req=42,
-    ),
-    "LYCANDERS_AIM": _Metadata(
+    )
+    LYCANDERS_AIM = _Metadata(
         ladder=False,
         code="am7",
         lvl=50,
         lvl_req=42,
-    ),
-    "LYCANDERS_FLANK": _Metadata(
+    )
+    LYCANDERS_FLANK = _Metadata(
         ladder=False,
         code="am9",
         lvl=50,
         lvl_req=42,
-    ),
-    "THE_OCULUS": _Metadata(
+    )
+    THE_OCULUS = _Metadata(
         ladder=False,
         code="oba",
         lvl=50,
         lvl_req=42,
-    ),
-    "HERALD_OF_ZAKARUM": _Metadata(
+    )
+    HERALD_OF_ZAKARUM = _Metadata(
         ladder=False,
         code="pa9",
         lvl=50,
         lvl_req=42,
-    ),
-    "BARTUCS_CUT_THROAT": _Metadata(
+    )
+    BARTUCS_CUT_THROAT = _Metadata(
         ladder=False,
         code="9tw",
         lvl=50,
         lvl_req=42,
-    ),
-    "JALALS_MANE": _Metadata(
+    )
+    JALALS_MANE = _Metadata(
         ladder=False,
         code="dra",
         lvl=50,
         lvl_req=42,
-    ),
-    "THE_SCALPER": _Metadata(
+    )
+    THE_SCALPER = _Metadata(
         ladder=False,
         code="9ta",
         lvl=65,
         lvl_req=57,
-    ),
-    "BLOODMOON": _Metadata(
+    )
+    BLOODMOON = _Metadata(
         ladder=False,
         code="7sb",
         lvl=69,
         lvl_req=61,
-    ),
-    "DJINN_SLAYER": _Metadata(
+    )
+    DJINN_SLAYER = _Metadata(
         ladder=False,
         code="7sm",
         lvl=73,
         lvl_req=65,
-    ),
-    "DEATHBIT": _Metadata(
+    )
+    DEATHBIT = _Metadata(
         ladder=False,
         code="9tk",
         lvl=52,
         lvl_req=44,
-    ),
-    "WARSHRIKE": _Metadata(
+    )
+    WARSHRIKE = _Metadata(
         ladder=False,
         code="7bk",
         lvl=83,
         lvl_req=75,
-    ),
-    "GUT_SIPHON": _Metadata(
+    )
+    GUT_SIPHON = _Metadata(
         ladder=False,
         code="6rx",
         lvl=79,
         lvl_req=71,
-    ),
-    "RAZORS_EDGE": _Metadata(
+    )
+    RAZORS_EDGE = _Metadata(
         ladder=False,
         code="7ha",
         lvl=75,
         lvl_req=67,
-    ),
-    "DEMON_LIMB": _Metadata(
+    )
+    DEMON_LIMB = _Metadata(
         ladder=False,
         code="7sp",
         lvl=71,
         lvl_req=63,
-    ),
-    "STEEL_SHADE": _Metadata(
+    )
+    STEEL_SHADE = _Metadata(
         ladder=False,
         code="ulm",
         lvl=70,
         lvl_req=62,
-    ),
-    "TOMB_REAVER": _Metadata(
+    )
+    TOMB_REAVER = _Metadata(
         ladder=False,
         code="7pa",
         lvl=86,
         lvl_req=84,
-    ),
-    "DEATHS_WEB": _Metadata(
+    )
+    DEATHS_WEB = _Metadata(
         ladder=False,
         code="7gw",
         lvl=74,
         lvl_req=66,
-    ),
-    "NATURES_PEACE": _Metadata(
+    )
+    NATURES_PEACE = _Metadata(
         ladder=False,
         code="rin",
         lvl=77,
         lvl_req=69,
-    ),
-    "AZUREWRATH": _Metadata(
+    )
+    AZUREWRATH = _Metadata(
         ladder=False,
         code="7cr",
         lvl=87,
         lvl_req=85,
-    ),
-    "SERAPHS_HYMN": _Metadata(
+    )
+    SERAPHS_HYMN = _Metadata(
         ladder=False,
         code="amu",
         lvl=73,
         lvl_req=65,
-    ),
-    "FLESHRIPPER": _Metadata(
+    )
+    FLESHRIPPER = _Metadata(
         ladder=False,
         code="7kr",
         lvl=76,
         lvl_req=68,
-    ),
-    "ODIUM": _Metadata(
+    )
+    ODIUM = _Metadata(
         ladder=False,
         code="7fb",
         lvl=87,
         lvl_req=80,
-    ),
-    "HORIZONS_TORNADO": _Metadata(
+    )
+    HORIZONS_TORNADO = _Metadata(
         ladder=False,
         code="7fl",
         lvl=72,
         lvl_req=64,
-    ),
-    "STONE_CRUSHER": _Metadata(
+    )
+    STONE_CRUSHER = _Metadata(
         ladder=False,
         code="7wh",
         lvl=76,
         lvl_req=68,
-    ),
-    "JADE_TALON": _Metadata(
+    )
+    JADE_TALON = _Metadata(
         ladder=False,
         code="7wb",
         lvl=74,
         lvl_req=66,
-    ),
-    "SHADOW_DANCER": _Metadata(
+    )
+    SHADOW_DANCER = _Metadata(
         ladder=False,
         code="uhb",
         lvl=79,
         lvl_req=71,
-    ),
-    "CEREBUS_BITE": _Metadata(
+    )
+    CEREBUS_BITE = _Metadata(
         ladder=False,
         code="drb",
         lvl=71,
         lvl_req=63,
-    ),
-    "TYRAELS_MIGHT": _Metadata(
+    )
+    TYRAELS_MIGHT = _Metadata(
         ladder=False,
         code="uar",
         lvl=87,
         lvl_req=84,
-    ),
-    "SOUL_DRAINER": _Metadata(
+    )
+    SOUL_DRAINER = _Metadata(
         ladder=False,
         code="umg",
         lvl=82,
         lvl_req=74,
-    ),
-    "RUNE_MASTER": _Metadata(
+    )
+    RUNE_MASTER = _Metadata(
         ladder=False,
         code="72a",
         lvl=80,
         lvl_req=72,
-    ),
-    "DEATH_CLEAVER": _Metadata(
+    )
+    DEATH_CLEAVER = _Metadata(
         ladder=False,
         code="7wa",
         lvl=78,
         lvl_req=70,
-    ),
-    "EXECUTIONERS_JUSTICE": _Metadata(
+    )
+    EXECUTIONERS_JUSTICE = _Metadata(
         ladder=False,
         code="7gi",
         lvl=83,
         lvl_req=75,
-    ),
-    "STONERAVEN": _Metadata(
+    )
+    STONERAVEN = _Metadata(
         ladder=False,
         code="amd",
         lvl=72,
         lvl_req=64,
-    ),
-    "LEVIATHAN": _Metadata(
+    )
+    LEVIATHAN = _Metadata(
         ladder=False,
         code="uld",
         lvl=73,
         lvl_req=65,
-    ),
-    "WISP_PROJECTOR": _Metadata(
+    )
+    WISP_PROJECTOR = _Metadata(
         ladder=False,
         code="rin",
         lvl=84,
         lvl_req=76,
-    ),
-    "GARGOYLES_BITE": _Metadata(
+    )
+    GARGOYLES_BITE = _Metadata(
         ladder=False,
         code="7ts",
         lvl=78,
         lvl_req=70,
-    ),
-    "LACERATOR": _Metadata(
+    )
+    LACERATOR = _Metadata(
         ladder=False,
         code="7b8",
         lvl=76,
         lvl_req=68,
-    ),
-    "MANG_SONGS_LESSON": _Metadata(
+    )
+    MANG_SONGS_LESSON = _Metadata(
         ladder=False,
         code="6ws",
         lvl=86,
         lvl_req=82,
-    ),
-    "VIPERFORK": _Metadata(
+    )
+    VIPERFORK = _Metadata(
         ladder=False,
         code="7br",
         lvl=79,
         lvl_req=71,
-    ),
-    "ETHEREAL_EDGE": _Metadata(
+    )
+    ETHEREAL_EDGE = _Metadata(
         ladder=False,
         code="7ba",
         lvl=82,
         lvl_req=74,
-    ),
-    "DEMONHORNS_EDGE": _Metadata(
+    )
+    DEMONHORNS_EDGE = _Metadata(
         ladder=False,
         code="bad",
         lvl=69,
         lvl_req=61,
-    ),
-    "THE_REAPERS_TOLL": _Metadata(
+    )
+    THE_REAPERS_TOLL = _Metadata(
         ladder=False,
         code="7s8",
         lvl=83,
         lvl_req=75,
-    ),
-    "SPIRIT_KEEPER": _Metadata(
+    )
+    SPIRIT_KEEPER = _Metadata(
         ladder=False,
         code="drd",
         lvl=75,
         lvl_req=67,
-    ),
-    "HELLRACK": _Metadata(
+    )
+    HELLRACK = _Metadata(
         ladder=False,
         code="6hx",
         lvl=84,
         lvl_req=76,
-    ),
-    "ALMA_NEGRA": _Metadata(
+    )
+    ALMA_NEGRA = _Metadata(
         ladder=False,
         code="pac",
         lvl=85,
         lvl_req=77,
-    ),
-    "DARKFORCE_SPAWN": _Metadata(
+    )
+    DARKFORCE_SPAWN = _Metadata(
         ladder=False,
         code="nef",
         lvl=72,
         lvl_req=64,
-    ),
-    "WIDOWMAKER": _Metadata(
+    )
+    WIDOWMAKER = _Metadata(
         ladder=False,
         code="6sw",
         lvl=73,
         lvl_req=65,
-    ),
-    "BLOOD_RAVENS_CHARGE": _Metadata(
+    )
+    BLOOD_RAVENS_CHARGE = _Metadata(
         ladder=False,
         code="amb",
         lvl=79,
         lvl_req=71,
-    ),
-    "GHOSTFLAME": _Metadata(
+    )
+    GHOSTFLAME = _Metadata(
         ladder=False,
         code="7bl",
         lvl=70,
         lvl_req=62,
-    ),
-    "SHADOW_KILLER": _Metadata(
+    )
+    SHADOW_KILLER = _Metadata(
         ladder=False,
         code="7cs",
         lvl=85,
         lvl_req=78,
-    ),
-    "GIMMERSHRED": _Metadata(
+    )
+    GIMMERSHRED = _Metadata(
         ladder=False,
         code="7ta",
         lvl=78,
         lvl_req=70,
-    ),
-    "GRIFFONS_EYE": _Metadata(
+    )
+    GRIFFONS_EYE = _Metadata(
         ladder=False,
         code="ci3",
         lvl=84,
         lvl_req=76,
-    ),
-    "WINDHAMMER": _Metadata(
+    )
+    WINDHAMMER = _Metadata(
         ladder=False,
         code="7m7",
         lvl=76,
         lvl_req=68,
-    ),
-    "THUNDERSTROKE": _Metadata(
+    )
+    THUNDERSTROKE = _Metadata(
         ladder=False,
         code="amf",
         lvl=77,
         lvl_req=69,
-    ),
-    "DEMONS_ARCH": _Metadata(
+    )
+    DEMONS_ARCH = _Metadata(
         ladder=False,
         code="7s7",
         lvl=76,
         lvl_req=68,
-    ),
-    "BONEFLAME": _Metadata(
+    )
+    BONEFLAME = _Metadata(
         ladder=False,
         code="nee",
         lvl=80,
         lvl_req=72,
-    ),
-    "STEEL_PILLAR": _Metadata(
+    )
+    STEEL_PILLAR = _Metadata(
         ladder=False,
         code="7p7",
         lvl=77,
         lvl_req=69,
-    ),
-    "NIGHTWINGS_VEIL": _Metadata(
+    )
+    NIGHTWINGS_VEIL = _Metadata(
         ladder=False,
         code="uhm",
         lvl=75,
         lvl_req=67,
-    ),
-    "CROWN_OF_AGES": _Metadata(
+    )
+    CROWN_OF_AGES = _Metadata(
         ladder=False,
         code="urn",
         lvl=86,
         lvl_req=82,
-    ),
-    "ANDARIELS_VISAGE": _Metadata(
+    )
+    ANDARIELS_VISAGE = _Metadata(
         ladder=False,
         code="usk",
         lvl=85,
         lvl_req=83,
-    ),
-    "DRAGONSCALE": _Metadata(
+    )
+    DRAGONSCALE = _Metadata(
         ladder=False,
         code="pae",
         lvl=84,
         lvl_req=80,
-    ),
-    "STEEL_CARAPACE": _Metadata(
+    )
+    STEEL_CARAPACE = _Metadata(
         ladder=False,
         code="uul",
         lvl=74,
         lvl_req=66,
-    ),
-    "MEDUSAS_GAZE": _Metadata(
+    )
+    MEDUSAS_GAZE = _Metadata(
         ladder=False,
         code="uow",
         lvl=84,
         lvl_req=76,
-    ),
-    "RAVENLORE": _Metadata(
+    )
+    RAVENLORE = _Metadata(
         ladder=False,
         code="dre",
         lvl=82,
         lvl_req=74,
-    ),
-    "BONESHADE": _Metadata(
+    )
+    BONESHADE = _Metadata(
         ladder=False,
         code="7bw",
         lvl=84,
         lvl_req=79,
-    ),
-    "FLAMEBELLOW": _Metadata(
+    )
+    FLAMEBELLOW = _Metadata(
         ladder=False,
         code="7gs",
         lvl=79,
         lvl_req=71,
-    ),
-    "DEATHS_FATHOM": _Metadata(
+    )
+    DEATHS_FATHOM = _Metadata(
         ladder=False,
         code="obf",
         lvl=81,
         lvl_req=73,
-    ),
-    "WOLFHOWL": _Metadata(
+    )
+    WOLFHOWL = _Metadata(
         ladder=False,
         code="bac",
         lvl=85,
         lvl_req=79,
-    ),
-    "SPIRIT_WARD": _Metadata(
+    )
+    SPIRIT_WARD = _Metadata(
         ladder=False,
         code="uts",
         lvl=76,
         lvl_req=68,
-    ),
-    "KIRAS_GUARDIAN": _Metadata(
+    )
+    KIRAS_GUARDIAN = _Metadata(
         ladder=False,
         code="ci2",
         lvl=85,
         lvl_req=77,
-    ),
-    "ORMUS_ROBES": _Metadata(
+    )
+    ORMUS_ROBES = _Metadata(
         ladder=False,
         code="uui",
         lvl=83,
         lvl_req=75,
-    ),
-    "GHEEDS_FORTUNE": _Metadata(
+    )
+    GHEEDS_FORTUNE = _Metadata(
         ladder=False,
         code="cm3",
         lvl=70,
         lvl_req=62,
-    ),
-    "STORMLASH": _Metadata(
+    )
+    STORMLASH = _Metadata(
         ladder=False,
         code="7fl",
         lvl=86,
         lvl_req=82,
-    ),
-    "HALABERDS_REIGN": _Metadata(
+    )
+    HALABERDS_REIGN = _Metadata(
         ladder=False,
         code="bae",
         lvl=85,
         lvl_req=77,
-    ),
-    "SPIKE_THORN": _Metadata(
+    )
+    SPIKE_THORN = _Metadata(
         ladder=False,
         code="upk",
         lvl=78,
         lvl_req=70,
-    ),
-    "DRACULS_GRASP": _Metadata(
+    )
+    DRACULS_GRASP = _Metadata(
         ladder=False,
         code="uvg",
         lvl=84,
         lvl_req=76,
-    ),
-    "FROSTWIND": _Metadata(
+    )
+    FROSTWIND = _Metadata(
         ladder=False,
         code="7ls",
         lvl=78,
         lvl_req=70,
-    ),
-    "TEMPLARS_MIGHT": _Metadata(
+    )
+    TEMPLARS_MIGHT = _Metadata(
         ladder=False,
         code="uar",
         lvl=82,
         lvl_req=74,
-    ),
-    "ESCHUTAS_TEMPER": _Metadata(
+    )
+    ESCHUTAS_TEMPER = _Metadata(
         ladder=False,
         code="obc",
         lvl=80,
         lvl_req=72,
-    ),
-    "FIRELIZARDS_TALONS": _Metadata(
+    )
+    FIRELIZARDS_TALONS = _Metadata(
         ladder=False,
         code="7lw",
         lvl=75,
         lvl_req=67,
-    ),
-    "SANDSTORM_TREK": _Metadata(
+    )
+    SANDSTORM_TREK = _Metadata(
         ladder=False,
         code="uvb",
         lvl=72,
         lvl_req=64,
-    ),
-    "MARROWWALK": _Metadata(
+    )
+    MARROWWALK = _Metadata(
         ladder=False,
         code="umb",
         lvl=74,
         lvl_req=66,
-    ),
-    "HEAVENS_LIGHT": _Metadata(
+    )
+    HEAVENS_LIGHT = _Metadata(
         ladder=False,
         code="7sc",
         lvl=69,
         lvl_req=61,
-    ),
-    "MERMANS_SPROCKET": _Metadata(
+    )
+    MERMANS_SPROCKET = _Metadata(
         ladder=False,
         code="ulb",
         lvl=45,
         lvl_req=45,
-    ),
-    "ARACHNID_MESH": _Metadata(
+    )
+    ARACHNID_MESH = _Metadata(
         ladder=False,
         code="ulc",
         lvl=87,
         lvl_req=80,
-    ),
-    "NOSFERATUS_COIL": _Metadata(
+    )
+    NOSFERATUS_COIL = _Metadata(
         ladder=False,
         code="uvc",
         lvl=68,
         lvl_req=51,
-    ),
-    "METALGRID": _Metadata(
+    )
+    METALGRID = _Metadata(
         ladder=False,
         code="amu",
         lvl=85,
         lvl_req=81,
-    ),
-    "VERDUNGOS_HEARTY_CORD": _Metadata(
+    )
+    VERDUNGOS_HEARTY_CORD = _Metadata(
         ladder=False,
         code="umc",
         lvl=71,
         lvl_req=63,
-    ),
-    "SIGGARDS_STAUNCH": _Metadata(
+    )
+    SIGGARDS_STAUNCH = _Metadata(
         ladder=False,
         code="uhc",
         lvl=80,
         lvl_req=72,
-    ),
-    "CARRION_WIND": _Metadata(
+    )
+    CARRION_WIND = _Metadata(
         ladder=False,
         code="rin",
         lvl=68,
         lvl_req=60,
-    ),
-    "GIANT_SKULL": _Metadata(
+    )
+    GIANT_SKULL = _Metadata(
         ladder=False,
         code="uh9",
         lvl=73,
         lvl_req=65,
-    ),
-    "ASTREONS_IRON_WARD": _Metadata(
+    )
+    ASTREONS_IRON_WARD = _Metadata(
         ladder=False,
         code="7ws",
         lvl=68,
         lvl_req=60,
-    ),
-    "ANNIHILUS": _Metadata(
+    )
+    ANNIHILUS = _Metadata(
         ladder=False,
         code="cm1",
         lvl=130,
         lvl_req=70,
-    ),
-    "ARIOCS_NEEDLE": _Metadata(
+    )
+    ARIOCS_NEEDLE = _Metadata(
         ladder=False,
         code="7sr",
         lvl=85,
         lvl_req=81,
-    ),
-    "CRANEBEAK": _Metadata(
+    )
+    CRANEBEAK = _Metadata(
         ladder=False,
         code="7mp",
         lvl=71,
         lvl_req=63,
-    ),
-    "NORDS_TENDERIZER": _Metadata(
+    )
+    NORDS_TENDERIZER = _Metadata(
         ladder=False,
         code="7cl",
         lvl=76,
         lvl_req=68,
-    ),
-    "EARTH_SHIFTER": _Metadata(
+    )
+    EARTH_SHIFTER = _Metadata(
         ladder=False,
         code="7gm",
         lvl=77,
         lvl_req=69,
-    ),
-    "WRAITH_FLIGHT": _Metadata(
+    )
+    WRAITH_FLIGHT = _Metadata(
         ladder=False,
         code="7gl",
         lvl=84,
         lvl_req=76,
-    ),
-    "BONEHEW": _Metadata(
+    )
+    BONEHEW = _Metadata(
         ladder=False,
         code="7o7",
         lvl=72,
         lvl_req=64,
-    ),
-    "ONDALS_WISDOM": _Metadata(
+    )
+    ONDALS_WISDOM = _Metadata(
         ladder=False,
         code="6cs",
         lvl=74,
         lvl_req=66,
-    ),
-    "THE_REDEEMER": _Metadata(
+    )
+    THE_REDEEMER = _Metadata(
         ladder=False,
         code="7sc",
         lvl=80,
         lvl_req=72,
-    ),
-    "HEAD_HUNTERS_GLORY": _Metadata(
+    )
+    HEAD_HUNTERS_GLORY = _Metadata(
         ladder=False,
         code="ush",
         lvl=83,
         lvl_req=75,
-    ),
-    "STEELREND": _Metadata(
+    )
+    STEELREND = _Metadata(
         ladder=False,
         code="uhg",
         lvl=78,
         lvl_req=70,
-    ),
-    "RAINBOW_FACET": _Metadata(
+    )
+    RAINBOW_FACET = _Metadata(
         ladder=False,
         code="jew",
         lvl=85,
         lvl_req=49,
-    ),
-    "HELLFIRE_TORCH": _Metadata(
+    )
+    HELLFIRE_TORCH = _Metadata(
         ladder=False,
         code="cm2",
         lvl=120,
         lvl_req=75,
-    ),
-    "ITHERAELS_PATH": _Metadata(
+    )
+    ITHERAELS_PATH = _Metadata(
         ladder=False,
         code="utb",
         lvl=131,
         lvl_req=85,
-    ),
-    "OVERLORDS_HELM": _Metadata(
+    )
+    OVERLORDS_HELM = _Metadata(
         ladder=False,
         code="uhl",
         lvl=131,
         lvl_req=85,
-    ),
-    "DARK_ABYSS": _Metadata(
+    )
+    DARK_ABYSS = _Metadata(
         ladder=False,
         code="uth",
         lvl=131,
         lvl_req=85,
-    ),
-    "AIDANS_SCAR": _Metadata(
+    )
+    AIDANS_SCAR = _Metadata(
         ladder=False,
         code="7qr",
         lvl=131,
         lvl_req=85,
-    ),
-    "HADRIELS_HAND": _Metadata(
+    )
+    HADRIELS_HAND = _Metadata(
         ladder=False,
         code="7bs",
         lvl=131,
         lvl_req=85,
-    ),
-    "TRUE_SILVER": _Metadata(
+    )
+    TRUE_SILVER = _Metadata(
         ladder=False,
         code="am5",
         lvl=24,
         lvl_req=20,
-    ),
-    "QUETZALCOATL": _Metadata(
+    )
+    QUETZALCOATL = _Metadata(
         ladder=False,
         code="dr2",
         lvl=35,
         lvl_req=29,
-    ),
-    "CYCLOPEAN_ROAR": _Metadata(
+    )
+    CYCLOPEAN_ROAR = _Metadata(
         ladder=False,
         code="ba6",
         lvl=34,
         lvl_req=28,
-    ),
-    "SANKEKURS_FALL": _Metadata(
+    )
+    SANKEKURS_FALL = _Metadata(
         ladder=False,
         code="pa3",
         lvl=37,
         lvl_req=29,
-    ),
-    "MAGE_SLAYER": _Metadata(
+    )
+    MAGE_SLAYER = _Metadata(
         ladder=False,
         code="9ar",
         lvl=32,
         lvl_req=27,
-    ),
-    "KALANS_LEGACY": _Metadata(
+    )
+    KALANS_LEGACY = _Metadata(
         ladder=False,
         code="ne6",
         lvl=30,
         lvl_req=26,
-    ),
-    "TEMPEST": _Metadata(
+    )
+    TEMPEST = _Metadata(
         ladder=False,
         code="ob6",
         lvl=28,
         lvl_req=25,
-    ),
-    "BAND_OF_SKULLS": _Metadata(
+    )
+    BAND_OF_SKULLS = _Metadata(
         ladder=False,
         code="rbe",
         lvl=131,
         lvl_req=90,
-    ),
-    "CAGE_OF_THE_UNSULLIED": _Metadata(
+    )
+    CAGE_OF_THE_UNSULLIED = _Metadata(
         ladder=False,
         code="rar",
         lvl=131,
         lvl_req=90,
-    ),
-    "THE_THIRD_EYE": _Metadata(
+    )
+    THE_THIRD_EYE = _Metadata(
         ladder=False,
         code="ram",
         lvl=131,
         lvl_req=90,
-    ),
-    "ZERAES_RESOLVE": _Metadata(
+    )
+    ZERAES_RESOLVE = _Metadata(
         ladder=False,
         code="ame",
         lvl=87,
         lvl_req=76,
-    ),
-    "OCCULTIST": _Metadata(
+    )
+    OCCULTIST = _Metadata(
         ladder=False,
         code="utg",
         lvl=87,
         lvl_req=70,
-    ),
-    "BRIMSTONE_RAIN": _Metadata(
+    )
+    BRIMSTONE_RAIN = _Metadata(
         ladder=False,
         code="6bs",
         lvl=87,
         lvl_req=80,
-    ),
-    "AKARATS_DEVOTION": _Metadata(
+    )
+    AKARATS_DEVOTION = _Metadata(
         ladder=False,
         code="7qs",
         lvl=87,
         lvl_req=74,
-    ),
-    "MARTYRDOM": _Metadata(
+    )
+    MARTYRDOM = _Metadata(
         ladder=False,
         code="ned",
         lvl=87,
         lvl_req=68,
-    ),
-    "STALKERS_CULL": _Metadata(
+    )
+    STALKERS_CULL = _Metadata(
         ladder=False,
         code="7tw",
         lvl=87,
         lvl_req=65,
-    ),
-    "PURGATORY": _Metadata(
+    )
+    PURGATORY = _Metadata(
         ladder=False,
         code="utp",
         lvl=87,
         lvl_req=75,
-    ),
-    "RAEKORS_VIRTUE": _Metadata(
+    )
+    RAEKORS_VIRTUE = _Metadata(
         ladder=False,
         code="baf",
         lvl=87,
         lvl_req=78,
-    ),
-    "URSAS_NIGHTMARE": _Metadata(
+    )
+    URSAS_NIGHTMARE = _Metadata(
         ladder=False,
         code="drf",
         lvl=50,
         lvl_req=42,
-    ),
-    "ZHARS_SANCTUM": _Metadata(
+    )
+    ZHARS_SANCTUM = _Metadata(
         ladder=False,
         code="t51",
         lvl=80,
         lvl_req=80,
-    ),
-    "WARLORD_OF_BLOOD": _Metadata(
+    )
+    WARLORD_OF_BLOOD = _Metadata(
         ladder=False,
         code="t52",
         lvl=80,
         lvl_req=80,
-    ),
-    "FALLEN_GARDENS": _Metadata(
+    )
+    FALLEN_GARDENS = _Metadata(
         ladder=False,
         code="t53",
         lvl=80,
         lvl_req=80,
-    ),
-    "ULDYSSIANS_AWAKENING": _Metadata(
+    )
+    ULDYSSIANS_AWAKENING = _Metadata(
         ladder=False,
         code="7st",
         lvl=80,
         lvl_req=74,
-    ),
-    "LEORICS_MITHRIL_BANE": _Metadata(
+    )
+    LEORICS_MITHRIL_BANE = _Metadata(
         ladder=False,
         code="7cm",
         lvl=78,
         lvl_req=68,
-    ),
-    "TWILIGHTS_REFLECTION": _Metadata(
+    )
+    TWILIGHTS_REFLECTION = _Metadata(
         ladder=False,
         code="urg",
         lvl=18,
         lvl_req=13,
-    ),
-    "WRAITHSKIN": _Metadata(
+    )
+    WRAITHSKIN = _Metadata(
         ladder=False,
         code="ung",
         lvl=61,
         lvl_req=53,
-    ),
-    "TITANS_GRIP": _Metadata(
+    )
+    TITANS_GRIP = _Metadata(
         ladder=False,
         code="ulg",
         lvl=45,
         lvl_req=38,
-    ),
-    "SHATTERBLADE": _Metadata(
+    )
+    SHATTERBLADE = _Metadata(
         ladder=False,
         code="7di",
         lvl=73,
         lvl_req=65,
-    ),
-    "DENMOTHER": _Metadata(
+    )
+    DENMOTHER = _Metadata(
         ladder=False,
         code="drc",
         lvl=66,
         lvl_req=58,
-    ),
-    "EBONBANE": _Metadata(
+    )
+    EBONBANE = _Metadata(
         ladder=False,
         code="amc",
         lvl=70,
         lvl_req=63,
-    ),
-    "WHISPERING_MIRAGE": _Metadata(
+    )
+    WHISPERING_MIRAGE = _Metadata(
         ladder=False,
         code="7xf",
         lvl=76,
         lvl_req=68,
-    ),
-    "SKYWARDEN": _Metadata(
+    )
+    SKYWARDEN = _Metadata(
         ladder=False,
         code="paf",
         lvl=85,
         lvl_req=77,
-    ),
-    "SKORN": _Metadata(
+    )
+    SKORN = _Metadata(
         ladder=False,
         code="ob7",
         lvl=36,
         lvl_req=27,
-    ),
-    "ACHILLES_STRIKE": _Metadata(
+    )
+    ACHILLES_STRIKE = _Metadata(
         ladder=False,
         code="9b8",
         lvl=59,
         lvl_req=51,
-    ),
-    "WILDSPEAKER": _Metadata(
+    )
+    WILDSPEAKER = _Metadata(
         ladder=False,
         code="ba7",
         lvl=52,
         lvl_req=44,
-    ),
-    "FENRIS": _Metadata(
+    )
+    FENRIS = _Metadata(
         ladder=False,
         code="dr6",
         lvl=48,
         lvl_req=40,
-    ),
-    "SACRED_TOTEM": _Metadata(
+    )
+    SACRED_TOTEM = _Metadata(
         ladder=False,
         code="neg",
         lvl=72,
         lvl_req=64,
-    ),
-    "IMPERIAL_PALACE": _Metadata(
+    )
+    IMPERIAL_PALACE = _Metadata(
         ladder=False,
         code="t54",
         lvl=80,
         lvl_req=80,
-    ),
-    "OUTER_VOID": _Metadata(
+    )
+    OUTER_VOID = _Metadata(
         ladder=False,
         code="t55",
         lvl=80,
         lvl_req=80,
-    ),
-    "BALEFIRE": _Metadata(
+    )
+    BALEFIRE = _Metadata(
         ladder=False,
         code="aqv",
         lvl=14,
         lvl_req=14,
-    ),
-    "SWIFTWIND_NEEDLE": _Metadata(
+    )
+    SWIFTWIND_NEEDLE = _Metadata(
         ladder=False,
         code="aqv2",
         lvl=32,
         lvl_req=32,
-    ),
-    "TOMBSONG": _Metadata(
+    )
+    TOMBSONG = _Metadata(
         ladder=False,
         code="aqv2",
         lvl=36,
         lvl_req=36,
-    ),
-    "AETHERWING": _Metadata(
+    )
+    AETHERWING = _Metadata(
         ladder=False,
         code="aqv3",
         lvl=55,
         lvl_req=55,
-    ),
-    "BASILISKS_QUILL": _Metadata(
+    )
+    BASILISKS_QUILL = _Metadata(
         ladder=False,
         code="aqv3",
         lvl=62,
         lvl_req=62,
-    ),
-    "DOOMS_FINGER": _Metadata(
+    )
+    DOOMS_FINGER = _Metadata(
         ladder=False,
         code="aqv3",
         lvl=87,
         lvl_req=68,
-    ),
-    "RAMFODDER": _Metadata(
+    )
+    RAMFODDER = _Metadata(
         ladder=False,
         code="cqv",
         lvl=8,
         lvl_req=8,
-    ),
-    "ANVILGUARD_STRAP": _Metadata(
+    )
+    ANVILGUARD_STRAP = _Metadata(
         ladder=False,
         code="cqv2",
         lvl=34,
         lvl_req=34,
-    ),
-    "SHATTERHEAD": _Metadata(
+    )
+    SHATTERHEAD = _Metadata(
         ladder=False,
         code="cqv2",
         lvl=47,
         lvl_req=47,
-    ),
-    "ABYSSAL_WARD": _Metadata(
+    )
+    ABYSSAL_WARD = _Metadata(
         ladder=False,
         code="cqv3",
         lvl=60,
         lvl_req=60,
-    ),
-    "BANNERLORDS_CALL": _Metadata(
+    )
+    BANNERLORDS_CALL = _Metadata(
         ladder=False,
         code="cqv3",
         lvl=60,
         lvl_req=65,
-    ),
-    "FROZEN_SORROW": _Metadata(
+    )
+    FROZEN_SORROW = _Metadata(
         ladder=False,
         code="cqv3",
         lvl=87,
         lvl_req=72,
-    ),
-    "CRACKLESHOT": _Metadata(
+    )
+    CRACKLESHOT = _Metadata(
         ladder=False,
         code="6hb",
         lvl=87,
         lvl_req=72,
-    ),
-    "CITY_OF_UREH": _Metadata(
+    )
+    CITY_OF_UREH = _Metadata(
         ladder=False,
         code="t56",
         lvl=80,
         lvl_req=80,
-    ),
-}
-
-
-class UniqueItem(Enum):
-    """PD2 unique item categories."""
-
-    THE_GNASHER = "The Gnasher"
-    DEATHSPADE = "Deathspade"
-    BLADEBONE = "Bladebone"
-    SKULL_SPLITTER = "Skull Splitter"
-    RAKESCAR = "Rakescar"
-    AXE_OF_FECHMAR = "Axe of Fechmar"
-    GORESHOVEL = "Goreshovel"
-    THE_CHIEFTAIN = "The Chieftain"
-    BRAINHEW = "Brainhew"
-    HUMONGOUS = "Humongous"
-    TORCH_OF_IRO = "Torch of Iro"
-    MAELSTROM = "Maelstrom"
-    GRAVENSPINE = "Gravenspine"
-    UMES_LAMENT = "Ume's Lament"
-    FELLOAK = "Felloak"
-    KNELL_STRIKER = "Knell Striker"
-    RUSTHANDLE = "Rusthandle"
-    STORMEYE = "Stormeye"
-    STOUTNAIL = "Stoutnail"
-    CRUSHFLANGE = "Crushflange"
-    BLOODRISE = "Bloodrise"
-    THE_GENERALS_TAN_DO_LI_GA = "The General's Tan Do Li Ga"
-    IRONSTONE = "Ironstone"
-    BONESNAP = "Bonesnap"
-    STEELDRIVER = "Steeldriver"
-    RIXOTS_KEEN = "Rixot's Keen"
-    BLOOD_CRESCENT = "Blood Crescent"
-    SKEWER_OF_KRINTIZ = "Skewer of Krintiz"
-    GLEAMSCYTHE = "Gleamscythe"
-    GRISWOLDS_EDGE = "Griswold's Edge"
-    HELLPLAGUE = "Hellplague"
-    CULWENS_POINT = "Culwen's Point"
-    SHADOWFANG = "Shadowfang"
-    SOULFLAY = "Soulflay"
-    KINEMILS_AWL = "Kinemil's Awl"
-    BLACKTONGUE = "Blacktongue"
-    RIPSAW = "Ripsaw"
-    THE_PATRIARCH = "The Patriarch"
-    GULL = "Gull"
-    THE_DIGGLER = "The Diggler"
-    THE_JADE_TAN_DO = "The Jade Tan Do"
-    SPECTRAL_SHARD = "Spectral Shard"
-    THE_DRAGON_CHANG = "The Dragon Chang"
-    RAZORTINE = "Razortine"
-    BLOODTHIEF = "Bloodthief"
-    LANCE_OF_YAGGAI = "Lance of Yaggai"
-    THE_TANNR_GOREROD = "The Tannr Gorerod"
-    DIMOAKS_HEW = "Dimoak's Hew"
-    STEELGOAD = "Steelgoad"
-    SOUL_HARVEST = "Soul Harvest"
-    THE_BATTLEBRANCH = "The Battlebranch"
-    WOESTAVE = "Woestave"
-    THE_GRIM_REAPER = "The Grim Reaper"
-    BANE_ASH = "Bane Ash"
-    SERPENT_LORD = "Serpent Lord"
-    SPIRE_OF_LAZARUS = "Spire of Lazarus"
-    THE_SALAMANDER = "The Salamander"
-    THE_IRON_JANG_BONG = "The Iron Jang Bong"
-    PLUCKEYE = "Pluckeye"
-    WITHERSTRING = "Witherstring"
-    RAVEN_CLAW = "Raven Claw"
-    ROGUES_BOW = "Rogue's Bow"
-    STORMSTRIKE = "Stormstrike"
-    WIZENDRAW = "Wizendraw"
-    HELLCLAP = "Hellclap"
-    BLASTBARK = "Blastbark"
-    LEADCROW = "Leadcrow"
-    ICHORSTING = "Ichorsting"
-    HELLCAST = "Hellcast"
-    DOOMSLINGER = "Doomslinger"
-    BIGGINS_BONNET = "Biggin's Bonnet"
-    TARNHELM = "Tarnhelm"
-    COIF_OF_GLORY = "Coif of Glory"
-    DUSKDEEP = "Duskdeep"
-    WORMSKULL = "Wormskull"
-    HOWLTUSK = "Howltusk"
-    UNDEAD_CROWN = "Undead Crown"
-    THE_FACE_OF_HORROR = "The Face of Horror"
-    GREYFORM = "Greyform"
-    BLINKBATS_FORM = "Blinkbat's Form"
-    THE_CENTURION = "The Centurion"
-    TWITCHTHROE = "Twitchthroe"
-    DARKGLOW = "Darkglow"
-    HAWKMAIL = "Hawkmail"
-    SPARKING_MAIL = "Sparking Mail"
-    VENOM_WARD = "Venom Ward"
-    ICEBLINK = "Iceblink"
-    BONEFLESH = "Boneflesh"
-    ROCKFLEECE = "Rockfleece"
-    RATTLECAGE = "Rattlecage"
-    GOLDSKIN = "Goldskin"
-    SILKS_OF_THE_VICTOR = "Silks of the Victor"
-    HEAVENLY_GARB = "Heavenly Garb"
-    PELTA_LUNATA = "Pelta Lunata"
-    UMBRAL_DISK = "Umbral Disk"
-    STORMGUILD = "Stormguild"
-    WALL_OF_THE_EYELESS = "Wall of the Eyeless"
-    SWORDBACK_HOLD = "Swordback Hold"
-    STEELCLASH = "Steelclash"
-    BVERRIT_KEEP = "Bverrit Keep"
-    THE_WARD = "The Ward"
-    THE_HAND_OF_BROC = "The Hand of Broc"
-    BLOODFIST = "Bloodfist"
-    CHANCE_GUARDS = "Chance Guards"
-    MAGEFIST = "Magefist"
-    FROSTBURN = "Frostburn"
-    HOTSPUR = "Hotspur"
-    GOREFOOT = "Gorefoot"
-    TREADS_OF_CTHON = "Treads of Cthon"
-    GOBLIN_TOE = "Goblin Toe"
-    TEARHAUNCH = "Tearhaunch"
-    LENYMO = "Lenymo"
-    SNAKECORD = "Snakecord"
-    NIGHTSMOKE = "Nightsmoke"
-    GOLDWRAP = "Goldwrap"
-    BLADEBUCKLE = "Bladebuckle"
-    NOKOZAN_RELIC = "Nokozan Relic"
-    THE_EYE_OF_ETLICH = "The Eye of Etlich"
-    THE_MAHIM_OAK_CURIO = "The Mahim-Oak Curio"
-    NAGELRING = "Nagelring"
-    MANALD_HEAL = "Manald Heal"
-    THE_STONE_OF_JORDAN = "The Stone of Jordan"
-    AMULET_OF_THE_VIPER = "Amulet of the Viper"
-    STAFF_OF_KINGS = "Staff of Kings"
-    HORADRIC_STAFF = "Horadric Staff"
-    HELL_FORGE_HAMMER = "Hell Forge Hammer"
-    KHALIMS_FLAIL = "Khalim's Flail"
-    KHALIMS_WILL = "Khalim's Will"
-    COLDKILL = "Coldkill"
-    BUTCHERS_PUPIL = "Butcher's Pupil"
-    ISLESTRIKE = "Islestrike"
-    POMPEIIS_WRATH = "Pompeii's Wrath"
-    GUARDIAN_NAGA = "Guardian Naga"
-    WARLORDS_TRUST = "Warlord's Trust"
-    SPELLSTEEL = "Spellsteel"
-    STORMRIDER = "Stormrider"
-    BONESLAYER_BLADE = "Boneslayer Blade"
-    THE_MINOTAUR = "The Minotaur"
-    SUICIDE_BRANCH = "Suicide Branch"
-    CARIN_SHARD = "Carin Shard"
-    ARM_OF_KING_LEORIC = "Arm of King Leoric"
-    BLACKHAND_KEY = "Blackhand Key"
-    DARK_CLAN_CRUSHER = "Dark Clan Crusher"
-    ZAKARUMS_HAND = "Zakarum's Hand"
-    THE_FETID_SPRINKLER = "The Fetid Sprinkler"
-    HAND_OF_BLESSED_LIGHT = "Hand of Blessed Light"
-    FLESHRENDER = "Fleshrender"
-    SURESHRILL_FROST = "Sureshrill Frost"
-    MOONFALL = "Moonfall"
-    BAEZILS_VORTEX = "Baezil's Vortex"
-    EARTHSHAKER = "Earthshaker"
-    BLOODTREE_STUMP = "Bloodtree Stump"
-    THE_GAVEL_OF_PAIN = "The Gavel of Pain"
-    BLOODLETTER = "Bloodletter"
-    COLDSTEEL_EYE = "Coldsteel Eye"
-    HEXFIRE = "Hexfire"
-    BLADE_OF_ALI_BABA = "Blade of Ali Baba"
-    GINTHERS_RIFT = "Ginther's Rift"
-    HEADSTRIKER = "Headstriker"
-    PLAGUE_BEARER = "Plague Bearer"
-    THE_ATLANTEAN = "The Atlantean"
-    CRAINTE_VOMIR = "Crainte Vomir"
-    BING_SZ_WANG = "Bing Sz Wang"
-    THE_VILE_HUSK = "The Vile Husk"
-    CLOUDCRACK = "Cloudcrack"
-    TODESFAELLE_FLAMME = "Todesfaelle Flamme"
-    SWORDGUARD = "Swordguard"
-    SPINERIPPER = "Spineripper"
-    HEART_CARVER = "Heart Carver"
-    BLACKBOGS_SHARP = "Blackbog's Sharp"
-    STORMSPIKE = "Stormspike"
-    THE_IMPALER = "The Impaler"
-    KELPIE_SNARE = "Kelpie Snare"
-    SOULFEAST_TINE = "Soulfeast Tine"
-    HONE_SUNDAN = "Hone Sundan"
-    SPIRE_OF_HONOR = "Spire of Honor"
-    THE_MEAT_SCRAPER = "The Meat Scraper"
-    BLACKLEACH_BLADE = "Blackleach Blade"
-    ATHENAS_WRATH = "Athena's Wrath"
-    PIERRE_TOMBALE_COUANT = "Pierre Tombale Couant"
-    HUSOLDAL_EVO = "Husoldal Evo"
-    GRIMS_BURNING_DEAD = "Grim's Burning Dead"
-    RAZORSWITCH = "Razorswitch"
-    RIBCRACKER = "Ribcracker"
-    CHROMATIC_IRE = "Chromatic Ire"
-    WARPSPEAR = "Warpspear"
-    SKULL_COLLECTOR = "Skull Collector"
-    SKYSTRIKE = "Skystrike"
-    RIPHOOK = "Riphook"
-    KUKO_SHAKAKU = "Kuko Shakaku"
-    ENDLESSHAIL = "Endlesshail"
-    WITCHWILD_STRING = "Witchwild String"
-    CLIFFKILLER = "Cliffkiller"
-    MAGEWRATH = "Magewrath"
-    GOLDSTRIKE_ARCH = "Goldstrike Arch"
-    LANGER_BRISER = "Langer Briser"
-    PUS_SPITTER = "Pus Spitter"
-    BURIZA_DO_KYANON = "Buriza-Do Kyanon"
-    DEMON_MACHINE = "Demon Machine"
-    PEASANT_CROWN = "Peasant Crown"
-    ROCKSTOPPER = "Rockstopper"
-    STEALSKULL = "Stealskull"
-    DARKSIGHT_HELM = "Darksight Helm"
-    VALKYRIE_WING = "Valkyrie Wing"
-    CROWN_OF_THIEVES = "Crown of Thieves"
-    BLACKHORNS_FACE = "Blackhorn's Face"
-    VAMPIRE_GAZE = "Vampire Gaze"
-    THE_SPIRIT_SHROUD = "The Spirit Shroud"
-    SKIN_OF_THE_VIPERMAGI = "Skin of the Vipermagi"
-    SKIN_OF_THE_FLAYED_ONE = "Skin of the Flayed One"
-    IRON_PELT = "Iron Pelt"
-    SPIRIT_FORGE = "Spirit Forge"
-    CROW_CAW = "Crow Caw"
-    SHAFTSTOP = "Shaftstop"
-    DURIELS_SHELL = "Duriel's Shell"
-    SKULLDERS_IRE = "Skullder's Ire"
-    GUARDIAN_ANGEL = "Guardian Angel"
-    TOOTHROW = "Toothrow"
-    ATMAS_WAIL = "Atma's Wail"
-    BLACK_HADES = "Black Hades"
-    CORPSEMOURN = "Corpsemourn"
-    QUE_HEGANS_WISDOM = "Que-Hegan's Wisdom"
-    VISCERATUANT = "Visceratuant"
-    MOSERS_BLESSED_CIRCLE = "Moser's Blessed Circle"
-    STORMCHASER = "Stormchaser"
-    TIAMATS_REBUKE = "Tiamat's Rebuke"
-    GERKES_SANCTUARY = "Gerke's Sanctuary"
-    RADAMENTS_SPHERE = "Radament's Sphere"
-    LIDLESS_WALL = "Lidless Wall"
-    LANCE_GUARD = "Lance Guard"
-    VENOM_GRIP = "Venom Grip"
-    GRAVEPALM = "Gravepalm"
-    GHOULHIDE = "Ghoulhide"
-    LAVA_GOUT = "Lava Gout"
-    HELLMOUTH = "Hellmouth"
-    INFERNOSTRIDE = "Infernostride"
-    WATERWALK = "Waterwalk"
-    SILKWEAVE = "Silkweave"
-    WAR_TRAVELER = "War Traveler"
-    GORE_RIDER = "Gore Rider"
-    STRING_OF_EARS = "String of Ears"
-    RAZORTAIL = "Razortail"
-    GLOOMS_TRAP = "Gloom's Trap"
-    SNOWCLASH = "Snowclash"
-    THUNDERGODS_VIGOR = "Thundergod's Vigor"
-    HARLEQUIN_CREST = "Harlequin Crest"
-    VEIL_OF_STEEL = "Veil of Steel"
-    THE_GLADIATORS_BANE = "The Gladiator's Bane"
-    ARKAINES_VALOR = "Arkaine's Valor"
-    BLACKOAK_SHIELD = "Blackoak Shield"
-    STORMSHIELD = "Stormshield"
-    HELLSLAYER = "Hellslayer"
-    MESSERSCHMIDTS_REAVER = "Messerschmidt's Reaver"
-    BARANARS_STAR = "Baranar's Star"
-    SCHAEFERS_HAMMER = "Schaefer's Hammer"
-    THE_CRANIUM_BASHER = "The Cranium Basher"
-    LIGHTSABRE = "Lightsabre"
-    DOOMBRINGER = "Doombringer"
-    THE_GRANDFATHER = "The Grandfather"
-    WIZARDSPIKE = "Wizardspike"
-    CONSTRICTING_LOOP = "Constricting Loop"
-    STORMSPIRE = "Stormspire"
-    EAGLEHORN = "Eaglehorn"
-    WINDFORCE = "Windforce"
-    BUL_KATHOS_WEDDING_BAND = "Bul-Kathos' Wedding Band"
-    THE_CATS_EYE = "The Cat's Eye"
-    THE_RISING_SUN = "The Rising Sun"
-    CRESCENT_MOON = "Crescent Moon"
-    MARAS_KALEIDOSCOPE = "Mara's Kaleidoscope"
-    ATMAS_SCARAB = "Atma's Scarab"
-    DWARF_STAR = "Dwarf Star"
-    RAVEN_FROST = "Raven Frost"
-    HIGHLORDS_WRATH = "Highlord's Wrath"
-    SARACENS_CHANCE = "Saracen's Chance"
-    ARREATS_FACE = "Arreat's Face"
-    HOMUNCULUS = "Homunculus"
-    TITANS_REVENGE = "Titan's Revenge"
-    LYCANDERS_AIM = "Lycander's Aim"
-    LYCANDERS_FLANK = "Lycander's Flank"
-    THE_OCULUS = "The Oculus"
-    HERALD_OF_ZAKARUM = "Herald of Zakarum"
-    BARTUCS_CUT_THROAT = "Bartuc's Cut-Throat"
-    JALALS_MANE = "Jalal's Mane"
-    THE_SCALPER = "The Scalper"
-    BLOODMOON = "Bloodmoon"
-    DJINN_SLAYER = "Djinn Slayer"
-    DEATHBIT = "Deathbit"
-    WARSHRIKE = "Warshrike"
-    GUT_SIPHON = "Gut Siphon"
-    RAZORS_EDGE = "Razor's Edge"
-    DEMON_LIMB = "Demon Limb"
-    STEEL_SHADE = "Steel Shade"
-    TOMB_REAVER = "Tomb Reaver"
-    DEATHS_WEB = "Death's Web"
-    NATURES_PEACE = "Nature's Peace"
-    AZUREWRATH = "Azurewrath"
-    SERAPHS_HYMN = "Seraph's Hymn"
-    FLESHRIPPER = "Fleshripper"
-    ODIUM = "Odium"
-    HORIZONS_TORNADO = "Horizon's Tornado"
-    STONE_CRUSHER = "Stone Crusher"
-    JADE_TALON = "Jade Talon"
-    SHADOW_DANCER = "Shadow Dancer"
-    CEREBUS_BITE = "Cerebus' Bite"
-    TYRAELS_MIGHT = "Tyrael's Might"
-    SOUL_DRAINER = "Soul Drainer"
-    RUNE_MASTER = "Rune Master"
-    DEATH_CLEAVER = "Death Cleaver"
-    EXECUTIONERS_JUSTICE = "Executioner's Justice"
-    STONERAVEN = "Stoneraven"
-    LEVIATHAN = "Leviathan"
-    WISP_PROJECTOR = "Wisp Projector"
-    GARGOYLES_BITE = "Gargoyle's Bite"
-    LACERATOR = "Lacerator"
-    MANG_SONGS_LESSON = "Mang Song's Lesson"
-    VIPERFORK = "Viperfork"
-    ETHEREAL_EDGE = "Ethereal Edge"
-    DEMONHORNS_EDGE = "Demonhorn's Edge"
-    THE_REAPERS_TOLL = "The Reaper's Toll"
-    SPIRIT_KEEPER = "Spirit Keeper"
-    HELLRACK = "Hellrack"
-    ALMA_NEGRA = "Alma Negra"
-    DARKFORCE_SPAWN = "Darkforce Spawn"
-    WIDOWMAKER = "Widowmaker"
-    BLOOD_RAVENS_CHARGE = "Blood Raven's Charge"
-    GHOSTFLAME = "Ghostflame"
-    SHADOW_KILLER = "Shadow Killer"
-    GIMMERSHRED = "Gimmershred"
-    GRIFFONS_EYE = "Griffon's Eye"
-    WINDHAMMER = "Windhammer"
-    THUNDERSTROKE = "Thunderstroke"
-    DEMONS_ARCH = "Demon's Arch"
-    BONEFLAME = "Boneflame"
-    STEEL_PILLAR = "Steel Pillar"
-    NIGHTWINGS_VEIL = "Nightwing's Veil"
-    CROWN_OF_AGES = "Crown of Ages"
-    ANDARIELS_VISAGE = "Andariel's Visage"
-    DRAGONSCALE = "Dragonscale"
-    STEEL_CARAPACE = "Steel Carapace"
-    MEDUSAS_GAZE = "Medusa's Gaze"
-    RAVENLORE = "Ravenlore"
-    BONESHADE = "Boneshade"
-    FLAMEBELLOW = "Flamebellow"
-    DEATHS_FATHOM = "Death's Fathom"
-    WOLFHOWL = "Wolfhowl"
-    SPIRIT_WARD = "Spirit Ward"
-    KIRAS_GUARDIAN = "Kira's Guardian"
-    ORMUS_ROBES = "Ormus' Robes"
-    GHEEDS_FORTUNE = "Gheed's Fortune"
-    STORMLASH = "Stormlash"
-    HALABERDS_REIGN = "Halaberd's Reign"
-    SPIKE_THORN = "Spike Thorn"
-    DRACULS_GRASP = "Dracul's Grasp"
-    FROSTWIND = "Frostwind"
-    TEMPLARS_MIGHT = "Templar's Might"
-    ESCHUTAS_TEMPER = "Eschuta's Temper"
-    FIRELIZARDS_TALONS = "Firelizard's Talons"
-    SANDSTORM_TREK = "Sandstorm Trek"
-    MARROWWALK = "Marrowwalk"
-    HEAVENS_LIGHT = "Heaven's Light"
-    MERMANS_SPROCKET = "Merman's Sprocket"
-    ARACHNID_MESH = "Arachnid Mesh"
-    NOSFERATUS_COIL = "Nosferatu's Coil"
-    METALGRID = "Metalgrid"
-    VERDUNGOS_HEARTY_CORD = "Verdungo's Hearty Cord"
-    SIGGARDS_STAUNCH = "Siggard's Staunch"
-    CARRION_WIND = "Carrion Wind"
-    GIANT_SKULL = "Giant Skull"
-    ASTREONS_IRON_WARD = "Astreon's Iron Ward"
-    ANNIHILUS = "Annihilus"
-    ARIOCS_NEEDLE = "Arioc's Needle"
-    CRANEBEAK = "Cranebeak"
-    NORDS_TENDERIZER = "Nord's Tenderizer"
-    EARTH_SHIFTER = "Earth Shifter"
-    WRAITH_FLIGHT = "Wraith Flight"
-    BONEHEW = "Bonehew"
-    ONDALS_WISDOM = "Ondal's Wisdom"
-    THE_REDEEMER = "The Redeemer"
-    HEAD_HUNTERS_GLORY = "Head Hunter's Glory"
-    STEELREND = "Steelrend"
-    RAINBOW_FACET = "Rainbow Facet"
-    HELLFIRE_TORCH = "Hellfire Torch"
-    ITHERAELS_PATH = "Itherael's Path"
-    OVERLORDS_HELM = "Overlord's Helm"
-    DARK_ABYSS = "Dark Abyss"
-    AIDANS_SCAR = "Aidan's Scar"
-    HADRIELS_HAND = "Hadriel's Hand"
-    TRUE_SILVER = "True Silver"
-    QUETZALCOATL = "Quetzalcoatl"
-    CYCLOPEAN_ROAR = "Cyclopean Roar"
-    SANKEKURS_FALL = "Sankekur's Fall"
-    MAGE_SLAYER = "Mage Slayer"
-    KALANS_LEGACY = "Kalan's Legacy"
-    TEMPEST = "Tempest"
-    BAND_OF_SKULLS = "Band of Skulls"
-    CAGE_OF_THE_UNSULLIED = "Cage of the Unsullied"
-    THE_THIRD_EYE = "The Third Eye"
-    ZERAES_RESOLVE = "Zerae's Resolve"
-    OCCULTIST = "Occultist"
-    BRIMSTONE_RAIN = "Brimstone Rain"
-    AKARATS_DEVOTION = "Akarat's Devotion"
-    MARTYRDOM = "Martyrdom"
-    STALKERS_CULL = "Stalker's Cull"
-    PURGATORY = "Purgatory"
-    RAEKORS_VIRTUE = "Raekor's Virtue"
-    URSAS_NIGHTMARE = "Ursa's Nightmare"
-    ZHARS_SANCTUM = "Zhar's Sanctum"
-    WARLORD_OF_BLOOD = "Warlord of Blood"
-    FALLEN_GARDENS = "Fallen Gardens"
-    ULDYSSIANS_AWAKENING = "Uldyssian's Awakening"
-    LEORICS_MITHRIL_BANE = "Leoric's Mithril Bane"
-    TWILIGHTS_REFLECTION = "Twilight's Reflection"
-    WRAITHSKIN = "Wraithskin"
-    TITANS_GRIP = "Titan's Grip"
-    SHATTERBLADE = "Shatterblade"
-    DENMOTHER = "Denmother"
-    EBONBANE = "Ebonbane"
-    WHISPERING_MIRAGE = "Whispering Mirage"
-    SKYWARDEN = "Skywarden"
-    SKORN = "Skorn"
-    ACHILLES_STRIKE = "Achilles Strike"
-    WILDSPEAKER = "Wildspeaker"
-    FENRIS = "Fenris"
-    SACRED_TOTEM = "Sacred Totem"
-    IMPERIAL_PALACE = "Imperial Palace"
-    OUTER_VOID = "Outer Void"
-    BALEFIRE = "Balefire"
-    SWIFTWIND_NEEDLE = "Swiftwind Needle"
-    TOMBSONG = "Tombsong"
-    AETHERWING = "Aetherwing"
-    BASILISKS_QUILL = "Basilisk's Quill"
-    DOOMS_FINGER = "Doom's Finger"
-    RAMFODDER = "Ramfodder"
-    ANVILGUARD_STRAP = "Anvilguard Strap"
-    SHATTERHEAD = "Shatterhead"
-    ABYSSAL_WARD = "Abyssal Ward"
-    BANNERLORDS_CALL = "Bannerlord's Call"
-    FROZEN_SORROW = "Frozen Sorrow"
-    CRACKLESHOT = "Crackleshot"
-    CITY_OF_UREH = "City of Ureh"
+    )
 
     @property
     def ladder(self) -> bool:
-        return _METADATA[self.name].ladder
+        return self.value.ladder
 
     @property
     def code(self) -> str:
-        return _METADATA[self.name].code
+        return self.value.code
 
     @property
     def lvl(self) -> int:
-        return _METADATA[self.name].lvl
+        return self.value.lvl
 
     @property
     def lvl_req(self) -> int:
-        return _METADATA[self.name].lvl_req
+        return self.value.lvl_req
