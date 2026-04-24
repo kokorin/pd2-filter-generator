@@ -1,6 +1,9 @@
 .idea
 .vscode
 
+__pycache__/
+*.pyc
+
 .hatch
 *.html
 
