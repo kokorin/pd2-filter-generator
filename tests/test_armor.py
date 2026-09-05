@@ -1,15 +1,15 @@
 """Tests that Armor enum members are usable in filter expressions."""
 
-from pd2_filter_generator.armor import Armor
-from pd2_filter_generator.expression import And, BoolRef, ExprMixin, Not, Or
+import pd2_filter_generator.armor as Armor  # noqa: N812
+from pd2_filter_generator.expression import And, BoolRef, Not, Or
 
 
 def test_member_is_expr_mixin():
-    assert isinstance(Armor.FULL_PLATE_MAIL, ExprMixin)
+    assert isinstance(Armor.FULL_PLATE_MAIL, BoolRef)
 
 
 def test_member_value_code():
-    assert Armor.FULL_PLATE_MAIL.value.code == "ful"
+    assert Armor.FULL_PLATE_MAIL.value == "ful"
 
 
 def test_invert():

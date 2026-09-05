@@ -4,15 +4,15 @@ import pytest
 
 from pd2_filter_generator.expression import (
     And,
-    BinaryOp,
     BinaryOperator,
     BoolRef,
     Equal,
+    ExprLeaf,
+    ExprNode,
     GreaterThan,
     IntLit,
-    Leaf,
+    IntRef,
     LessThan,
-    Node,
     NodeVisitor,
     Not,
     NotEqual,
@@ -25,9 +25,9 @@ RARE = BoolRef("RARE")
 BOOTS = BoolRef("BOOTS")
 
 # Integer refs - PD2 numeric stats
-SOCKETS = IntLit("SOCKETS")
-CLVL = IntLit("CLVL")
-GOLD = IntLit("GOLD")
+SOCKETS = IntRef("SOCKETS")
+CLVL = IntRef("CLVL")
+GOLD = IntRef("GOLD")
 ONE = IntLit("1")
 TWO = IntLit("2")
 TEN = IntLit("10")
@@ -46,7 +46,7 @@ class ToDictVisitor(NodeVisitor[dict]):
         return {"type": operator.name, "left": left, "right": right}
 
 
-def to_dict(node: Node) -> dict:
+def to_dict(node: ExprNode) -> dict:
     return node.accept(ToDictVisitor())
 
 
@@ -61,7 +61,7 @@ class TestNode:
     def test_node_cannot_be_instantiated(self):
         """Node is abstract and cannot be instantiated directly."""
         with pytest.raises(TypeError):
-            Node()
+            ExprNode()
 
     def test_node_bool_raises_error_in_if(self):
         """Cannot use nodes in if statements."""
@@ -198,6 +198,11 @@ class TestBoolExpr:
             },
         }
 
+    def test_and_validates_left_operand_is_bool(self):
+        """AND requires both operands to be BoolExpr."""
+        with pytest.raises(TypeError, match="BoolExpr"):
+            SOCKETS & NMAG
+
     def test_and_validates_right_operand_is_bool(self):
         """AND requires both operands to be BoolExpr."""
         with pytest.raises(TypeError, match="BoolExpr"):
@@ -207,6 +212,11 @@ class TestBoolExpr:
         """OR requires both operands to be BoolExpr."""
         with pytest.raises(TypeError, match="BoolExpr"):
             NMAG | CLVL
+
+    def test_or_validates_left_operand_is_bool(self):
+        """OR requires both operands to be BoolExpr."""
+        with pytest.raises(TypeError, match="BoolExpr"):
+            CLVL | NMAG
 
     def test_comparison_results_are_boolean(self):
         """Comparison results are BoolExpr and can use &, |, ~."""
@@ -307,7 +317,7 @@ class TestLeaf:
     def test_leaf_base_class_cannot_be_instantiated(self):
         """Leaf is abstract."""
         with pytest.raises(TypeError):
-            Leaf("x")
+            ExprLeaf("x")
 
     # =========================================================================
     # BoolRef: supports &, |, ~ only
@@ -374,23 +384,6 @@ class TestLeaf:
             SOCKETS | CLVL
 
 
-class TestBinaryOp:
-    """Tests for BinaryOp base class."""
-
-    def test_binary_op_cannot_be_instantiated(self):
-        """BinaryOp is abstract."""
-        with pytest.raises(TypeError):
-            BinaryOp(NMAG, RARE, BinaryOperator.AND)
-
-    def test_visitor_pattern_for_binary_ops(self):
-        """All binary operations work with visitor pattern."""
-        expr = NMAG & (SOCKETS < TEN)
-        result = to_dict(expr)
-        assert result["type"] == "AND"
-        assert result["left"]["type"] == "Literal"
-        assert result["right"]["type"] == "LESS_THAN"
-
-
 class TestOperatorPrecedence:
     """Tests for operator precedence values."""
 
@@ -414,19 +407,19 @@ class TestComplexExpressions:
 
     def test_full_expression(self):
         """NMAG | RARE & (SOCKETS < CLVL) - needs parentheses due to precedence"""
-        result = NMAG | RARE & (SOCKETS < CLVL)
+        result = (NMAG | RARE) & (SOCKETS < CLVL)
         assert to_dict(result) == {
-            "type": "OR",
-            "left": {"type": "Literal", "value": "NMAG"},
-            "right": {
-                "type": "AND",
-                "left": {"type": "Literal", "value": "RARE"},
-                "right": {
-                    "type": "LESS_THAN",
-                    "left": {"type": "Literal", "value": "SOCKETS"},
-                    "right": {"type": "Literal", "value": "CLVL"},
-                },
+            "left": {
+                "left": {"type": "Literal", "value": "NMAG"},
+                "right": {"type": "Literal", "value": "RARE"},
+                "type": "OR",
             },
+            "right": {
+                "left": {"type": "Literal", "value": "SOCKETS"},
+                "right": {"type": "Literal", "value": "CLVL"},
+                "type": "LESS_THAN",
+            },
+            "type": "AND",
         }
 
     def test_not_with_comparison(self):

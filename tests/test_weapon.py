@@ -1,15 +1,15 @@
 """Tests that Weapon enum members are usable in filter expressions."""
 
-from pd2_filter_generator.expression import And, BoolRef, ExprMixin, Not, Or
-from pd2_filter_generator.weapon import Weapon
+import pd2_filter_generator.weapon as Weapon  # noqa: N812
+from pd2_filter_generator.expression import And, BoolRef, Not, Or
 
 
 def test_member_is_expr_mixin():
-    assert isinstance(Weapon.AXE, ExprMixin)
+    assert isinstance(Weapon.AXE, BoolRef)
 
 
 def test_member_value_code():
-    assert Weapon.AXE.value.code == "axe"
+    assert Weapon.AXE.value == "axe"
 
 
 def test_invert():

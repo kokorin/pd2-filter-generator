@@ -6,39 +6,32 @@ DO NOT EDIT MANUALLY - regenerate with: hatch run ./scripts/generate.py generate
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from enum import Enum
-
-from pd2_filter_generator.expression import BoolMixin, BoolRef
+from pd2_filter_generator.expression import BoolRef
 
 
-@dataclass(frozen=True)
-class _Metadata:
+class _Weapon(BoolRef):
     """Item type metadata."""
 
-    code: str
-    type: str  # "type"
-    type2: str  # "type2"
-
-
-class Weapon(BoolMixin, Enum):
-    """PD2 weapon categories."""
-
-    {{# weapon }}
-    {{ name }} = _Metadata(
-        code="{{ code }}",
-        type="{{ type }}",
-        type2="{{ type2 }}",
-    )
-    {{/ weapon }}
-
-    def as_node(self) -> BoolRef:
-        return BoolRef(self.value.code)
+    def __init__(self, value: str, type: str, type2: str): # noqa: A002
+        super().__init__(value)
+        self._type = type
+        self._type2 = type2
 
     @property
     def type(self) -> str:
-        return self.value.type
+        return self._type
 
     @property
     def type2(self) -> str:
-        return self.value.type2
+        return self._type2
+
+
+values = [
+    {{# weapon }}
+    {{ name }} := _Weapon(
+        value="{{ code }}",
+        type="{{ type }}",
+        type2="{{ type2 }}",
+    ),
+    {{/ weapon }}
+]

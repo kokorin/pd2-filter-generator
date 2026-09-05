@@ -29,6 +29,7 @@ from __future__ import annotations
 import csv
 import json
 import re
+from functools import cache
 from pathlib import Path
 from typing import Any
 
@@ -42,6 +43,7 @@ class Generator:
     def __init__(self, d2_path: Path):
         self.d2_path = d2_path
 
+    @cache  # noqa: B019
     def find_in_mpq(self, mpq_path: Path) -> Path:
         """Finds a file in a directory where all MPQs are extracted to.
         TODO: refactor to read original MPQ without a need for manual extraction.
@@ -58,9 +60,10 @@ class Generator:
             if path.exists():
                 return path
 
-        raise FileNotFoundError(f"{mpq_path} not found in any MPQ file")  # noqa: TRY003,EM102
+        raise FileNotFoundError(f"{mpq_path} not found in any MPQ file")
 
     @staticmethod
+    @cache
     def read_tsv(tsv_path: Path) -> list[dict[str, str]]:
         lines = tsv_path.read_text().splitlines()
         reader = csv.DictReader(lines, delimiter="\t")
@@ -68,6 +71,7 @@ class Generator:
 
     # TODO: refactor caching
     @staticmethod
+    @cache
     def read_tbl(tbl_path: Path) -> dict[str, str]:
         """Parses a Diablo 2 TBL file into a key-value dictionary."""
 
@@ -192,7 +196,7 @@ class Generator:
             tbl = self.read_tbl(tbl_path)
             if code in tbl:
                 return tbl[code]
-        raise ValueError(f"No such code: {code}")  # noqa: TRY003 EM102
+        raise ValueError(f"No such code: {code}")
 
     def read_weapons(self) -> list[dict[str, str]]:
         path = self.find_in_mpq(Path("data/global/excel/Weapons.txt"))

@@ -6,39 +6,32 @@ DO NOT EDIT MANUALLY - regenerate with: hatch run ./scripts/generate.py generate
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from enum import Enum
-
-from pd2_filter_generator.expression import BoolMixin, BoolRef
+from pd2_filter_generator.expression import BoolRef
 
 
-@dataclass(frozen=True)
-class _Metadata:
+class _Armor(BoolRef):
     """Item type metadata."""
 
-    code: str
-    reqstr: int  # "reqstr"
-    levelreq: int  # "levelreq"
-
-
-class Armor(BoolMixin, Enum):
-    """PD2 armor categories."""
-
-    {{# armor }}
-    {{ name }} = _Metadata(
-        code="{{ code }}",
-        reqstr={{ reqstr }},
-        levelreq={{ levelreq }},
-    )
-    {{/ armor }}
-
-    def as_node(self) -> BoolRef:
-        return BoolRef(self.value.code)
+    def __init__(self, value: str, reqstr: int, levelreq: int):
+        super().__init__(value)
+        self._reqstr = reqstr
+        self._levelreq = levelreq
 
     @property
     def reqstr(self) -> int:
-        return self.value.reqstr
+        return self._reqstr
 
     @property
     def levelreq(self) -> int:
-        return self.value.levelreq
+        return self._levelreq
+
+
+values = [
+    {{# armor }}
+    {{ name }} := _Armor(
+        value="{{ code }}",
+        reqstr={{ reqstr }},
+        levelreq={{ levelreq }},
+    ),
+    {{/ armor }}
+]
