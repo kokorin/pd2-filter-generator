@@ -10,9 +10,9 @@ from pd2_filter_generator.expression import (
     Equal,
     GreaterThan,
     IntLit,
-    Leaf,
+    ExprLeaf,
     LessThan,
-    Node,
+    ExprNode,
     NodeVisitor,
     Not,
     NotEqual,
@@ -46,7 +46,7 @@ class ToDictVisitor(NodeVisitor[dict]):
         return {"type": operator.name, "left": left, "right": right}
 
 
-def to_dict(node: Node) -> dict:
+def to_dict(node: ExprNode) -> dict:
     return node.accept(ToDictVisitor())
 
 
@@ -61,7 +61,7 @@ class TestNode:
     def test_node_cannot_be_instantiated(self):
         """Node is abstract and cannot be instantiated directly."""
         with pytest.raises(TypeError):
-            Node()
+            ExprNode()
 
     def test_node_bool_raises_error_in_if(self):
         """Cannot use nodes in if statements."""
@@ -307,7 +307,7 @@ class TestLeaf:
     def test_leaf_base_class_cannot_be_instantiated(self):
         """Leaf is abstract."""
         with pytest.raises(TypeError):
-            Leaf("x")
+            ExprLeaf("x")
 
     # =========================================================================
     # BoolRef: supports &, |, ~ only

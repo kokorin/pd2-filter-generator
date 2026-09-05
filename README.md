@@ -9,6 +9,9 @@
 
 - [Installation](#installation)
 - [Overview](#overview)
+- [Type System](#type-system)
+- [Generated Enums](#generated-enums)
+- [Development](#development)
 - [License](#license)
 
 ## Installation
@@ -25,22 +28,22 @@ Build PD2 filter conditions using Python syntax. The library provides a DSL that
 
 Python keywords `and`, `or`, `not` cannot be overloaded, so we use bitwise operators:
 
-| Operation | PD2 Filter | Python DSL |
-|-----------|------------|------------|
-| AND | `A B` (implicit) | `A & B` |
-| OR | `A OR B` | `A \| B` |
-| NOT | `!A` | `~A` |
-| Equal | `A=5` | `A == 5` |
-| Less than | `A<5` | `A < 5` |
-| Greater than | `A>5` | `A > 5` |
-| Between | `A~1-5` | `(1 < A) & (A < 5)` |
+| Operation    | PD2 Filter     | Python DSL                      |
+|--------------|----------------|---------------------------------|
+| AND          | `A B` (implicit) | `A & B`                       |
+| OR           | `A OR B`       | `A \| B`                        |
+| NOT          | `!A`           | `~A`                            |
+| Equal        | `A=5`          | `A == 5`                        |
+| Less than    | `A<5`          | `A < 5`                         |
+| Greater than | `A>5`          | `A > 5`                         |
+| Between      | `A~1-5`        | `(1 < A) & (A < 5)`             |
 
 ### Examples
 
 **Simple AND condition:**
 ```
 PD2:    NMAG SOCKETS=1
-Python: NMAG & SOCKETS == 1
+Python: NMAG & (SOCKETS == 1)
 ```
 
 **OR with grouping:**
@@ -63,7 +66,7 @@ Python: RARE & (CLVL > 10) & (1 < SOCKETS) & (SOCKETS < 2)
 
 ### Operator Precedence
 
-**Note:** Python's bitwise operators (`&`, `|`) have higher precedence than comparisons (`<`, `>`, `==`). Use parentheses around comparisons when combining with AND/OR:
+Python's bitwise operators (`&`, `|`) have lower precedence than comparisons (`<`, `>`, `==`). Use parentheses around comparisons when combining with AND/OR:
 
 ```python
 (X < Y) & (A > B)   # Correct: explicit grouping
@@ -73,106 +76,101 @@ A & X < Y           # Wrong: parses as (A & X) < Y
 
 ## Type System
 
-The library enforces type safety through three literal types that match PD2's filter system.
+The library enforces type safety through two expression types matching PD2's filter system.
 
 ### Node Type Hierarchy
 
 ```
 Node (abstract base)
-├── EqNode - supports ==, !=
-│   └── ComparableNode - supports <, >, ==, !=
-└── BooleanNode - supports ~, &, |
+├── BoolExpr  — supports ~, &, |
+└── IntExpr   — supports ==, !=, <, >
 
-Concrete literal types:
-- BoolLiteral(Literal, BooleanNode)
-- CodeLiteral(Literal, EqNode)
-- IntLiteral(Literal, ComparableNode)
+Leaf (abstract, base for all leaf nodes)
+├── BoolRef(Leaf, BoolExpr)   — boolean flags and item-type predicates
+├── IntRef(Leaf, IntExpr)     — integer references (named stats)
+└── IntLit(Leaf, IntExpr)     — integer literals (numeric values)
 ```
 
-### Literal Types
+Mixins mirror the node hierarchy for use in enums:
+- `BoolMixin` — enum members participate in `~`, `&`, `|` expressions
+- `IntMixin`  — enum members participate in `==`, `!=`, `<`, `>` expressions
 
-**BoolLiteral** — Boolean flags (presence checks):
+### Leaf Types
+
+**BoolRef** — Boolean flags and item-type predicates:
 ```python
-NMAG, RARE, UNI, SET       # Item quality
-BOOTS, GLOVES, ARMOR       # Item groups
-ETH, ID, SOCK              # Item properties
-SHOP, GROUND, EQUIPPED     # Item state
+NMAG = BoolRef("NMAG")   # Item quality flags
+BOOTS = BoolRef("BOOTS") # Item group predicates
 ```
 - Supports: `&` (AND), `|` (OR), `~` (NOT)
 - Does NOT support: `==`, `!=`, `<`, `>`
-- Example: `NMAG & BOOTS | GLOVES`
 
-**IntLiteral** — Integer values (fully comparable):
+**IntRef** — Named integer references:
 ```python
-SOCKETS, CLVL, ILVL, QLVL  # Levels and counts
-GOLD, PRICE, QTY           # Quantities
-FRES, CRES, LRES, PRES     # Resistances
-RUNE                       # Rune number (1-33)
+SOCKETS = IntRef("SOCKETS")
+CLVL = IntRef("CLVL")
 ```
-- Supports: `==`, `!=`, `<`, `>`, `&`, `|`
-- Range check: `(1 < SOCKETS) & (SOCKETS < 3)` for PD2's `SOCKETS~1-3`
-- Example: `RARE & (CLVL > 10) & (1 < SOCKETS) & (SOCKETS < 3)`
+- Supports: `==`, `!=`, `<`, `>`
+- Does NOT support: `~`, `&`, `|`
 
-**CodeLiteral** — 3-letter item codes (equality only):
+**IntLit** — Numeric integer literals:
 ```python
-'cap', 'hlm', 'msk'        # Helmets
-'tbt', 'tgl'               # Boots, gloves
-'aqv', 'cqv'               # Arrows, bolts
+ONE = IntLit("1")
+TEN = IntLit("10")
 ```
-- Supports: `==`, `!=`, `&`, `|`
-- Does NOT support: `<`, `>` (no ordering)
-- Example: `ITEM == 'cap' | ITEM == 'hlm'`
+- Same operators as `IntRef`
 
 ### Type Safety
 
-The type system prevents nonsensical operations at construction time:
-
 ```python
-NMAG < RARE           # ❌ AttributeError: BoolLiteral has no '<' operator
-SOCKETS == NMAG       # ❌ TypeError: NMAG does not support equality
-'cap' < 'hlm'         # ❌ AttributeError: CodeLiteral has no '<' operator
-~SOCKETS              # ❌ AttributeError: IntLiteral has no '__invert__'
-
-SOCKETS == 1          # ✅ Both are IntLiteral (Comparable)
-NMAG & BOOTS          # ✅ Both are BoolLiteral (Boolean)
-ITEM == 'cap'         # ✅ Both are CodeLiteral (Eq)
-1 < SOCKETS < 3       # ❌ TypeError: Cannot use in boolean context
-(1 < SOCKETS) & (SOCKETS < 3)  # ✅ Explicit range check
+NMAG < RARE           # TypeError: BoolExpr has no '<'
+SOCKETS == NMAG       # TypeError: requires IntExpr operands
+~SOCKETS              # TypeError: IntExpr has no '__invert__'
+1 < SOCKETS < 3       # TypeError: cannot use in boolean context
+(1 < SOCKETS) & (SOCKETS < 3)  # Correct range check
 ```
 
-### Design Goals
+## Generated Enums
 
-1. **Fail fast** — Invalid expressions raise errors immediately
-2. **IDE support** — Type hints enable autocomplete
-3. **Future-proof** — Will generate typed constants for all PD2 items
-4. **Semantic clarity** — Type restrictions match PD2 filter semantics
+Typed enum classes are auto-generated from PD2 data files. Each member participates directly in filter expressions via `BoolMixin`.
 
-### Known Limitations
+### Available Enums
 
-**Current limitation:** All integers share the same `IntLiteral` type, allowing semantically invalid comparisons:
+| Module         | Class       | Example member         |
+|----------------|-------------|------------------------|
+| `armor`        | `Armor`     | `Armor.FULL_PLATE_MAIL` |
+| `weapon`       | `Weapon`    | `Weapon.AXE`           |
+| `set`          | `Set`       | `Set.CIVERBS_VESTMENTS` |
+| `set_item`     | `SetItem`   | `SetItem.CIVERBS_WARD` |
+| `unique_item`  | `UniqueItem`| `UniqueItem.THE_GNASHER` |
 
-```python
-SOCKETS == GOLD       # ✅ Type-safe but semantically wrong
-CLVL < FRES           # ✅ Type-safe but meaningless
-```
-
-**Future improvement:** Introduce semantic integer types:
+### Usage
 
 ```python
-# Different semantic types for integers
-CountLiteral          # SOCKETS, QTY (item counts)
-LevelLiteral          # CLVL, ILVL, QLVL (character/item levels)
-CurrencyLiteral       # GOLD, PRICE (currency values)
-ResistanceLiteral     # FRES, CRES, LRES, PRES (resistances)
-StatLiteral           # Generic stats that can be compared
+from pd2_filter_generator.armor import Armor
+from pd2_filter_generator.weapon import Weapon
+from pd2_filter_generator.expression import BoolRef
 
-# Only allow comparisons within compatible types
-SOCKETS == 1          # ✅ CountLiteral == int
-CLVL > ILVL           # ✅ LevelLiteral > LevelLiteral
-SOCKETS == GOLD       # ❌ TypeError: Cannot compare CountLiteral with CurrencyLiteral
+NMAG = BoolRef("NMAG")
+
+# Enum members work directly in expressions
+expr = NMAG & (Armor.FULL_PLATE_MAIL | Armor.GOTHIC_PLATE)
+expr = ~Weapon.AXE & NMAG
+
+# Metadata is accessible as properties
+Armor.FULL_PLATE_MAIL.reqstr    # int
+Armor.FULL_PLATE_MAIL.levelreq  # int
+Weapon.AXE.type                 # str
+SetItem.CIVERBS_WARD.set        # Set enum member
+UniqueItem.THE_GNASHER.ladder   # bool
 ```
 
-This would require a more granular type system but would catch more semantic errors at construction time.
+### Regenerating
+
+Requires a local PD2 installation:
+```console
+hatch run ./scripts/generate.py generate
+```
 
 ## Development
 
@@ -183,17 +181,10 @@ Install [Hatch](https://hatch.pypa.io/):
 pip install hatch
 ```
 
-Hatch automatically manages virtual environments and dependencies.
-
 ### Running Tests
 
 ```console
 hatch run pytest
-```
-
-Run tests with coverage:
-```console
-hatch run pytest --cov=src/pd2_filter_generator
 ```
 
 ### Code Quality
@@ -201,11 +192,6 @@ hatch run pytest --cov=src/pd2_filter_generator
 **Format and lint** (using Ruff):
 ```console
 hatch fmt
-```
-
-Check without fixing:
-```console
-hatch fmt --check
 ```
 
 **Type checking** (using mypy):
@@ -220,55 +206,48 @@ hatch fmt --check && hatch run types:check && hatch run pytest
 
 ### Pre-commit Hooks
 
-Install pre-commit to run checks automatically before each commit:
-
 ```console
 pip install pre-commit
 pre-commit install
 ```
 
-This will run:
-- File hygiene checks (trailing whitespace, EOF newlines, mixed line endings)
-- Ruff format & lint
-- Mypy type checking
-- Pytest test suite
-
-Run manually on all files:
-```console
-pre-commit run --all-files
-```
+Runs format, lint, type checking, and tests before each commit.
 
 ### Project Structure
 
 ```
 src/pd2_filter_generator/
 ├── expression.py       # Core AST and type system
+├── armor.py            # Generated Armor enum
+├── weapon.py           # Generated Weapon enum
+├── set.py              # Generated Set enum
+├── set_item.py         # Generated SetItem enum
+├── unique_item.py      # Generated UniqueItem enum
 └── __init__.py
 
+scripts/
+├── generate.py         # Code generation script
+└── templates/          # Jinja2 templates for generated files
+
 tests/
-└── test_expression.py  # Comprehensive test suite
+├── test_expression.py
+├── test_armor.py
+├── test_weapon.py
+├── test_set.py
+├── test_set_item.py
+└── test_unique_item.py
 ```
 
 ## Future Ideas
 
 **IN operator** — `A == ANY(X, Y, Z)` expands to `A=X OR A=Y OR A=Z`:
 ```python
-A == ANY(X, Y, Z)   # Python DSL
-A=X OR A=Y OR A=Z   # PD2 output
+ITEM == ANY(Armor.CAP, Armor.HELM)
 ```
 
 **Sum operator** — combine stats before comparison:
 ```python
-(FRES + CRES + LRES + PRES) > 79   # Python DSL
-FRES+CRES+LRES+PRES>79             # PD2 output
-```
-
-**Generated constants** — Auto-generate typed Python constants from PD2 data:
-```python
-# Auto-generated from PD2 database
-from pd2_filter_generator.constants import *
-
-my_filter = NMAG & SOCKETS == 1 & CLVL > 10  # Fully typed!
+(FRES + CRES + LRES + PRES) > 79
 ```
 
 ## License
