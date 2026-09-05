@@ -17,9 +17,16 @@ repos:
   # Hatch-based checks (uses project dependencies)
   - repo: local
     hooks:
-      - id: hatch-fmt
-        name: hatch fmt (ruff)
-        entry: hatch fmt --check
+      - id: hatch-check-fmt
+        name: hatch check fmt
+        entry: hatch check fmt --fix
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: hatch-check-code
+        name: hatch check code
+        entry: hatch check code --fix
         language: system
         types: [python]
         pass_filenames: false

@@ -1,0 +1,44 @@
+"""
+Generated Armor enum from PD2 data.
+
+DO NOT EDIT MANUALLY - regenerate with: hatch run ./scripts/generate.py generate
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import Enum
+
+from pd2_filter_generator.expression import BoolMixin, BoolRef
+
+
+@dataclass(frozen=True)
+class _Metadata:
+    """Item type metadata."""
+
+    code: str
+    reqstr: int  # "reqstr"
+    levelreq: int  # "levelreq"
+
+
+class Armor(BoolMixin, Enum):
+    """PD2 armor categories."""
+
+    {{# armor }}
+    {{ name }} = _Metadata(
+        code="{{ code }}",
+        reqstr={{ reqstr }},
+        levelreq={{ levelreq }},
+    )
+    {{/ armor }}
+
+    def as_node(self) -> BoolRef:
+        return BoolRef(self.value.code)
+
+    @property
+    def reqstr(self) -> int:
+        return self.value.reqstr
+
+    @property
+    def levelreq(self) -> int:
+        return self.value.levelreq

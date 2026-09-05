@@ -12,6 +12,8 @@ requires-python = ">=3.9"
 [dependency-groups]
 dev = [
     "pytest",
+    "click",
+    "pystache",
 ]
 
 [tool.hatch.envs.default]

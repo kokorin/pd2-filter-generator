@@ -2,8 +2,7 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #   "click",
-#   "jinja2",
-#   "duckdb",
+#   "pystache",
 # ]
 # ///
 """
@@ -29,23 +28,26 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 from pathlib import Path
+from typing import Any
 
 import click
-from jinja2 import Environment, FileSystemLoader
+import pystache
 
 CACHE_DIR = Path(__file__).parent.parent / ".cache"
 
 
-def find_in_mpq(mpq_path: Path, d2_path: Path) -> Path:
-    """Extract file from MPQ stack. First MPQ in list has highest priority.
+def find_in_mpq(d2_path: Path, mpq_path: Path) -> Path:
+    """Finds a file in a directory where all MPQs are extracted to.
+    TODO refactor to read original MPQ without a need for manual extraction.
 
     Args:
-        path: Path inside MPQ (e.g., Path("data/global/excel/Armor.txt"))
         d2_path: directory with extracted MPQ data
+        mpq_path: Path inside MPQ (e.g., Path("data/global/excel/Armor.txt"))
 
     Returns:
-        Raw file bytes from first MPQ that contains it, or None if not found
+        Full Path to a file, or None if not found
     """
 
     mpq_path = d2_path / mpq_path
@@ -65,12 +67,14 @@ def read_tsv(tsv_path: Path) -> list[dict[str, str]]:
 TBL_CACHE = {}
 
 
+# TODO: refactor caching
 def read_tbl(tbl_path: Path) -> dict[str, str]:
+    """Parses a Diablo 2 TBL file into a key-value dictionary."""
+
     result = TBL_CACHE.setdefault(tbl_path, {})
     if result:
         return result
 
-    """Parse a Diablo 2 TBL file into a key-value dictionary."""
     with open(tbl_path, "rb") as f:
         data = f.read()
 
@@ -158,8 +162,160 @@ def read_tbl(tbl_path: Path) -> dict[str, str]:
     return result
 
 
-def raise_exception(msg: str):
-    raise Exception(msg)  # noqa: TRY002
+# TODO: refactor
+def to_snake_case(value: str) -> str:
+    value = value.replace(" ", "_")
+
+    value = re.sub(r"[^A-Za-z0-9_]+", "", value)
+    # 1. Insert an underscore before any capital letter followed by lowercase (e.g., camelCase -> camel_Case)
+    value = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", value)
+
+    # 2. Insert an underscore between lowercase/numbers and uppercase letters (e.g., HTTPResponse -> HTTP_Response)
+    value = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", value)
+
+    # 3. Replace spaces, hyphens, or multiple underscores with a single underscore
+    value = re.sub(r"[\s\-_]+", "_", value)
+
+    # 4. Clean up any trailing/leading underscores and convert to lowercase
+    return value.strip("_").lower()
+
+
+def render_template(template_name: str, context: dict[str, Any]) -> None:
+    template_path = Path(__file__).parent / "templates" / f"{template_name}.py.mst"
+    python_path = Path(__file__).parent.parent / "src" / "pd2_filter_generator" / f"{template_name}.py"
+
+    template = template_path.read_text("utf-8")
+    rendered = pystache.render(template, context)
+    python_path.write_text(rendered, "utf-8", newline="\n")
+
+
+def resolve_name(d2_path: Path, code: str) -> str:
+    for tbl_name in ["patchstring.tbl", "expansionstring.tbl", "string.tbl"]:
+        tbl_path = find_in_mpq(d2_path, Path("data/local/lng/eng") / tbl_name)
+        tbl = read_tbl(tbl_path)
+        if code in tbl:
+            return tbl[code]
+    raise ValueError(f"No such code: {code}")  # noqa: TRY003 EM102
+
+
+def read_weapons(d2_path: Path) -> list[dict[str, str]]:
+    path = find_in_mpq(d2_path, Path("data/global/excel/Weapons.txt"))
+    raw = read_tsv(path)
+    # PD2 spawns new potions with new codes, legacy potions are disabled from dropping
+    # https://wiki.projectdiablo2.com/wiki/Item_Filtering#Potions
+    legacy_potions = {"opl", "gpl", "opm", "gpm", "ops", "gps", "7cr2"}
+
+    return [
+        {
+            # For some reason in tbl files Strangling Potion and Choking Potion are called
+            # Strangling Gas Potion and Choking Gas Potion
+            "name": to_snake_case(resolve_name(d2_path, row["namestr"])).replace("_gas_", "_").upper(),
+            "code": row["code"],
+            "type": row["type"],
+            "type2": row["type2"],
+            "props": json.dumps(row),
+        }
+        for row in raw
+        if (
+            row["name"] not in {"None", "Not Used", "Unused", "unused", "Expansion"}
+            and row["code"] not in legacy_potions
+            and row["spawnable"] == "1"
+        )
+    ]
+
+
+def read_armor(d2_path: Path) -> list[dict[str, str]]:
+    path = find_in_mpq(d2_path, Path("data/global/excel/Armor.txt"))
+    raw = read_tsv(path)
+    # Special weapon types are added in PD2, only for unique version
+    # https://wiki.projectdiablo2.com/wiki/Item_Filtering#PD2_Items
+    special_equipment = {
+        "rar": "Cage of the Unsullied",
+        "rbe": "Band of Skulls",
+        "ram": "The Third Eye",
+    }
+    return [
+        {
+            "name": to_snake_case(special_equipment.get(row["code"]) or resolve_name(d2_path, row["namestr"])).upper(),
+            "code": row["code"],
+            "reqstr": row["reqstr"],
+            "levelreq": row["levelreq"],
+            "props": json.dumps(row),
+        }
+        for row in raw
+        if row["name"] not in {"None", "Not Used", "Unused", "unused", "Expansion"}
+    ]
+
+
+def read_sets(d2_path: Path) -> list[dict[str, str]]:
+    path = find_in_mpq(d2_path, Path("data/global/excel/Sets.txt"))
+    raw = read_tsv(path)
+    return [
+        {
+            "name": to_snake_case(resolve_name(d2_path, row["name"])).upper(),
+            "level": row["level"],
+            "props": json.dumps(row),
+        }
+        for row in raw
+        if row["index"] not in {"None", "Not Used", "Unused", "unused", "Expansion"}
+    ]
+
+
+def read_set_items(d2_path: Path) -> list[dict[str, str]]:
+    path = find_in_mpq(d2_path, Path("data/global/excel/SetItems.txt"))
+    raw = read_tsv(path)
+    return [
+        {
+            "name": to_snake_case(resolve_name(d2_path, row["index"])).upper(),
+            "set": to_snake_case(resolve_name(d2_path, row["set"])).upper(),
+            "lvl": row["lvl"],
+            "lvl_req": row["lvl req"],
+            "props": json.dumps(row),
+        }
+        for row in raw
+        if row["index"] not in {"None", "Not Used", "Unused", "unused", "Expansion"}
+    ]
+
+
+def read_unique_items(d2_path: Path) -> list[dict[str, str]]:
+    path = find_in_mpq(d2_path, Path("data/global/excel/UniqueItems.txt"))
+    raw = read_tsv(path)
+    uniques = [
+        {
+            "name": to_snake_case(resolve_name(d2_path, row["index"])).upper(),
+            "code": row["code"],
+            "ladder": str(row["ladder"] == "1"),
+            "lvl": row["lvl"],
+            "lvl_req": row["lvl req"],
+            # "props": json.dumps(row), props will affect deduplication, be careful
+        }
+        for row in raw
+        if (
+            row["index"]
+            not in {
+                "None",
+                "Not Used",
+                "Unused",
+                "unused",
+                "Expansion",
+                "Armor",
+                "Ring",
+                "Elite Uniques",
+                "Class Specific",
+            }
+            and row["enabled"] not in {"0", "", None}
+        )
+    ]
+
+    # Some uniques (like Rainbow Facet) have different variations, we deduplicate variations if they are same
+    # If variations are different - generated code will raise an error
+    result = []
+    for unique in uniques:
+        if unique in result:
+            continue
+        result.append(unique)
+
+    return result
 
 
 @click.group()
@@ -175,38 +331,18 @@ def cli():
 )
 def generate(d2_path: Path):
     """Generate constants from PD2 data files."""
-    templates_dir = Path(__file__).parent / "templates"
-    output_dir = Path(__file__).parent.parent / "src" / "pd2_filter_generator"
+    context = {
+        "weapon": read_weapons(d2_path),
+        "armor": read_armor(d2_path),
+        "set": read_sets(d2_path),
+        "set_item": read_set_items(d2_path),
+        "unique_item": read_unique_items(d2_path),
+    }
+    click.echo(f"Loaded {', '.join(context.keys())}")
 
-    # Setup Jinja environment with custom functions/filters
-    env = Environment(loader=FileSystemLoader(templates_dir), autoescape=False)  # noqa: S701
-    env.globals["read_tsv"] = lambda mpq_path: read_tsv(find_in_mpq(Path(mpq_path), d2_path))
-    env.globals["read_tbl"] = lambda mpq_path: read_tbl(find_in_mpq(Path(mpq_path), d2_path))
-    env.globals["raise"] = raise_exception
-
-    # Find all .jinja templates
-    templates = sorted(templates_dir.glob("*.py.jinja"))
-
-    if not templates:
-        click.echo("No templates found in templates/", err=True)
-        return
-
-    click.echo(f"Found {len(templates)} template(s)")
-
-    # Render each template
-    for template_path in templates:
-        template_name = template_path.name
-        output_name = template_name.replace(".jinja", "")
-
-        click.echo(f"Generating {output_name}...")
-
-        template = env.get_template(template_name)
-        rendered = template.render()
-
-        output_file = output_dir / output_name
-        output_file.write_text(rendered, encoding="utf-8", newline="\n")
-
-        click.echo(f"  -> {output_file.relative_to(Path.cwd())}")
+    for template_name in context:
+        click.echo(f"Processing {template_name}")
+        render_template(template_name, context)
 
 
 if __name__ == "__main__":

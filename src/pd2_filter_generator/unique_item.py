@@ -24,6 +24,7 @@ class _Metadata:
 class UniqueItem(Enum):
     """PD2 unique item categories."""
 
+    # TODO: ladder is always False
     THE_GNASHER = _Metadata(
         ladder=False,
         code="hax",
