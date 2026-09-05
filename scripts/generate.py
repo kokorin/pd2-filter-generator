@@ -2,8 +2,7 @@
 # requires-python = ">=3.10"
 # dependencies = [
 #   "click",
-#   "jinja2",
-#   "duckdb",
+#   "pystache",
 # ]
 # ///
 """
@@ -29,137 +28,303 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 from pathlib import Path
+from typing import Any
 
 import click
-from jinja2 import Environment, FileSystemLoader
+import pystache
 
 CACHE_DIR = Path(__file__).parent.parent / ".cache"
 
 
-def find_in_mpq(mpq_path: Path, d2_path: Path) -> Path:
-    """Extract file from MPQ stack. First MPQ in list has highest priority.
+class Generator:
+    def __init__(self, d2_path: Path):
+        self.d2_path = d2_path
 
-    Args:
-        path: Path inside MPQ (e.g., Path("data/global/excel/Armor.txt"))
-        d2_path: directory with extracted MPQ data
+    def find_in_mpq(self, mpq_path: Path) -> Path:
+        """Finds a file in a directory where all MPQs are extracted to.
+        TODO: refactor to read original MPQ without a need for manual extraction.
 
-    Returns:
-        Raw file bytes from first MPQ that contains it, or None if not found
-    """
+        Args:
+            mpq_path: Path inside MPQ (e.g., Path("data/global/excel/Armor.txt"))
 
-    mpq_path = d2_path / mpq_path
-    for path in [mpq_path, mpq_path.with_name(mpq_path.name.lower())]:
-        if path.exists():
-            return path
+        Returns:
+            Full Path to a file, or None if not found
+        """
 
-    raise FileNotFoundError(f"{mpq_path} not found in any MPQ file")  # noqa: TRY003,EM102
+        mpq_path = self.d2_path / mpq_path
+        for path in [mpq_path, mpq_path.with_name(mpq_path.name.lower())]:
+            if path.exists():
+                return path
 
+        raise FileNotFoundError(f"{mpq_path} not found in any MPQ file")  # noqa: TRY003,EM102
 
-def read_tsv(tsv_path: Path) -> list[dict[str, str]]:
-    lines = tsv_path.read_text().splitlines()
-    reader = csv.DictReader(lines, delimiter="\t")
-    return list(reader)
+    @staticmethod
+    def read_tsv(tsv_path: Path) -> list[dict[str, str]]:
+        lines = tsv_path.read_text().splitlines()
+        reader = csv.DictReader(lines, delimiter="\t")
+        return list(reader)
 
+    # TODO: refactor caching
+    @staticmethod
+    def read_tbl(tbl_path: Path) -> dict[str, str]:
+        """Parses a Diablo 2 TBL file into a key-value dictionary."""
 
-TBL_CACHE = {}
+        with open(tbl_path, "rb") as f:
+            data = f.read()
 
+        offset = 0
 
-def read_tbl(tbl_path: Path) -> dict[str, str]:
-    result = TBL_CACHE.setdefault(tbl_path, {})
-    if result:
-        return result
+        # Skip CRC (2 bytes)
+        offset += 2
 
-    """Parse a Diablo 2 TBL file into a key-value dictionary."""
-    with open(tbl_path, "rb") as f:
-        data = f.read()
+        # Number of elements (2 bytes, uint16 little-endian)
+        num_elements = int.from_bytes(data[offset : offset + 2], byteorder="little")
+        offset += 2
 
-    offset = 0
+        # Hash table size (4 bytes, uint32 little-endian)
+        hash_table_size = int.from_bytes(data[offset : offset + 4], byteorder="little")
+        offset += 4
 
-    # Skip CRC (2 bytes)
-    offset += 2
-
-    # Number of elements (2 bytes, uint16 little-endian)
-    num_elements = int.from_bytes(data[offset : offset + 2], byteorder="little")
-    offset += 2
-
-    # Hash table size (4 bytes, uint32 little-endian)
-    hash_table_size = int.from_bytes(data[offset : offset + 4], byteorder="little")
-    offset += 4
-
-    # Version (1 byte, always 0)
-    offset += 1
-
-    # Skip metadata (12 bytes: StringOffset, retry count, FileSize)
-    offset += 12
-
-    # Element indices (num_elements * 2 bytes)
-    offset += num_elements * 2
-
-    # Read hash entries (17 bytes each)
-    hash_entries = []
-    for _ in range(hash_table_size):
-        is_active = data[offset] != 0
+        # Version (1 byte, always 0)
         offset += 1
 
-        index = int.from_bytes(data[offset : offset + 2], byteorder="little")
-        offset += 2
+        # Skip metadata (12 bytes: StringOffset, retry count, FileSize)
+        offset += 12
 
-        hash_value = int.from_bytes(data[offset : offset + 4], byteorder="little")
-        offset += 4
+        # Element indices (num_elements * 2 bytes)
+        offset += num_elements * 2
 
-        index_string = int.from_bytes(data[offset : offset + 4], byteorder="little")
-        offset += 4
+        # Read hash entries (17 bytes each)
+        hash_entries = []
+        for _ in range(hash_table_size):
+            is_active = data[offset] != 0
+            offset += 1
 
-        name_string = int.from_bytes(data[offset : offset + 4], byteorder="little")
-        offset += 4
+            index = int.from_bytes(data[offset : offset + 2], byteorder="little")
+            offset += 2
 
-        name_length = int.from_bytes(data[offset : offset + 2], byteorder="little")
-        offset += 2
+            hash_value = int.from_bytes(data[offset : offset + 4], byteorder="little")
+            offset += 4
 
-        hash_entries.append(
+            index_string = int.from_bytes(data[offset : offset + 4], byteorder="little")
+            offset += 4
+
+            name_string = int.from_bytes(data[offset : offset + 4], byteorder="little")
+            offset += 4
+
+            name_length = int.from_bytes(data[offset : offset + 2], byteorder="little")
+            offset += 2
+
+            hash_entries.append(
+                {
+                    "is_active": is_active,
+                    "index": index,
+                    "hash_value": hash_value,
+                    "index_string": index_string,
+                    "name_string": name_string,
+                    "name_length": name_length,
+                }
+            )
+
+        result = {}
+
+        for idx, entry in enumerate(hash_entries):
+            if not entry["is_active"]:
+                continue
+
+            # Read value at nameString offset
+            value_offset = entry["name_string"]
+            value_length = entry["name_length"] - 1
+            value = data[value_offset : value_offset + value_length].decode("latin-1")
+
+            # Read key at indexString offset (null-terminated)
+            key_offset = entry["index_string"]
+            key_end = data.index(b"\x00", key_offset)
+            key = data[key_offset:key_end].decode("latin-1")
+
+            # Handle special keys
+            if key.upper() == "X":
+                key = f"#{idx}"
+
+            # Store in lookup table (skip duplicates)
+            if key not in result:
+                result[key] = value
+
+        cached = CACHE_DIR / tbl_path.with_suffix(".json").name
+        if not cached.exists():
+            cached.parent.mkdir(parents=True, exist_ok=True)
+            cached.write_text(json.dumps(result))
+
+        return result
+
+    # TODO: refactor
+    @staticmethod
+    def to_snake_case(value: str) -> str:
+        value = value.replace(" ", "_")
+
+        value = re.sub(r"[^A-Za-z0-9_]+", "", value)
+        # 1. Insert an underscore before any capital letter followed by lowercase (e.g., camelCase -> camel_Case)
+        value = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", value)
+
+        # 2. Insert an underscore between lowercase/numbers and uppercase letters (e.g., HTTPResponse -> HTTP_Response)
+        value = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", value)
+
+        # 3. Replace spaces, hyphens, or multiple underscores with a single underscore
+        value = re.sub(r"[\s\-_]+", "_", value)
+
+        # 4. Clean up any trailing/leading underscores and convert to lowercase
+        return value.strip("_").lower()
+
+    @staticmethod
+    def render_template(template_name: str, context: dict[str, Any]) -> None:
+        template_path = Path(__file__).parent / "templates" / f"{template_name}.py.mst"
+        python_path = Path(__file__).parent.parent / "src" / "pd2_filter_generator" / f"{template_name}.py"
+
+        template = template_path.read_text("utf-8")
+        rendered = pystache.render(template, context)
+        python_path.write_text(rendered, "utf-8", newline="\n")
+
+    def resolve_name(self, code: str) -> str:
+        for tbl_name in ["patchstring.tbl", "expansionstring.tbl", "string.tbl"]:
+            tbl_path = self.find_in_mpq(Path("data/local/lng/eng") / tbl_name)
+            tbl = self.read_tbl(tbl_path)
+            if code in tbl:
+                return tbl[code]
+        raise ValueError(f"No such code: {code}")  # noqa: TRY003 EM102
+
+    def read_weapons(self) -> list[dict[str, str]]:
+        path = self.find_in_mpq(Path("data/global/excel/Weapons.txt"))
+        raw = self.read_tsv(path)
+        # PD2 spawns new potions with new codes, legacy potions are disabled from dropping
+        # https://wiki.projectdiablo2.com/wiki/Item_Filtering#Potions
+        legacy_potions = {"opl", "gpl", "opm", "gpm", "ops", "gps", "7cr2"}
+
+        return [
             {
-                "is_active": is_active,
-                "index": index,
-                "hash_value": hash_value,
-                "index_string": index_string,
-                "name_string": name_string,
-                "name_length": name_length,
+                # For some reason in tbl files Strangling Potion and Choking Potion are called
+                # Strangling Gas Potion and Choking Gas Potion
+                "name": self.to_snake_case(self.resolve_name(row["namestr"])).replace("_gas_", "_").upper(),
+                "code": row["code"],
+                "type": row["type"],
+                "type2": row["type2"],
+                "props": json.dumps(row),
             }
-        )
+            for row in raw
+            if (
+                row["name"] not in {"None", "Not Used", "Unused", "unused", "Expansion"}
+                and row["code"] not in legacy_potions
+                and row["spawnable"] == "1"
+            )
+        ]
 
-    for idx, entry in enumerate(hash_entries):
-        if not entry["is_active"]:
-            continue
+    def read_armor(self) -> list[dict[str, str]]:
+        path = self.find_in_mpq(Path("data/global/excel/Armor.txt"))
+        raw = self.read_tsv(path)
+        # Special weapon types are added in PD2, only for unique version
+        # https://wiki.projectdiablo2.com/wiki/Item_Filtering#PD2_Items
+        special_equipment = {
+            "rar": "Cage of the Unsullied",
+            "rbe": "Band of Skulls",
+            "ram": "The Third Eye",
+        }
+        return [
+            {
+                "name": self.to_snake_case(
+                    special_equipment.get(row["code"]) or self.resolve_name(row["namestr"])
+                ).upper(),
+                "code": row["code"],
+                "reqstr": row["reqstr"],
+                "levelreq": row["levelreq"],
+                "props": json.dumps(row),
+            }
+            for row in raw
+            if row["name"] not in {"None", "Not Used", "Unused", "unused", "Expansion"}
+        ]
 
-        # Read value at nameString offset
-        value_offset = entry["name_string"]
-        value_length = entry["name_length"] - 1
-        value = data[value_offset : value_offset + value_length].decode("latin-1")
+    def read_sets(self) -> list[dict[str, str]]:
+        path = self.find_in_mpq(Path("data/global/excel/Sets.txt"))
+        raw = self.read_tsv(path)
+        return [
+            {
+                "name": self.to_snake_case(self.resolve_name(row["name"])).upper(),
+                "level": row["level"],
+                "props": json.dumps(row),
+            }
+            for row in raw
+            if row["index"] not in {"None", "Not Used", "Unused", "unused", "Expansion"}
+        ]
 
-        # Read key at indexString offset (null-terminated)
-        key_offset = entry["index_string"]
-        key_end = data.index(b"\x00", key_offset)
-        key = data[key_offset:key_end].decode("latin-1")
+    def read_set_items(self) -> list[dict[str, str]]:
+        path = self.find_in_mpq(Path("data/global/excel/SetItems.txt"))
+        raw = self.read_tsv(path)
+        return [
+            {
+                "name": self.to_snake_case(self.resolve_name(row["index"])).upper(),
+                "set": self.to_snake_case(self.resolve_name(row["set"])).upper(),
+                "lvl": row["lvl"],
+                "lvl_req": row["lvl req"],
+                "props": json.dumps(row),
+            }
+            for row in raw
+            if row["index"] not in {"None", "Not Used", "Unused", "unused", "Expansion"}
+        ]
 
-        # Handle special keys
-        if key.upper() == "X":
-            key = f"#{idx}"
+    def read_unique_items(self) -> list[dict[str, str]]:
+        path = self.find_in_mpq(Path("data/global/excel/UniqueItems.txt"))
+        raw = self.read_tsv(path)
+        uniques = [
+            {
+                "name": self.to_snake_case(self.resolve_name(row["index"])).upper(),
+                "code": row["code"],
+                "ladder": str(row["ladder"] == "1"),
+                "lvl": row["lvl"],
+                "lvl_req": row["lvl req"],
+                # "props": json.dumps(row), props will affect deduplication, be careful
+            }
+            for row in raw
+            if (
+                row["index"]
+                not in {
+                    "None",
+                    "Not Used",
+                    "Unused",
+                    "unused",
+                    "Expansion",
+                    "Armor",
+                    "Ring",
+                    "Elite Uniques",
+                    "Class Specific",
+                }
+                and row["enabled"] not in {"0", "", None}
+            )
+        ]
 
-        # Store in lookup table (skip duplicates)
-        if key not in result:
-            result[key] = value
+        # Some uniques (like Rainbow Facet) have different variations, we deduplicate variations if they are same
+        # If variations are different - generated code will raise an error
+        result = []
+        for unique in uniques:
+            if unique in result:
+                continue
+            result.append(unique)
 
-    cached = CACHE_DIR / tbl_path.with_suffix(".json").name
-    if not cached.exists():
-        cached.parent.mkdir(parents=True, exist_ok=True)
-        cached.write_text(json.dumps(result))
+        return result
 
-    return result
+    def generate(self):
+        """Generate constants from PD2 data files."""
+        context = {
+            "weapon": self.read_weapons(),
+            "armor": self.read_armor(),
+            "set": self.read_sets(),
+            "set_item": self.read_set_items(),
+            "unique_item": self.read_unique_items(),
+        }
+        click.echo(f"Loaded {', '.join(context.keys())}")
 
-
-def raise_exception(msg: str):
-    raise Exception(msg)  # noqa: TRY002
+        for template_name in context:
+            click.echo(f"Processing {template_name}")
+            self.render_template(template_name, context)
 
 
 @click.group()
@@ -175,38 +340,7 @@ def cli():
 )
 def generate(d2_path: Path):
     """Generate constants from PD2 data files."""
-    templates_dir = Path(__file__).parent / "templates"
-    output_dir = Path(__file__).parent.parent / "src" / "pd2_filter_generator"
-
-    # Setup Jinja environment with custom functions/filters
-    env = Environment(loader=FileSystemLoader(templates_dir), autoescape=False)  # noqa: S701
-    env.globals["read_tsv"] = lambda mpq_path: read_tsv(find_in_mpq(Path(mpq_path), d2_path))
-    env.globals["read_tbl"] = lambda mpq_path: read_tbl(find_in_mpq(Path(mpq_path), d2_path))
-    env.globals["raise"] = raise_exception
-
-    # Find all .jinja templates
-    templates = sorted(templates_dir.glob("*.py.jinja"))
-
-    if not templates:
-        click.echo("No templates found in templates/", err=True)
-        return
-
-    click.echo(f"Found {len(templates)} template(s)")
-
-    # Render each template
-    for template_path in templates:
-        template_name = template_path.name
-        output_name = template_name.replace(".jinja", "")
-
-        click.echo(f"Generating {output_name}...")
-
-        template = env.get_template(template_name)
-        rendered = template.render()
-
-        output_file = output_dir / output_name
-        output_file.write_text(rendered, encoding="utf-8", newline="\n")
-
-        click.echo(f"  -> {output_file.relative_to(Path.cwd())}")
+    Generator(d2_path).generate()
 
 
 if __name__ == "__main__":

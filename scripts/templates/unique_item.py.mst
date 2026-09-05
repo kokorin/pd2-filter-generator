@@ -1,0 +1,50 @@
+# ruff: noqa: PIE796
+"""
+Generated UniqueItem enum from PD2 data.
+
+DO NOT EDIT MANUALLY - regenerate with: hatch run ./scripts/generate.py generate
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import Enum
+
+
+@dataclass(frozen=True)
+class _Metadata:
+    """Item type metadata."""
+
+    ladder: bool  # "ladder"
+    code: str  # "code"
+    lvl: int  # "lvl"
+    lvl_req: int  # "lvl req"
+
+
+class UniqueItem(Enum):
+    """PD2 unique item categories."""
+    # TODO: ladder is always False
+    {{# unique_item }}
+    {{ name }} = _Metadata(
+        ladder={{ ladder }},
+        code="{{ code }}",
+        lvl={{ lvl }},
+        lvl_req={{ lvl_req }},
+    )
+    {{/ unique_item }}
+
+    @property
+    def ladder(self) -> bool:
+        return self.value.ladder
+
+    @property
+    def code(self) -> str:
+        return self.value.code
+
+    @property
+    def lvl(self) -> int:
+        return self.value.lvl
+
+    @property
+    def lvl_req(self) -> int:
+        return self.value.lvl_req

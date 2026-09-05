@@ -1034,12 +1034,12 @@ class Armor(BoolMixin, Enum):
         reqstr=106,
         levelreq=65,
     )
-    BONEWEAVE_RAR = _Metadata(
+    CAGE_OF_THE_UNSULLIED = _Metadata(
         code="rar",
         reqstr=158,
         levelreq=47,
     )
-    TROLL_BELT_RBE = _Metadata(
+    BAND_OF_SKULLS = _Metadata(
         code="rbe",
         reqstr=151,
         levelreq=62,

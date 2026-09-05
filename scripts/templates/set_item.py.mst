@@ -1,0 +1,46 @@
+# ruff: noqa: PIE796
+"""
+Generated SetItem enum from PD2 data.
+
+DO NOT EDIT MANUALLY - regenerate with: hatch run ./scripts/generate.py generate
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import Enum
+
+from pd2_filter_generator.set import Set
+
+
+@dataclass(frozen=True)
+class _Metadata:
+    """Item type metadata."""
+
+    set: Set  # "set"
+    lvl: int  # "lvl"
+    lvl_req: int  # "lvl req"
+
+
+class SetItem(Enum):
+    """PD2 set item categories."""
+
+    {{# set_item }}
+    {{ name }} = _Metadata(
+        set=Set.{{ set }},
+        lvl={{ lvl }},
+        lvl_req={{ lvl_req }},
+    )
+    {{/ set_item }}
+
+    @property
+    def set(self) -> Set:
+        return self.value.set
+
+    @property
+    def lvl(self) -> int:
+        return self.value.lvl
+
+    @property
+    def lvl_req(self) -> int:
+        return self.value.lvl_req

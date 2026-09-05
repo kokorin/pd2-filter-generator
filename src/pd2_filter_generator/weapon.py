@@ -424,41 +424,6 @@ class Weapon(BoolMixin, Enum):
         type="xbow",
         type2="",
     )
-    DECOY_GIDBINN = _Metadata(
-        code="d33",
-        type="knif",
-        type2="",
-    )
-    THE_GIDBINN = _Metadata(
-        code="g33",
-        type="knif",
-        type2="",
-    )
-    WIRTS_LEG = _Metadata(
-        code="leg",
-        type="club",
-        type2="",
-    )
-    HORADRIC_MALUS = _Metadata(
-        code="hdm",
-        type="hamm",
-        type2="",
-    )
-    HELL_FORGE_HAMMER = _Metadata(
-        code="hfh",
-        type="hamm",
-        type2="",
-    )
-    HORADRIC_STAFF = _Metadata(
-        code="hst",
-        type="staf",
-        type2="2han",
-    )
-    SHAFT_OF_THE_HORADRIC_STAFF = _Metadata(
-        code="msf",
-        type="staf",
-        type2="2han",
-    )
     HATCHET = _Metadata(
         code="9ha",
         type="axe",
@@ -764,7 +729,7 @@ class Weapon(BoolMixin, Enum):
         type="pole",
         type2="2han",
     )
-    BEC_DE_CORBIN = _Metadata(
+    BECDE_CORBIN = _Metadata(
         code="9h9",
         type="pole",
         type2="2han",
@@ -857,16 +822,6 @@ class Weapon(BoolMixin, Enum):
     CHU_KO_NU = _Metadata(
         code="8rx",
         type="xbow",
-        type2="",
-    )
-    KHALIMS_FLAIL = _Metadata(
-        code="qf1",
-        type="mace",
-        type2="",
-    )
-    KHALIMS_WILL = _Metadata(
-        code="qf2",
-        type="mace",
         type2="",
     )
     KATAR = _Metadata(
@@ -1004,7 +959,7 @@ class Weapon(BoolMixin, Enum):
         type="axe",
         type2="2han",
     )
-    SILVER_EDGED_AXE = _Metadata(
+    SILVEREDGED_AXE = _Metadata(
         code="7ba",
         type="axe",
         type2="2han",
