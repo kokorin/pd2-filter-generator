@@ -1,6 +1,6 @@
 """Tests for UniqueItem enum."""
 
-from pd2_filter_generator.unique_item import UniqueItem
+import pd2_filter_generator.unique_item as UniqueItem  # noqa: N812
 
 
 def test_member_exists():
@@ -8,7 +8,7 @@ def test_member_exists():
 
 
 def test_metadata_code_is_code_literal():
-    assert isinstance(UniqueItem.THE_GNASHER.code, str)
+    assert isinstance(UniqueItem.THE_GNASHER.value, str)
 
 
 def test_metadata_lvl():
